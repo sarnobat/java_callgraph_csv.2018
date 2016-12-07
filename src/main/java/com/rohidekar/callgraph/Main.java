@@ -40,17 +40,6 @@ public class Main {
   public static final int ROOT_DEPTH = 27;
 
   static final String[] substringsToIgnore = {"java", "Logger", "Test", ".toString", "Exception",
-  // "com.google.common",
-  // "Property.getValue()",
-  // "com.google.gwt",
-  // "com.google.common",
-  // ".get",
-  // "<init>",
-  // "com.google.inject",
-  // "com.opensymphony",
-  // "com.google.ads",
-  // "com.google.corplogin",
-  // "com.google.gse",
       };
 
 
@@ -62,7 +51,6 @@ public class Main {
     Logger.getRootLogger().addAppender(consoleAppender);
     String resource;
     if (args == null || args.length < 1) {
-      //resource = "/home/ssarnobat/workspaces/2012-06-12/06-12/";
       // resource = "/Users/ssarnobat/work/src/saas/";
        resource = "/Users/ssarnobat/github/nanohttpd/target";
       // TODO: use the current working directory as the class folder, not
