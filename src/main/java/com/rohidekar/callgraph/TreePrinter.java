@@ -43,11 +43,19 @@ public class TreePrinter {
         }
         TextTree textTree = new TextTree(tree);
         System.out.println(treeDepth);
-        textTree.printTree();
+        //textTree.printTree();
+        printRelationships(tree);
       }
     }
   }
 
+  private static void printRelationships(TreeModel tree) {
+    for (int i = 0; i < tree.getChildCount(tree.getRoot()); i++) {
+      Object child = tree.getChild(tree.getRoot(), i);
+      System.out.println("TreePrinter.printRelationships() - SRIDHAR: \"" + child.toString() + "\",\""
+          + tree.getRoot().toString() + "\"");
+    }
+  }
 
   /**
    * @param relationships
