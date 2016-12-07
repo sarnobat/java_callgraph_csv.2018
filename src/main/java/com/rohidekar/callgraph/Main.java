@@ -61,7 +61,6 @@ public class Main {
     printGraphs(resource);
   }
 
-  @SuppressWarnings("unchecked")
   private static void printGraphs(String resource) {
     Relationships relationships = new Relationships(resource);
     relationships.validate();
