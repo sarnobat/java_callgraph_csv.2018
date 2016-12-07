@@ -64,7 +64,9 @@ public class TextTree {
 			sb.append(pref);
 			sb.append(bud);
 			sb.append("-- ");
-			sb.append(node.toString());
+			String string = node.toString();
+			System.out.println("TextTree.printNode() - SRIDHAR: string = " + string);
+      sb.append(string);
 			sb.append("\n");
 		}
 		String pref1 = pref + "   ";
