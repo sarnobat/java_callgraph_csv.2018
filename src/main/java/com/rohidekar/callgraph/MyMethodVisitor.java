@@ -21,11 +21,11 @@ import gr.gousiosg.javacg.stat.MethodVisitor;
 import java.util.Collection;
 
 public class MyMethodVisitor extends MethodVisitor {
-  private static Logger log = Logger.getLogger(Main.class);
-  private JavaClass visitedClass;
-  private ConstantPoolGen constantsPool;
-  private Relationships relationships;
-  private String parentMethodQualifiedName;
+  @Deprecated private static Logger log = Logger.getLogger(Main.class);
+  private final JavaClass visitedClass;
+  private final ConstantPoolGen constantsPool;
+  private final Relationships relationships;
+  private final String parentMethodQualifiedName;
 
   public MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, Relationships relationships) {
     super(methodGen, javaClass);
@@ -92,23 +92,28 @@ public class MyMethodVisitor extends MethodVisitor {
   }
 
   private void addMethodCallRelationship(Type iClass, String unqualifiedMethodName,
-      @SuppressWarnings("unused") Instruction anInstruction,
-      @SuppressWarnings("unused") Type[] argumentTypes) {
+      Instruction anInstruction,
+      Type[] argumentTypes) {
     if (!(iClass instanceof ObjectType)) {
       return;
     }
-    ObjectType childClass = (ObjectType) iClass;
-    MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
-    relationships.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true));
-    if (relationships.getMethod(this.parentMethodQualifiedName) == null) {
-      relationships.addMethodDefinition(
-          new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
+    // method calls
+    {
+      ObjectType childClass = (ObjectType) iClass;
+      MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
+      relationships.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true));
+      if (relationships.getMethod(this.parentMethodQualifiedName) == null) {
+        relationships.addMethodDefinition(new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
+      }
+      // link to superclass method - note: this will not work for the top-level
+      // method (i.e.
+      // parentMethodQualifiedName). Only for target.
+      // We can't do it for the superclass without a JavaClass object. We don't
+      // know which superclass
+      // the method overrides.
+      linkMethodToSuperclassMethod(unqualifiedMethodName, target);
     }
-    // link to superclass method - note: this will not work for the top-level method (i.e.
-    // parentMethodQualifiedName). Only for target.
-    // We can't do it for the superclass without a JavaClass object. We don't know which superclass
-    // the method overrides.
-    linkMethodToSuperclassMethod(unqualifiedMethodName, target);
+    // class dependencies for method calls
   }
 
   private void linkMethodToSuperclassMethod(String unqualifiedMethodName, MyInstruction target)
@@ -131,6 +136,13 @@ public class MyMethodVisitor extends MethodVisitor {
         }
         relationships.addMethodCall(
             parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified());
+      }
+      if (parentInstruction != null && target != null && !target.getClassNameQualified().equals(parentInstruction.getClassNameQualified())) {
+        // TODO: this should get printed later
+        System.out.println(
+            //"MyMethodVisitor.linkMethodToSuperclassMethod() - SRIDHAR: " +
+            "\""+parentInstruction.getClassNameQualified() + "\",\"" + target.getClassNameQualified() + "\"");
+        relationships.addContainmentRelationshipStringOnly(parentInstruction.getClassNameQualified(), target.getClassNameQualified());
       }
     }
   }

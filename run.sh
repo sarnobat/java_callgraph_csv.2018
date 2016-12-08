@@ -1,1 +1,1 @@
-mvn exec:java -Dexec.mainClass="com.rohidekar.callgraph.Main"
+mvn --quiet exec:java -Dexec.mainClass="com.rohidekar.callgraph.Main"

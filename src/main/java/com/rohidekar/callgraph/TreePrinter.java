@@ -21,7 +21,11 @@ import javax.swing.tree.TreeModel;
  */
 public class TreePrinter {
 
+  /**
+   * Output suitable for D3
+   */
   static void printTrees(Relationships relationships, Multimap<Integer, TreeModel> depthToTree) {
+    System.out.println("source,target");
     for (Integer treeDepth : depthToTree.keySet()) {
       Object o = depthToTree.get(treeDepth);
       if (o == null) {
@@ -42,8 +46,6 @@ public class TreePrinter {
           continue;
         }
         TextTree textTree = new TextTree(tree);
-        System.out.println(treeDepth);
-        //textTree.printTree();
         printRelationships(tree);
       }
     }
@@ -52,7 +54,7 @@ public class TreePrinter {
   private static void printRelationships(TreeModel tree) {
     for (int i = 0; i < tree.getChildCount(tree.getRoot()); i++) {
       Object child = tree.getChild(tree.getRoot(), i);
-      System.out.println("TreePrinter.printRelationships() - SRIDHAR: \"" + child.toString() + "\",\""
+      System.out.println("\"" + child.toString() + "\",\""
           + tree.getRoot().toString() + "\"");
     }
   }
@@ -87,9 +89,7 @@ public class TreePrinter {
         // new TextTree(aTreeModel2).printTree();
         GraphNode rootNode = (GraphNode) aTreeModel2.getRoot();
         printTreeTest(rootNode, 0, new HashSet<GraphNode>());
-        System.out.println("");
       }
-//      System.out.println("");
     }
   }
 
@@ -98,8 +98,6 @@ public class TreePrinter {
       return;
     }
     visited.add(tn);
-    System.out.print(StringUtils.repeat("    ", level));
-    System.out.println(tn.getSource());
     if (((MyInstruction) tn.getSource()).getMethodNameQualified()
         .equals("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError();

@@ -38,8 +38,10 @@ public class TextTree {
 	/**
 	 * Prints this tree to <code>System.out</code>.
 	 */
+	@Deprecated
 	public void printTree() {
 		System.out.println(toString());
+		throw new RuntimeException("Deprecated");
 	}
 
 	/**
@@ -47,9 +49,10 @@ public class TextTree {
 	 * 
 	 * @param printStream
 	 */
+  @Deprecated
 	public void printTree(PrintStream printStream) {
-		printStream.println(toString());
-	}
+    throw new RuntimeException("Deprecated");
+  }
 
 	@Override
 	public String toString() {
@@ -65,7 +68,6 @@ public class TextTree {
 			sb.append(bud);
 			sb.append("-- ");
 			String string = node.toString();
-			System.out.println("TextTree.printNode() - SRIDHAR: string = " + string);
       sb.append(string);
 			sb.append("\n");
 		}

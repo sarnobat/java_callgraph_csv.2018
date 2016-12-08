@@ -34,7 +34,7 @@ public class Main {
 //  private static final boolean PRINT_PACKAGE_ARCHITECTURE = true;
 
 
-  public static final int MIN_TREE_DEPTH = 3;
+  public static final int MIN_TREE_DEPTH = 1;
   public static int MAX_TREE_DEPTH = 187;// 27 works, 30 breaks
   // Only print from roots this far below the top level package that contains classes
   public static final int ROOT_DEPTH = 27;
@@ -51,8 +51,8 @@ public class Main {
     Logger.getRootLogger().addAppender(consoleAppender);
     String resource;
     if (args == null || args.length < 1) {
-      // resource = "/Users/ssarnobat/work/src/saas/";
-       resource = "/Users/ssarnobat/github/nanohttpd/target";
+       resource = "/Users/ssarnobat/work/src/saas/";
+//       resource = "/Users/ssarnobat/github/nanohttpd/target";
       // TODO: use the current working directory as the class folder, not
       // an arbitrary jar
     } else {
@@ -80,7 +80,7 @@ public class Main {
 //      }
 //      TreePrinter.printTrees(rootMethodNodes);
 //    }
-    System.out.println("Containment Hierarchy");
+    System.err.println("Containment Hierarchy");
     if (PRINT_CONTAINMENT) {
       Map<String, GraphNode> classNameToClassNodes =
           RelationshipToGraphTransformer.determineContainments(relationships);
