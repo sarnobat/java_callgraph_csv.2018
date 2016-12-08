@@ -51,8 +51,9 @@ public class Main {
     Logger.getRootLogger().addAppender(consoleAppender);
     String resource;
     if (args == null || args.length < 1) {
-       resource = "/Users/ssarnobat/work/src/saas/";
+       //resource = "/Users/ssarnobat/work/src/saas/";
 //       resource = "/Users/ssarnobat/github/nanohttpd/target";
+      resource = "/Users/ssarnobat/github/java_callgraph_csv/target";
       // TODO: use the current working directory as the class folder, not
       // an arbitrary jar
     } else {
