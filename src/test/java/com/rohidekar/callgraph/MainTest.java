@@ -62,7 +62,7 @@ public class MainTest extends TestCase {
         "com.google.is.gcomp.backend.service.impl.config.ConfigurationFileRowReader"));
 
     Map<String, GraphNode> allMethodNamesToGraphNodes =
-        RelationshipToGraphTransformer.determineCallHierarchy(relationships);
+        RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy(relationships);
     System.out.println("Method names: " + allMethodNamesToGraphNodes.size());
     // Nodes
     assertTrue(allMethodNamesToGraphNodes.containsKey(

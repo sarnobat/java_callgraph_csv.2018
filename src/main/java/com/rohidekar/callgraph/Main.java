@@ -84,7 +84,7 @@ public class Main {
     System.err.println("Containment Hierarchy");
     if (PRINT_CONTAINMENT) {
       Map<String, GraphNode> classNameToClassNodes =
-          RelationshipToGraphTransformer.determineContainments(relationships);
+          RelationshipToGraphTransformerCallHierarchy.determineContainments(relationships);
       Set<GraphNode> rootClasses = RootFinder.findRootJavaClasses(classNameToClassNodes);
       Multimap<Integer, TreeModel> depthToTree = GraphNodeUtils.removeCyclicCalls(rootClasses);
       TreePrinter.printTrees(relationships, depthToTree);

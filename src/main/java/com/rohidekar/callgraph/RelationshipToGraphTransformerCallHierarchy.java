@@ -15,9 +15,9 @@ import java.util.Map;
 /**
 * Transforms relationships into graphs
  */
-public class RelationshipToGraphTransformer {
+public class RelationshipToGraphTransformerCallHierarchy {
 
-  private static Logger log = Logger.getLogger(RelationshipToGraphTransformer.class);
+  private static Logger log = Logger.getLogger(RelationshipToGraphTransformerCallHierarchy.class);
   @VisibleForTesting
   public static Map<String, GraphNode> determineCallHierarchy(Relationships relationships) {
     relationships.validate();
