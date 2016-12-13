@@ -9,6 +9,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.rohidekar.callgraph.Main;
 import com.rohidekar.callgraph.common.GraphNode;
+import com.rohidekar.callgraph.common.MyInstruction;
 import com.rohidekar.callgraph.common.MyTreeModel;
 import com.rohidekar.callgraph.common.Relationships;
 import com.rohidekar.callgraph.containments.TreeDepthCalculator;
@@ -44,8 +45,24 @@ public class TreePrinterCalls {
         TreeModel aTreeModel2 = (TreeModel) aTreeModel;
         // new TextTree(aTreeModel2).printTree();
         GraphNode rootNode = (GraphNode) aTreeModel2.getRoot();
-        TreePrinter.printTreeTest(rootNode, 0, new HashSet<GraphNode>());
+        printTreeTest(rootNode, 0, new HashSet<GraphNode>());
       }
     }
+  }
+
+
+  private static void printTreeTest(GraphNode tn, int level, Set<GraphNode> visited) {
+    if (visited.contains(tn)) {
+      return;
+    }
+    visited.add(tn);
+    if (((MyInstruction) tn.getSource()).getMethodNameQualified()
+        .equals("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
+      throw new IllegalAccessError();
+    }
+    for (GraphNode child : tn.getChildren()) {
+      printTreeTest(child, level + 1, visited);
+    }
+
   }
 }

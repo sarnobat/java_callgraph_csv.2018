@@ -3,6 +3,8 @@ package com.rohidekar.callgraph.packages;
 import com.rohidekar.callgraph.common.*;
 import com.rohidekar.callgraph.printer.TreePrinter;
 
+import dnl.utils.text.tree.TextTree;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.HashSet;
@@ -20,7 +22,13 @@ public class RelationshipToGraphTransformerPackages {
         RelationshipToGraphTransformerPackages.determinePackageStructure(relationships);
     Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerPackages.findRoots(allPacakgeNamesToPackageNodes);
       System.err.println("Root package: " + rootMethodNodes.iterator().next().toString());
-      TreePrinter.printTrees(rootMethodNodes);
+      printTrees(rootMethodNodes);
+  }
+
+  public static void printTrees(Set<GraphNode> rootMethodNodes) {
+    for (GraphNode aRootNode : rootMethodNodes) {
+      new TextTree(new MyTreeModel(aRootNode)).printTree();
+    }
   }
 
   private static Set<GraphNode> findRoots(Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
