@@ -1,7 +1,6 @@
 package com.rohidekar.callgraph.packages;
 
 import com.rohidekar.callgraph.common.*;
-import com.rohidekar.callgraph.printer.TreePrinter;
 
 import dnl.utils.text.tree.TextTree;
 

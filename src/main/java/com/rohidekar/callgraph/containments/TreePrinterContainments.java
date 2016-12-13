@@ -8,7 +8,6 @@ import com.google.common.collect.Multimap;
 import com.rohidekar.callgraph.Main;
 import com.rohidekar.callgraph.common.GraphNode;
 import com.rohidekar.callgraph.common.Relationships;
-import com.rohidekar.callgraph.printer.TreePrinter;
 
 import dnl.utils.text.tree.TextTree;
 
