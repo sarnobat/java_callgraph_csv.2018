@@ -49,18 +49,18 @@ public class Main {
     printGraphs(resource);
   }
 
-  private static void printGraphs(String resource) {
-    Relationships relationships = new Relationships(resource);
+  private static void printGraphs(String classDirOrJar) {
+    Relationships relationships = new Relationships(classDirOrJar);
     relationships.validate();
     if (PRINT_CALL_TREE) {
       RelationshipToGraphTransformerCallHierarchy.printCallGraph(relationships);
     }
     if (PRINT_PACKAGE_ARCHITECTURE) {
-      RelationshipToGraphTransformerPackages.printPackages(relationships);
+//      RelationshipToGraphTransformerPackages.printPackages(relationships);
     }
     System.err.println("Containment Hierarchy");
     if (PRINT_CONTAINMENT) {
-      RelationshipToGraphTransformerContainments.printContainment(relationships);
+//      RelationshipToGraphTransformerContainments.printContainment(relationships);
     }
   }
 }
