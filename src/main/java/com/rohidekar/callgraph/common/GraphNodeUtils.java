@@ -1,7 +1,6 @@
 package com.rohidekar.callgraph.common;
 
 import com.rohidekar.callgraph.printer.*;
-import com.rohidekar.callgraph.CycleRemovingTreeVisitor;
 import com.rohidekar.callgraph.common.*;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
