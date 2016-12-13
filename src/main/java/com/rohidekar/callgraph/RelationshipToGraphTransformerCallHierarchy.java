@@ -5,8 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.annotations.VisibleForTesting;
 
 import org.apache.commons.lang.ClassUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -17,16 +15,13 @@ import java.util.Map;
  */
 public class RelationshipToGraphTransformerCallHierarchy {
 
-  private static Logger log = Logger.getLogger(RelationshipToGraphTransformerCallHierarchy.class);
   @VisibleForTesting
   public static Map<String, GraphNode> determineCallHierarchy(Relationships relationships) {
     relationships.validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
     for (String parentMethodNameKey : relationships.getAllMethodCallers()) {
-      if (log.isEnabledFor(Level.DEBUG)) {
-        log.debug(parentMethodNameKey);
-      }
+        System.err.println("RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - " + parentMethodNameKey);
       if (Ignorer.shouldIgnore(parentMethodNameKey)) {
         continue;
       }
@@ -36,9 +31,7 @@ public class RelationshipToGraphTransformerCallHierarchy {
         MyInstruction parentMethodInstruction =
             relationships.getMethod(parentMethodNameKey);
         if (parentMethodInstruction == null) {
-          if (log.isEnabledFor(Level.WARN)) {
-            log.warn("couldn't find instruction for  " + parentMethodNameKey);
-          }
+          System.err.println("RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - WARNING: couldn't find instruction for  " + parentMethodNameKey);
           continue;
         }
         parentEnd = new GraphNodeInstruction(parentMethodInstruction);
@@ -56,9 +49,7 @@ public class RelationshipToGraphTransformerCallHierarchy {
         if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
           continue;
         }
-        if (log.isEnabledFor(Level.DEBUG)) {
-          log.debug("-> " + childMethod.getMethodNameQualified());
-        }
+        System.err.println("RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> " + childMethod.getMethodNameQualified());
         GraphNodeInstruction child =
             (GraphNodeInstruction) allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
         if (child == null) {
@@ -77,7 +68,7 @@ public class RelationshipToGraphTransformerCallHierarchy {
       throws IllegalAccessError {
     Map<String, GraphNode> classNameToGraphNodeJavaClassMap =
         new LinkedHashMap<String, GraphNode>();
-    log.info("Number of classes: " + relationships.getAllClassNames().size());
+    System.err.println("RelationshipToGraphTransformerCallHierarchy.determineContainments() - Number of classes: " + relationships.getAllClassNames().size());
     Map<String, GraphNode> classNameToGraphNodeClassNameMap = classNameToGraphNodeJavaClassMap;
     // Create a custom containment graph structure from the multimap (this is effectively a a
     // map-reduce

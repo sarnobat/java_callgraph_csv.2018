@@ -4,12 +4,6 @@ package com.rohidekar.callgraph;
 
 import com.google.common.collect.Multimap;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-
-import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,11 +38,6 @@ public class Main {
 
 
   public static void main(String[] args) {
-    Logger.getRootLogger().setLevel(Level.ERROR);
-    ConsoleAppender consoleAppender = new ConsoleAppender();
-    consoleAppender.setWriter(new OutputStreamWriter(System.out));
-    consoleAppender.setLayout(new PatternLayout("%-5p [%t]: %m%n"));
-    Logger.getRootLogger().addAppender(consoleAppender);
     String resource;
     if (args == null || args.length < 1) {
        //resource = "/Users/ssarnobat/work/src/saas/";
