@@ -3,6 +3,8 @@
 package com.rohidekar.callgraph;
 
 import com.google.common.collect.Multimap;
+import com.rohidekar.callgraph.calls.RelationshipToGraphTransformerCallHierarchy;
+import com.rohidekar.callgraph.containments.RelationshipToGraphTransformerContainments;
 
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +75,7 @@ public class Main {
     System.err.println("Containment Hierarchy");
     if (PRINT_CONTAINMENT) {
       Map<String, GraphNode> classNameToClassNodes =
-          RelationshipToGraphTransformerCallHierarchy.determineContainments(relationships);
+          RelationshipToGraphTransformerContainments.determineContainments(relationships);
       Set<GraphNode> rootClasses = RootFinder.findRootJavaClasses(classNameToClassNodes);
       Multimap<Integer, TreeModel> depthToTree = GraphNodeUtils.removeCyclicCalls(rootClasses);
       TreePrinter.printTrees(relationships, depthToTree);
