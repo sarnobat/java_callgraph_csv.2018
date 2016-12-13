@@ -1,6 +1,7 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 
 package com.rohidekar.callgraph.packages;
+
 import com.rohidekar.callgraph.common.*;
 
 import org.apache.commons.lang.ClassUtils;
@@ -10,11 +11,11 @@ import org.apache.commons.lang.StringUtils;
  * @author ssarnobat@google.com (Sridhar Sarnobat)
  *
  */
-public class GraphNodePackage extends GraphNode {
+class GraphNodePackage extends GraphNode {
 
   private String pkgQualifiedName;
 
-  public GraphNodePackage(String pkgQualifiedName) {
+  GraphNodePackage(String pkgQualifiedName) {
     super(pkgQualifiedName);
     this.pkgQualifiedName = pkgQualifiedName;
     if (pkgQualifiedName.length() < 1) {

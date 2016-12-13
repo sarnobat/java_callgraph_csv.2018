@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.rohidekar.callgraph.GraphNodeInstruction;
 
 /**
  * Transforms relationships into graphs

@@ -1,7 +1,8 @@
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.calls;
 
 import com.rohidekar.callgraph.common.*;
-public class GraphNodeInstruction extends GraphNode {
+
+class GraphNodeInstruction extends GraphNode {
   MyInstruction instruction;
 
   public GraphNodeInstruction(MyInstruction parentMethodInstruction) {
@@ -14,8 +15,8 @@ public class GraphNodeInstruction extends GraphNode {
 
   @Override
   public int getPackageDepth() {
-    return instruction == null ? Integer.MAX_VALUE : Relationships.getPackageDepth(
-        instruction.getMethodNameQualified());
+    return instruction == null ? Integer.MAX_VALUE
+        : Relationships.getPackageDepth(instruction.getMethodNameQualified());
   }
 
   @Override

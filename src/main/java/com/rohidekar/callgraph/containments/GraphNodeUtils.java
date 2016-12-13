@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph.common;
+package com.rohidekar.callgraph.containments;
 
 import com.rohidekar.callgraph.printer.*;
 import com.rohidekar.callgraph.common.*;
@@ -12,9 +12,9 @@ import javax.swing.tree.TreeModel;
 /**
  * Generic routines related to graph structures
  */
-public class GraphNodeUtils {
+class GraphNodeUtils {
 
-  public static Multimap<Integer, TreeModel> removeCyclicCalls(Set<GraphNode> rootClasses) {
+  static Multimap<Integer, TreeModel> removeCyclicCalls(Set<GraphNode> rootClasses) {
     Multimap<Integer, TreeModel> depthToTree;
     depthToTree = HashMultimap.create();
     for (GraphNode aRootNodeWithCyclesNode : rootClasses) {

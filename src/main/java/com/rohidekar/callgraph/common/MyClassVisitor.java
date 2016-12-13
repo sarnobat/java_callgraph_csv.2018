@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MyClassVisitor extends ClassVisitor {
+class MyClassVisitor extends ClassVisitor {
 
   private JavaClass classToVisit;
   private Relationships relationships;
