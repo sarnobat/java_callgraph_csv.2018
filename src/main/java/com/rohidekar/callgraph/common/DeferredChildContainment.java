@@ -1,6 +1,6 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.common;
 
 import org.apache.bcel.classfile.JavaClass;
 

@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class RootFinder {
 
-  static Set<GraphNode> findRoots(Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
+  private static Set<GraphNode> findRoots(Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
     Set<GraphNode> rootMethodNodes;
     rootMethodNodes = new HashSet<GraphNode>();
     for (GraphNode aNode : allPacakgeNamesToPackageNodes.values()) {
@@ -41,7 +41,7 @@ public class RootFinder {
     }
   }
 
-  static Set<GraphNode> findRootCallers(Map<String, GraphNode> allMethodNamesToMethods) {
+  private static Set<GraphNode> findRootCallers(Map<String, GraphNode> allMethodNamesToMethods) {
     Set<GraphNode> rootMethodNodes;
     rootMethodNodes = new HashSet<GraphNode>();
     for (GraphNode aNode : allMethodNamesToMethods.values()) {
@@ -53,7 +53,7 @@ public class RootFinder {
     return rootMethodNodes;
   }
 
-  static Set<GraphNode> findRootJavaClasses(Map<String, GraphNode> classNameToGraphNodeJavaClassMap) {
+  public static Set<GraphNode> findRootJavaClasses(Map<String, GraphNode> classNameToGraphNodeJavaClassMap) {
     Set<GraphNode> rootClasses;
     rootClasses = new HashSet<GraphNode>();
     for (GraphNode aNode : classNameToGraphNodeJavaClassMap.values()) {

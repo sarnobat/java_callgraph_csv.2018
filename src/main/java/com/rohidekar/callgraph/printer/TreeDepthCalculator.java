@@ -1,6 +1,7 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.printer;
+
 import com.rohidekar.callgraph.common.*;
 import javax.swing.tree.TreeModel;
 
@@ -8,7 +9,7 @@ import javax.swing.tree.TreeModel;
  * @author ssarnobat@google.com (Sridhar Sarnobat)
  *
  */
-public class TreeDepthCalculator {
+class TreeDepthCalculator {
   static int getTreeDepth(TreeModel tree) {
     TreeDepthVisitor tdv = new TreeDepthVisitor();
     int childCount = tree.getChildCount(tree.getRoot());

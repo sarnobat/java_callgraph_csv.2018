@@ -1,5 +1,6 @@
 package com.rohidekar.callgraph.packages;
 
+import com.rohidekar.callgraph.common.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.LinkedHashMap;
@@ -7,14 +8,11 @@ import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
 
-import com.rohidekar.callgraph.Relationships;
-
 public class RelationshipToGraphTransformerPackages {
 
   public static Map<String, GraphNodePackage> determinePackageStructure(Relationships relationships) {
-    Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes =
-        new LinkedHashMap<String, GraphNodePackage>();
-  
+    Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes = new LinkedHashMap<String, GraphNodePackage>();
+
     for (String parentPackage : relationships.getPackagesKeySet()) {
       // parent
       GraphNodePackage graphNodePackage = allPacakgeNamesToPackageNodes.get(parentPackage);

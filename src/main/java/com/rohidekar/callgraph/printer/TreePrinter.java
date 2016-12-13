@@ -1,19 +1,16 @@
-// Copyright 2012 Google Inc. All Rights Reserved.
-
-package com.rohidekar.callgraph;
-import com.rohidekar.callgraph.common.*;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
-
-import org.apache.commons.lang.StringUtils;
-
-import dnl.utils.text.tree.TextTree;
+package com.rohidekar.callgraph.printer;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.tree.TreeModel;
+
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import com.rohidekar.callgraph.common.GraphNode;
+
+import dnl.utils.text.tree.TextTree;
 
 /**
  * @author ssarnobat@google.com (Sridhar Sarnobat)
@@ -41,8 +38,7 @@ public class TreePrinter {
           continue;
         }
 
-        if (((GraphNode) tree.getRoot()).getPackageDepth()
-            > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
+        if (((GraphNode) tree.getRoot()).getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
           continue;
         }
         TextTree textTree = new TextTree(tree);
@@ -54,8 +50,7 @@ public class TreePrinter {
   private static void printRelationships(TreeModel tree) {
     for (int i = 0; i < tree.getChildCount(tree.getRoot()); i++) {
       Object child = tree.getChild(tree.getRoot(), i);
-      System.out.println("\"" + child.toString() + "\",\""
-          + tree.getRoot().toString() + "\"");
+      System.out.println("\"" + child.toString() + "\",\"" + tree.getRoot().toString() + "\"");
     }
   }
 
@@ -63,7 +58,6 @@ public class TreePrinter {
    * @param relationships
    * @param rootMethodNodes
    */
-
 
   static void printTrees(Relationships relationships, Set<GraphNode> rootMethodNodes) {
     Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();

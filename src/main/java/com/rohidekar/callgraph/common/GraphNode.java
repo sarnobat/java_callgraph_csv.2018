@@ -5,8 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import com.rohidekar.callgraph.MyInstruction;
-
 public abstract class GraphNode {
 
   // TODO: for better performance, create a parentsClosure set

@@ -1,9 +1,9 @@
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.printer;
 import com.rohidekar.callgraph.common.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TreeDepthVisitor {
+class TreeDepthVisitor {
 	private Map<String, GraphNode> visited = new HashMap<String, GraphNode>();
 
 	public void visit(GraphNode iParent) {

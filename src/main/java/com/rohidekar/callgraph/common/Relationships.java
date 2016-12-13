@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.common;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
