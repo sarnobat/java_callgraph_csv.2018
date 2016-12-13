@@ -1,8 +1,10 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 
-package com.rohidekar.callgraph.printer;
+package com.rohidekar.callgraph.containments;
 
 import com.rohidekar.callgraph.common.*;
+import com.rohidekar.callgraph.printer.TreeDepthVisitor;
+
 import javax.swing.tree.TreeModel;
 
 /**

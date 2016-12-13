@@ -9,7 +9,7 @@ import org.apache.bcel.classfile.JavaClass;
  * 
  * @author ssarnobat@google.com (Sridhar Sarnobat)
  */
-public class DeferredChildContainment {
+class DeferredChildContainment {
   private String childClassQualifiedName ;
   private JavaClass parentClass;
   public DeferredChildContainment(JavaClass parentClass, String childClassQualifiedName){

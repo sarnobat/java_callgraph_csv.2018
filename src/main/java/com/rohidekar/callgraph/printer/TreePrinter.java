@@ -11,6 +11,7 @@ import com.google.common.collect.Multimap;
 import com.rohidekar.callgraph.Main;
 import com.rohidekar.callgraph.common.*;
 import com.rohidekar.callgraph.common.Relationships;
+import com.rohidekar.callgraph.containments.TreeDepthCalculator;
 
 import dnl.utils.text.tree.TextTree;
 

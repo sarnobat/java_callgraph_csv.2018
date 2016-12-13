@@ -2,8 +2,6 @@ package com.rohidekar.callgraph.calls;
 
 import com.rohidekar.callgraph.common.*;
 import com.rohidekar.callgraph.printer.TreePrinter;
-import com.rohidekar.callgraph.rootfinder.RootFinder;
-import com.rohidekar.callgraph.rootfinder.RootsVisitor;
 
 import java.util.Collection;
 import java.util.HashSet;

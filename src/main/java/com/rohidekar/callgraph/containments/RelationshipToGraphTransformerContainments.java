@@ -2,7 +2,6 @@ package com.rohidekar.callgraph.containments;
 
 import com.rohidekar.callgraph.common.*;
 import com.rohidekar.callgraph.printer.TreePrinter;
-import com.rohidekar.callgraph.rootfinder.RootFinder;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

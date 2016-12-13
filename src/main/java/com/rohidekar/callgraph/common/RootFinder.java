@@ -1,7 +1,4 @@
-package com.rohidekar.callgraph.rootfinder;
-
-import com.rohidekar.callgraph.common.*;
-import com.rohidekar.callgraph.packages.GraphNodePackage;
+package com.rohidekar.callgraph.common;
 
 import java.util.HashSet;
 import java.util.Map;

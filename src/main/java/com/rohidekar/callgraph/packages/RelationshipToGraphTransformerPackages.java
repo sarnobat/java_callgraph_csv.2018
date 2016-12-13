@@ -2,8 +2,6 @@ package com.rohidekar.callgraph.packages;
 
 import com.rohidekar.callgraph.common.*;
 import com.rohidekar.callgraph.printer.TreePrinter;
-import com.rohidekar.callgraph.rootfinder.RootFinder;
-import com.rohidekar.callgraph.rootfinder.RootsVisitor;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
