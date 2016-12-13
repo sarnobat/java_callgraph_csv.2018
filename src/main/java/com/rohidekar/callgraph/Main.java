@@ -63,26 +63,14 @@ public class Main {
     Relationships relationships = new Relationships(resource);
     relationships.validate();
     if (PRINT_CALL_TREE) {
-      Map<String, GraphNode> allMethodNamesToMethodNodes =
-          RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy(relationships);
-      relationships.validate();
-      Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerCallHierarchy.findRootCallers(allMethodNamesToMethodNodes);
-      TreePrinter.printTrees(relationships, rootMethodNodes);
+      RelationshipToGraphTransformerCallHierarchy.printCallGraph(relationships);
     }
     if (PRINT_PACKAGE_ARCHITECTURE) {
-      Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes =
-          RelationshipToGraphTransformerPackages.determinePackageStructure(relationships);
-      Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerPackages.findRoots(allPacakgeNamesToPackageNodes);
-        System.err.println("Root package: " + rootMethodNodes.iterator().next().toString());
-      TreePrinter.printTrees(rootMethodNodes);
+      RelationshipToGraphTransformerPackages.printPackages(relationships);
     }
     System.err.println("Containment Hierarchy");
     if (PRINT_CONTAINMENT) {
-      Map<String, GraphNode> classNameToClassNodes =
-          RelationshipToGraphTransformerContainments.determineContainments(relationships);
-      Set<GraphNode> rootClasses = RootFinder.findRootJavaClasses(classNameToClassNodes);
-      Multimap<Integer, TreeModel> depthToTree = GraphNodeUtils.removeCyclicCalls(rootClasses);
-      TreePrinter.printTrees(relationships, depthToTree);
+      RelationshipToGraphTransformerContainments.printContainment(relationships);
     }
   }
 }

@@ -1,6 +1,7 @@
 package com.rohidekar.callgraph.packages;
 
 import com.rohidekar.callgraph.common.*;
+import com.rohidekar.callgraph.printer.TreePrinter;
 import com.rohidekar.callgraph.rootfinder.RootFinder;
 import com.rohidekar.callgraph.rootfinder.RootsVisitor;
 
@@ -16,7 +17,15 @@ import org.apache.commons.lang.ClassUtils;
 public class RelationshipToGraphTransformerPackages {
 
 
-  public static Set<GraphNode> findRoots(Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
+  public static void printPackages(Relationships relationships) {
+    Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes =
+        RelationshipToGraphTransformerPackages.determinePackageStructure(relationships);
+    Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerPackages.findRoots(allPacakgeNamesToPackageNodes);
+      System.err.println("Root package: " + rootMethodNodes.iterator().next().toString());
+      TreePrinter.printTrees(rootMethodNodes);
+  }
+
+  private static Set<GraphNode> findRoots(Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
     Set<GraphNode> rootMethodNodes;
     rootMethodNodes = new HashSet<GraphNode>();
     for (GraphNode aNode : allPacakgeNamesToPackageNodes.values()) {
@@ -26,7 +35,7 @@ public class RelationshipToGraphTransformerPackages {
     return rootMethodNodes;
   }
   
-  public static Map<String, GraphNodePackage> determinePackageStructure(Relationships relationships) {
+  private static Map<String, GraphNodePackage> determinePackageStructure(Relationships relationships) {
     Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes = new LinkedHashMap<String, GraphNodePackage>();
 
     for (String parentPackage : relationships.getPackagesKeySet()) {

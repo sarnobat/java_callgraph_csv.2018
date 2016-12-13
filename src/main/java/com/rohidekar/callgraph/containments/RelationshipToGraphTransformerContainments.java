@@ -1,13 +1,29 @@
 package com.rohidekar.callgraph.containments;
 import com.rohidekar.callgraph.common.*;
+import com.rohidekar.callgraph.printer.TreePrinter;
+import com.rohidekar.callgraph.rootfinder.RootFinder;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
+import javax.swing.tree.TreeModel;
+
+import com.google.common.collect.Multimap;
 import com.rohidekar.callgraph.*;
 
 public class RelationshipToGraphTransformerContainments {
 
-  public static Map<String, GraphNode> determineContainments(Relationships relationships)
+
+
+  public static void printContainment(Relationships relationships) throws IllegalAccessError {
+    Map<String, GraphNode> classNameToClassNodes =
+        RelationshipToGraphTransformerContainments.determineContainments(relationships);
+    Set<GraphNode> rootClasses = RootFinder.findRootJavaClasses(classNameToClassNodes);
+    Multimap<Integer, TreeModel> depthToTree = GraphNodeUtils.removeCyclicCalls(rootClasses);
+    TreePrinter.printTrees(relationships, depthToTree);
+  }
+  private static Map<String, GraphNode> determineContainments(Relationships relationships)
       throws IllegalAccessError {
     Map<String, GraphNode> classNameToGraphNodeJavaClassMap =
         new LinkedHashMap<String, GraphNode>();

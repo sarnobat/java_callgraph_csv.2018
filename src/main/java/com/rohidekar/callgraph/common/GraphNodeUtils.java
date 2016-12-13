@@ -1,6 +1,7 @@
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.common;
 
 import com.rohidekar.callgraph.printer.*;
+import com.rohidekar.callgraph.CycleRemovingTreeVisitor;
 import com.rohidekar.callgraph.common.*;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -12,7 +13,7 @@ import javax.swing.tree.TreeModel;
 /**
  * Generic routines related to graph structures
  */
-class GraphNodeUtils {
+public class GraphNodeUtils {
 
   public static Multimap<Integer, TreeModel> removeCyclicCalls(Set<GraphNode> rootClasses) {
     Multimap<Integer, TreeModel> depthToTree;
