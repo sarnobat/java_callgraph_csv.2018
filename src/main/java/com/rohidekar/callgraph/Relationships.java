@@ -11,8 +11,6 @@ import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class Relationships {
-  private static Logger log = Logger.getLogger(Relationships.class);
 
   // The top level package with classes in it
   int minPackageDepth = Integer.MAX_VALUE;
@@ -117,9 +114,7 @@ public class Relationships {
 
   public void addContainmentRelationship(String parentClassFullName, JavaClass javaClass) {
     if (!Ignorer.shouldIgnore(javaClass)) {
-      if (log.isEnabledFor(Level.DEBUG)) {
-        log.debug("CONTAINMENT: " + parentClassFullName + "--> " + javaClass.getClassName());
-      }
+      System.err.println("CONTAINMENT: " + parentClassFullName + "--> " + javaClass.getClassName());
     }
     classNameToFieldTypesMultiMap.put(parentClassFullName, javaClass);
     addContainmentRelationshipStringOnly(parentClassFullName, javaClass.getClassName());
@@ -190,9 +185,7 @@ public class Relationships {
       jc = Repository.lookupClass(aClassFullName);
     } catch (ClassNotFoundException e) {
       if (this.classNameToJavaClassMap.get(aClassFullName) != null) {
-        if (log.isEnabledFor(Level.WARN)) {
-          log.warn("We do need our own homemade repository. I don't know why");
-        }
+        System.err.println("We do need our own homemade repository. I don't know why");
       }
     }
     if (jc == null) {
@@ -224,9 +217,7 @@ public class Relationships {
       }
     }
     if (superClassesAndInterfaces.size() > 0) {
-      if (log.isDebugEnabled()) {
-        log.debug("Has a parent (" + childClass.getClassName() + ")");
-      }
+      System.err.println("Has a parent (" + childClass.getClassName() + ")");
     }
     return ImmutableSet.copyOf(superClassesAndInterfaces);
   }
@@ -263,9 +254,7 @@ public class Relationships {
   }
 
   public void deferParentContainment(String parentClassName, JavaClass javaClass) {
-    if (log.isEnabledFor(Level.DEBUG)) {
-      log.debug("Deferring " + parentClassName + " --> " + javaClass.getClassName());
-    }
+    System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
     this.deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
   }
 

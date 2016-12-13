@@ -10,8 +10,6 @@ import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.Type;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 import gr.gousiosg.javacg.stat.ClassVisitor;
 
@@ -20,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MyClassVisitor extends ClassVisitor {
-  private static Logger log = Logger.getLogger(MyClassVisitor.class);
 
   private JavaClass classToVisit;
   private Relationships relationships;
@@ -115,26 +112,21 @@ public class MyClassVisitor extends ClassVisitor {
     try {
       jc = Repository.lookupClass(childClassNameQualified);
     } catch (ClassNotFoundException e) {
-      if (log.isEnabledFor(Level.WARN)) {
-        log.warn(e);
-      }
+      
+        System.err.println(e);
       if (allowDeferral) {
         relationships.deferContainmentVisit(classToVisit, childClassNameQualified);
       } else {
         jc = relationships.getClassDef(childClassNameQualified);
         if (jc == null) {
           if (!Ignorer.shouldIgnore(childClassNameQualified)) {
-            if (log.isEnabledFor(Level.WARN)) {
-              log.warn("Still can't find " + childClassNameQualified);
-            }
+            System.err.println("WARN: Still can't find " + childClassNameQualified);
           }
         }
       }
     }
     if (jc == null) {
-      if (log.isEnabledFor(Level.WARN)) {
-        log.warn("Couldn't find " + childClassNameQualified);
-      }
+      System.err.println("WARN: Couldn't find " + childClassNameQualified);
     } else {
       relationships.addContainmentRelationship(classToVisit.getClassName(), jc);
     }

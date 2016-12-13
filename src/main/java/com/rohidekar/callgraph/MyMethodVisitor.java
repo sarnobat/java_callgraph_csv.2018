@@ -14,14 +14,12 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReturnInstruction;
 import org.apache.bcel.generic.Type;
-import org.apache.log4j.Logger;
 
 import gr.gousiosg.javacg.stat.MethodVisitor;
 
 import java.util.Collection;
 
 public class MyMethodVisitor extends MethodVisitor {
-  @Deprecated private static Logger log = Logger.getLogger(Main.class);
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
   private final Relationships relationships;
@@ -130,10 +128,8 @@ public class MyMethodVisitor extends MethodVisitor {
         relationships.deferSuperMethodRelationshipCapture(
             new DeferredSuperMethod(parentClassOrInterface, unqualifiedMethodName, target));
       } else {
-        if (log.isDebugEnabled()) {
-          log.debug(parentInstruction.getMethodNameQualified() + " -> "
+        System.err.println(parentInstruction.getMethodNameQualified() + " -> "
               + target.getMethodNameQualified());
-        }
         relationships.addMethodCall(
             parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified());
       }

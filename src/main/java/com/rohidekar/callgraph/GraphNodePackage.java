@@ -4,15 +4,12 @@ package com.rohidekar.callgraph;
 
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 /**
  * @author ssarnobat@google.com (Sridhar Sarnobat)
  *
  */
 public class GraphNodePackage extends GraphNode {
-  private static Logger log = Logger.getLogger(Relationships.class);
 
   private String pkgQualifiedName;
 
@@ -20,9 +17,7 @@ public class GraphNodePackage extends GraphNode {
     super(pkgQualifiedName);
     this.pkgQualifiedName = pkgQualifiedName;
     if (pkgQualifiedName.length() < 1) {
-      if (log.isEnabledFor(Level.WARN)) {
-        log.warn("Probably a mistake");
-      }
+      System.err.println("Probably a mistake");
     }
   }
 

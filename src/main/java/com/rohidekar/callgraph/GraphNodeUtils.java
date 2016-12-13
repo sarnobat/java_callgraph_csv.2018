@@ -3,8 +3,6 @@ package com.rohidekar.callgraph;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import org.apache.log4j.Logger;
-
 import java.util.Set;
 
 import javax.swing.tree.TreeModel;
@@ -13,9 +11,6 @@ import javax.swing.tree.TreeModel;
  * Generic routines related to graph structures
  */
 public class GraphNodeUtils {
-
-  @SuppressWarnings("unused")
-  private static Logger log = Logger.getLogger(GraphNodeUtils.class);
 
   public static Multimap<Integer, TreeModel> removeCyclicCalls(Set<GraphNode> rootClasses) {
     Multimap<Integer, TreeModel> depthToTree;

@@ -4,12 +4,9 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.commons.lang.ClassUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 public class MyInstruction {
 
-  private static Logger log = Logger.getLogger(Relationships.class);
   private String _qualifiedMethodName;
 
   public MyInstruction(ObjectType iClass, String unqualifiedMethodName) {
@@ -57,9 +54,7 @@ public class MyInstruction {
     String classNameQualified = getClassNameQualified();
     String classNameUnqualified = ClassUtils.getShortCanonicalName(classNameQualified);
     if (classNameUnqualified.contains("cassandra.db")) {
-      if (log.isEnabledFor(Level.WARN)) {
-        log.warn("do not display package: " + classNameUnqualified);
-      }
+      System.err.println("do not display package: " + classNameUnqualified);
     }
     return printPackage ? this.getMethodNameQualified()
         : classNameUnqualified + "." + methodNameUnqualified;
