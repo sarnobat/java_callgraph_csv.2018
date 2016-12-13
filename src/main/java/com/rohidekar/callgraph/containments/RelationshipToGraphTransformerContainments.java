@@ -18,7 +18,7 @@ public class RelationshipToGraphTransformerContainments {
         .determineContainments(relationships);
     Set<GraphNode> rootClasses = RootFinder.findRootJavaClasses(classNameToClassNodes);
     Multimap<Integer, TreeModel> depthToTree = GraphNodeUtils.removeCyclicCalls(rootClasses);
-    TreePrinter.printTrees(relationships, depthToTree);
+    TreePrinterContainments.printTrees(relationships, depthToTree);
   }
 
   private static Map<String, GraphNode> determineContainments(Relationships relationships) throws IllegalAccessError {

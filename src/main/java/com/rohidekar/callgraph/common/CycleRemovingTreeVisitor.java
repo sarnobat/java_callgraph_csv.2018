@@ -3,9 +3,9 @@ package com.rohidekar.callgraph.common;
 import java.util.HashSet;
 import java.util.Set;
 
-class CycleRemovingTreeVisitor {
+public class CycleRemovingTreeVisitor {
 
-  GraphNode visit(GraphNode aRootNodeWithCycles) {
+  public GraphNode visit(GraphNode aRootNodeWithCycles) {
     GraphNodeString aRootNodeWithoutCycles = new GraphNodeString( // (JavaClass) //
                                                                   // aRootNodeWithCycles.toString(),
         (String) aRootNodeWithCycles.getSource());

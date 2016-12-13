@@ -1,7 +1,6 @@
 package com.rohidekar.callgraph.calls;
 
 import com.rohidekar.callgraph.common.*;
-import com.rohidekar.callgraph.printer.TreePrinter;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -9,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.annotations.VisibleForTesting;
 
 /**
  * Transforms relationships into graphs
@@ -22,7 +20,7 @@ public class RelationshipToGraphTransformerCallHierarchy {
     relationships.validate();
     Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerCallHierarchy
         .findRootCallers(allMethodNamesToMethodNodes);
-    TreePrinter.printTrees(relationships, rootMethodNodes);
+    TreePrinterCalls.printTrees(relationships, rootMethodNodes);
   }
 
   private static Set<GraphNode> findRootCallers(Map<String, GraphNode> allMethodNamesToMethods) {
