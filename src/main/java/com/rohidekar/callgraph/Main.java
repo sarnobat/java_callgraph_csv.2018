@@ -3,9 +3,12 @@
 package com.rohidekar.callgraph;
 
 import com.google.common.collect.Multimap;
+import com.rohidekar.callgraph.calls.RelationshipToGraphTransformerCallHierarchy;
 import com.rohidekar.callgraph.common.GraphNode;
 import com.rohidekar.callgraph.common.Relationships;
 import com.rohidekar.callgraph.containments.RelationshipToGraphTransformerContainments;
+import com.rohidekar.callgraph.packages.GraphNodePackage;
+import com.rohidekar.callgraph.packages.RelationshipToGraphTransformerPackages;
 import com.rohidekar.callgraph.printer.TreePrinter;
 import com.rohidekar.callgraph.rootfinder.RootFinder;
 
@@ -29,8 +32,8 @@ public class Main {
 
   // TODO: Create a configuration object. Have several profiles: automatic, maximal
   private static final boolean PRINT_CONTAINMENT = true;
-//  private static final boolean PRINT_CALL_TREE = true;
-//  private static final boolean PRINT_PACKAGE_ARCHITECTURE = true;
+  private static final boolean PRINT_CALL_TREE = true;
+  private static final boolean PRINT_PACKAGE_ARCHITECTURE = true;
 
 
   public static final int MIN_TREE_DEPTH = 1;
@@ -59,22 +62,20 @@ public class Main {
   private static void printGraphs(String resource) {
     Relationships relationships = new Relationships(resource);
     relationships.validate();
-//    if (PRINT_CALL_TREE) {
-//      Map<String, GraphNode> allMethodNamesToMethodNodes =
-//          RelationshipToGraphTransformer.determineCallHierarchy(relationships);
-//      relationships.validate();
-//      Set<GraphNode> rootMethodNodes = RootFinder.findRootCallers(allMethodNamesToMethodNodes);
-//      TreePrinter.printTrees(relationships, rootMethodNodes);
-//    }
-//    if (PRINT_PACKAGE_ARCHITECTURE) {
-//      Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes =
-//          RelationshipToGraphTransformer.determinePackageStructure(relationships);
-//      Set<GraphNode> rootMethodNodes = RootFinder.findRoots(allPacakgeNamesToPackageNodes);
-//      if (log.isEnabledFor(Level.DEBUG)) {
-//        log.debug("Root package: " + rootMethodNodes.iterator().next().toString());
-//      }
-//      TreePrinter.printTrees(rootMethodNodes);
-//    }
+    if (PRINT_CALL_TREE) {
+      Map<String, GraphNode> allMethodNamesToMethodNodes =
+          RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy(relationships);
+      relationships.validate();
+      Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerCallHierarchy.findRootCallers(allMethodNamesToMethodNodes);
+      TreePrinter.printTrees(relationships, rootMethodNodes);
+    }
+    if (PRINT_PACKAGE_ARCHITECTURE) {
+      Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes =
+          RelationshipToGraphTransformerPackages.determinePackageStructure(relationships);
+      Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerPackages.findRoots(allPacakgeNamesToPackageNodes);
+        System.err.println("Root package: " + rootMethodNodes.iterator().next().toString());
+      TreePrinter.printTrees(rootMethodNodes);
+    }
     System.err.println("Containment Hierarchy");
     if (PRINT_CONTAINMENT) {
       Map<String, GraphNode> classNameToClassNodes =

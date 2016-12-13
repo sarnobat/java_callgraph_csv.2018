@@ -13,17 +13,7 @@ import java.util.Set;
  */
 public class RootFinder {
 
-  private static Set<GraphNode> findRoots(Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
-    Set<GraphNode> rootMethodNodes;
-    rootMethodNodes = new HashSet<GraphNode>();
-    for (GraphNode aNode : allPacakgeNamesToPackageNodes.values()) {
-      RootsVisitor rootsVisitor = new RootsVisitor();
-      getRoots(aNode, rootMethodNodes, rootsVisitor);
-    }
-    return rootMethodNodes;
-  }
-
-  private static void getRoots(GraphNode aNode, Set<GraphNode> roots, RootsVisitor rootsVisitor) {
+  public static void getRoots(GraphNode aNode, Set<GraphNode> roots, RootsVisitor rootsVisitor) {
     if (rootsVisitor.visited(aNode)) {
 
     } else {
@@ -39,18 +29,6 @@ public class RootFinder {
         roots.add(aNode);
       }
     }
-  }
-
-  private static Set<GraphNode> findRootCallers(Map<String, GraphNode> allMethodNamesToMethods) {
-    Set<GraphNode> rootMethodNodes;
-    rootMethodNodes = new HashSet<GraphNode>();
-    for (GraphNode aNode : allMethodNamesToMethods.values()) {
-      Set<GraphNode> roots = new HashSet<GraphNode>();
-      RootsVisitor rootsVisitor = new RootsVisitor();
-      getRoots(aNode, roots, rootsVisitor);
-      rootMethodNodes.addAll(roots);
-    }
-    return rootMethodNodes;
   }
 
   public static Set<GraphNode> findRootJavaClasses(Map<String, GraphNode> classNameToGraphNodeJavaClassMap) {

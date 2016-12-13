@@ -1,8 +1,13 @@
 package com.rohidekar.callgraph.calls;
 import com.rohidekar.callgraph.common.*;
+import com.rohidekar.callgraph.rootfinder.RootFinder;
+import com.rohidekar.callgraph.rootfinder.RootsVisitor;
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.rohidekar.callgraph.GraphNodeInstruction;
@@ -12,6 +17,19 @@ import com.rohidekar.callgraph.GraphNodeInstruction;
  */
 public class RelationshipToGraphTransformerCallHierarchy {
 
+
+  public static Set<GraphNode> findRootCallers(Map<String, GraphNode> allMethodNamesToMethods) {
+    Set<GraphNode> rootMethodNodes;
+    rootMethodNodes = new HashSet<GraphNode>();
+    for (GraphNode aNode : allMethodNamesToMethods.values()) {
+      Set<GraphNode> roots = new HashSet<GraphNode>();
+      RootsVisitor rootsVisitor = new RootsVisitor();
+      RootFinder.getRoots(aNode, roots, rootsVisitor);
+      rootMethodNodes.addAll(roots);
+    }
+    return rootMethodNodes;
+  }
+  
   @VisibleForTesting
   public static Map<String, GraphNode> determineCallHierarchy(Relationships relationships) {
     relationships.validate();

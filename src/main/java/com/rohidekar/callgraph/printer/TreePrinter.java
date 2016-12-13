@@ -61,7 +61,7 @@ public class TreePrinter {
    * @param rootMethodNodes
    */
 
-  static void printTrees(Relationships relationships, Set<GraphNode> rootMethodNodes) {
+  public static void printTrees(Relationships relationships, Set<GraphNode> rootMethodNodes) {
     Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();
     for (GraphNode aRootNode : rootMethodNodes) {
       TreeModel tree = new MyTreeModel(aRootNode);
@@ -104,7 +104,7 @@ public class TreePrinter {
 
   }
 
-  static void printTrees(Set<GraphNode> rootMethodNodes) {
+  public static void printTrees(Set<GraphNode> rootMethodNodes) {
     for (GraphNode aRootNode : rootMethodNodes) {
       new TextTree(new MyTreeModel(aRootNode)).printTree();
     }
