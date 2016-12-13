@@ -1,16 +1,15 @@
 package com.rohidekar.callgraph.calls;
 
-import com.rohidekar.callgraph.*;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import com.google.common.annotations.VisibleForTesting;
-
-import org.apache.commons.lang.ClassUtils;
-
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.rohidekar.callgraph.GraphNode;
+import com.rohidekar.callgraph.GraphNodeInstruction;
+import com.rohidekar.callgraph.Ignorer;
+import com.rohidekar.callgraph.MyInstruction;
+import com.rohidekar.callgraph.Relationships;
 
 /**
 * Transforms relationships into graphs
