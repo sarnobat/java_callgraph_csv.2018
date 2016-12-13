@@ -1,9 +1,11 @@
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.common;
 
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
+
+import com.rohidekar.callgraph.MyInstruction;
 
 public abstract class GraphNode {
 

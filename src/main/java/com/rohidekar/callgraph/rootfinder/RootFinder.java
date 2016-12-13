@@ -1,6 +1,7 @@
-// Copyright 2012 Google Inc. All Rights Reserved.
+package com.rohidekar.callgraph.rootfinder;
 
-package com.rohidekar.callgraph;
+import com.rohidekar.callgraph.common.*;
+import com.rohidekar.callgraph.packages.GraphNodePackage;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -12,8 +13,7 @@ import java.util.Set;
  */
 public class RootFinder {
 
-  static Set<GraphNode> findRoots(
-      Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
+  static Set<GraphNode> findRoots(Map<String, GraphNodePackage> allPacakgeNamesToPackageNodes) {
     Set<GraphNode> rootMethodNodes;
     rootMethodNodes = new HashSet<GraphNode>();
     for (GraphNode aNode : allPacakgeNamesToPackageNodes.values()) {
@@ -22,6 +22,7 @@ public class RootFinder {
     }
     return rootMethodNodes;
   }
+
   private static void getRoots(GraphNode aNode, Set<GraphNode> roots, RootsVisitor rootsVisitor) {
     if (rootsVisitor.visited(aNode)) {
 
@@ -32,7 +33,7 @@ public class RootFinder {
           getRoots(parentNode, roots, rootsVisitor);
         }
       } else {
-        if (aNode.toString().equals("java.lang.System.currentTimeMillis()")){
+        if (aNode.toString().equals("java.lang.System.currentTimeMillis()")) {
           throw new IllegalAccessError();
         }
         roots.add(aNode);
@@ -52,8 +53,7 @@ public class RootFinder {
     return rootMethodNodes;
   }
 
-  static Set<GraphNode> findRootJavaClasses(
-      Map<String, GraphNode> classNameToGraphNodeJavaClassMap) {
+  static Set<GraphNode> findRootJavaClasses(Map<String, GraphNode> classNameToGraphNodeJavaClassMap) {
     Set<GraphNode> rootClasses;
     rootClasses = new HashSet<GraphNode>();
     for (GraphNode aNode : classNameToGraphNodeJavaClassMap.values()) {
@@ -62,6 +62,5 @@ public class RootFinder {
     }
     return rootClasses;
   }
-
 
 }

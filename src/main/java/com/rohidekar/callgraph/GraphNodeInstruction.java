@@ -1,6 +1,6 @@
 package com.rohidekar.callgraph;
 
-
+import com.rohidekar.callgraph.common.*;
 public class GraphNodeInstruction extends GraphNode {
   MyInstruction instruction;
 

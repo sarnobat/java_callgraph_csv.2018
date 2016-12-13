@@ -1,6 +1,7 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.packages;
+import com.rohidekar.callgraph.common.*;
 
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;

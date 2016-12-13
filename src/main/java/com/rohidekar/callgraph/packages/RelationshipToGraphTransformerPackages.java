@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
 
-import com.rohidekar.callgraph.GraphNodePackage;
 import com.rohidekar.callgraph.Relationships;
 
 public class RelationshipToGraphTransformerPackages {
