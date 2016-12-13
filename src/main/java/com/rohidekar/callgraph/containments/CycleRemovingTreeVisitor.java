@@ -1,11 +1,13 @@
-package com.rohidekar.callgraph.common;
+package com.rohidekar.callgraph.containments;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class CycleRemovingTreeVisitor {
+import com.rohidekar.callgraph.common.GraphNode;
 
-  public GraphNode visit(GraphNode aRootNodeWithCycles) {
+class CycleRemovingTreeVisitor {
+
+  GraphNode visit(GraphNode aRootNodeWithCycles) {
     GraphNodeString aRootNodeWithoutCycles = new GraphNodeString( // (JavaClass) //
                                                                   // aRootNodeWithCycles.toString(),
         (String) aRootNodeWithCycles.getSource());
