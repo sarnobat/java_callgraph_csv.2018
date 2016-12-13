@@ -8,7 +8,9 @@ import javax.swing.tree.TreeModel;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import com.rohidekar.callgraph.common.GraphNode;
+import com.rohidekar.callgraph.Main;
+import com.rohidekar.callgraph.common.*;
+import com.rohidekar.callgraph.common.Relationships;
 
 import dnl.utils.text.tree.TextTree;
 
@@ -21,7 +23,7 @@ public class TreePrinter {
   /**
    * Output suitable for D3
    */
-  static void printTrees(Relationships relationships, Multimap<Integer, TreeModel> depthToTree) {
+  public static void printTrees(Relationships relationships, Multimap<Integer, TreeModel> depthToTree) {
     System.out.println("source,target");
     for (Integer treeDepth : depthToTree.keySet()) {
       Object o = depthToTree.get(treeDepth);

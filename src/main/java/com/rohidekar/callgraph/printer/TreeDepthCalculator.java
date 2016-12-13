@@ -9,8 +9,8 @@ import javax.swing.tree.TreeModel;
  * @author ssarnobat@google.com (Sridhar Sarnobat)
  *
  */
-class TreeDepthCalculator {
-  static int getTreeDepth(TreeModel tree) {
+public class TreeDepthCalculator {
+  public static int getTreeDepth(TreeModel tree) {
     TreeDepthVisitor tdv = new TreeDepthVisitor();
     int childCount = tree.getChildCount(tree.getRoot());
     int maxDepth = 0;

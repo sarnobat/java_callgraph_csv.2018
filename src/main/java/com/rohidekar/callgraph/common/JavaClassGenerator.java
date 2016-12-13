@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.common;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

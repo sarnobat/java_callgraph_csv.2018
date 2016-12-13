@@ -4,7 +4,9 @@ package com.rohidekar.callgraph;
 
 import com.google.common.collect.Multimap;
 import com.rohidekar.callgraph.common.GraphNode;
+import com.rohidekar.callgraph.common.Relationships;
 import com.rohidekar.callgraph.containments.RelationshipToGraphTransformerContainments;
+import com.rohidekar.callgraph.printer.TreePrinter;
 import com.rohidekar.callgraph.rootfinder.RootFinder;
 
 import java.util.Map;
@@ -36,7 +38,7 @@ public class Main {
   // Only print from roots this far below the top level package that contains classes
   public static final int ROOT_DEPTH = 27;
 
-  static final String[] substringsToIgnore = {"java", "Logger", "Test", ".toString", "Exception",
+  public static final String[] substringsToIgnore = {"java", "Logger", "Test", ".toString", "Exception",
       };
 
 
