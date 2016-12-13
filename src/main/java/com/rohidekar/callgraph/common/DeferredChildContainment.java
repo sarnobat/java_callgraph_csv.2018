@@ -12,16 +12,16 @@ import org.apache.bcel.classfile.JavaClass;
 class DeferredChildContainment {
   private String childClassQualifiedName ;
   private JavaClass parentClass;
-  public DeferredChildContainment(JavaClass parentClass, String childClassQualifiedName){
+  DeferredChildContainment(JavaClass parentClass, String childClassQualifiedName){
     this.childClassQualifiedName = childClassQualifiedName;
     this.parentClass = parentClass;
   }
 
-  public String getClassQualifiedName() {
+  String getClassQualifiedName() {
     return childClassQualifiedName;
   }
 
-  public JavaClass getParentClass() {
+  JavaClass getParentClass() {
     return parentClass;
   }
 }

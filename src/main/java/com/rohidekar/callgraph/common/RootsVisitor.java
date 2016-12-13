@@ -1,6 +1,5 @@
 package com.rohidekar.callgraph.common;
 
-import com.rohidekar.callgraph.common.*;
 import java.util.HashSet;
 import java.util.Set;
 

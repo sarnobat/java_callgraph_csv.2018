@@ -6,28 +6,28 @@ import org.apache.bcel.classfile.JavaClass;
  * @author ssarnobat@google.com (Sridhar Sarnobat)
  *
  */
-public class DeferredSuperMethod {
+class DeferredSuperMethod {
 
   JavaClass parentClassOrInterface;
   String unqualifiedMethodName;
   MyInstruction target;
 
-  public DeferredSuperMethod(
+  DeferredSuperMethod(
       JavaClass parentClassOrInterface, String unqualifiedMethodName, MyInstruction target) {
     this.parentClassOrInterface = parentClassOrInterface;
     this.unqualifiedMethodName = unqualifiedMethodName;
     this.target = target;
   }
 
-  public MyInstruction gettarget() {
+  MyInstruction gettarget() {
     return target;
   }
 
-  public JavaClass getparentClassOrInterface() {
+  JavaClass getparentClassOrInterface() {
     return parentClassOrInterface;
   }
 
-  public String getunqualifiedMethodName() {
+  String getunqualifiedMethodName() {
     return unqualifiedMethodName;
   }
 

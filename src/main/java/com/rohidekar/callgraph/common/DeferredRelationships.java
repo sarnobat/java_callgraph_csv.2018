@@ -8,7 +8,7 @@ import org.apache.bcel.classfile.JavaClass;
  */
 class DeferredRelationships {
 
-  public static void handleDeferredRelationships(Relationships relationships) {
+  static void handleDeferredRelationships(Relationships relationships) {
     for (DeferredParentContainment aDeferredParentContainment :
         relationships.getDeferredParentContainments()) {
       JavaClass parentClass =

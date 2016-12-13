@@ -12,12 +12,12 @@ class DeferredParentContainment {
   private String parentClassName;
   private JavaClass childClass;
 
-  public DeferredParentContainment(String parentClassName, JavaClass childClass) {
+  DeferredParentContainment(String parentClassName, JavaClass childClass) {
     this.setParentClassName(parentClassName);
     this.setChildClass(childClass);
   }
 
-  public String getParentClassName() {
+  String getParentClassName() {
     return parentClassName;
   }
 
@@ -25,7 +25,7 @@ class DeferredParentContainment {
     this.parentClassName = parentClassName;
   }
 
-  public JavaClass getChildClass() {
+  JavaClass getChildClass() {
     return childClass;
   }
 

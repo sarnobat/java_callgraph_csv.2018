@@ -19,13 +19,13 @@ import gr.gousiosg.javacg.stat.MethodVisitor;
 
 import java.util.Collection;
 
-public class MyMethodVisitor extends MethodVisitor {
+class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
   private final Relationships relationships;
   private final String parentMethodQualifiedName;
 
-  public MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, Relationships relationships) {
+  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, Relationships relationships) {
     super(methodGen, javaClass);
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
