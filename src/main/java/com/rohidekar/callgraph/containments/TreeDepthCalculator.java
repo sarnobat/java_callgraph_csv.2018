@@ -3,7 +3,6 @@
 package com.rohidekar.callgraph.containments;
 
 import com.rohidekar.callgraph.common.*;
-import com.rohidekar.callgraph.printer.TreeDepthVisitor;
 
 import javax.swing.tree.TreeModel;
 

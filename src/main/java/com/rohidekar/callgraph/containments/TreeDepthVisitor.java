@@ -1,17 +1,17 @@
-package com.rohidekar.callgraph.printer;
+package com.rohidekar.callgraph.containments;
 
 import com.rohidekar.callgraph.common.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TreeDepthVisitor {
+class TreeDepthVisitor {
   private Map<String, GraphNode> visited = new HashMap<String, GraphNode>();
 
-  public void visit(GraphNode iParent) {
+  void visit(GraphNode iParent) {
     visited.put(iParent.toString(), iParent);
   }
 
-  public boolean isVisited(GraphNode iParent) {
+  boolean isVisited(GraphNode iParent) {
     return visited.keySet().contains(iParent.toString());
   }
 }
