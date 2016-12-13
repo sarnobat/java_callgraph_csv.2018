@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph;
+package com.rohidekar.callgraph.packages;
 
 import com.rohidekar.callgraph.*;
 

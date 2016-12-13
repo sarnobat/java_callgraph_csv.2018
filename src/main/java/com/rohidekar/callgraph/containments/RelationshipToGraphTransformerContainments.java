@@ -7,7 +7,6 @@ import com.rohidekar.callgraph.*;
 
 public class RelationshipToGraphTransformerContainments {
 
-  @Deprecated // move to another class
   public static Map<String, GraphNode> determineContainments(Relationships relationships)
       throws IllegalAccessError {
     Map<String, GraphNode> classNameToGraphNodeJavaClassMap =
