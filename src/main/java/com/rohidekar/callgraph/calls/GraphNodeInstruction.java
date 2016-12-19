@@ -3,7 +3,7 @@ package com.rohidekar.callgraph.calls;
 import com.rohidekar.callgraph.common.*;
 
 class GraphNodeInstruction extends GraphNode {
-  MyInstruction instruction;
+  private MyInstruction instruction;
 
   public GraphNodeInstruction(MyInstruction parentMethodInstruction) {
     super(parentMethodInstruction);
