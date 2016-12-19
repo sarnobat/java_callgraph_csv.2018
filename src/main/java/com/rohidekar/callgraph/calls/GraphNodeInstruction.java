@@ -21,6 +21,7 @@ class GraphNodeInstruction extends GraphNode {
 
   @Override
   protected String printTreeNode() {
-    return this.instruction.printInstruction((getParents().size() < 1));
+    //return this.instruction.printInstruction((getParents().size() < 1));
+    return this.instruction.printInstruction(true);
   }
 }
