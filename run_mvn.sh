@@ -3,5 +3,3 @@ mvn --quiet clean compile
 
 # Don't do filtering here. Do it separately
 mvn --quiet exec:java -Dexec.mainClass="com.rohidekar.callgraph.Main"
-
-#cat calls.csv | groovy csvfilterincoming.groovy 1.0 | sh csv2d3.sh

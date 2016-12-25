@@ -14,11 +14,11 @@ import com.google.common.collect.*;
 public class CsvFilterIncoming {
 
 	public static void main(String[] args) throws IOException {
-		double percentageOfRelationshipsToRemove;
+		double percentageOfRelationshipsToRetain;
 		if (args.length > 0) {
-			percentageOfRelationshipsToRemove = Double.parseDouble(args[0]);
+			percentageOfRelationshipsToRetain = Double.parseDouble(args[0]);
 		} else {
-			percentageOfRelationshipsToRemove = 0.8;
+			percentageOfRelationshipsToRetain = 0.8;
 		}
 
 	//	HashMultimap<String, String> outgoingRelationships = HashMultimap.create();
@@ -51,7 +51,7 @@ public class CsvFilterIncoming {
 //		}
 
 		for (String destinationNode : incomingCounts.keySet()) {
-			System.out.println(incomingCounts.get(destinationNode) + "\t" + destinationNode);
+			System.err.println("ARITY: " + incomingCounts.get(destinationNode) + "\t" + destinationNode);
 		}
 //		int outgoingCountAccumulator = count(outgoingCounts.values());
 		int incomingCountAccumulator = count(incomingCounts.values());
@@ -73,7 +73,7 @@ public class CsvFilterIncoming {
 		List<Contribution> contributions = populateContributions(incomingCounts);
 		Preconditions.checkState(contributions.size() > 0);
 
-		double maximumDesired = totalCount * (1 - percentageOfRelationshipsToRemove);
+		double maximumDesired = totalCount * (percentageOfRelationshipsToRetain);
 		double amountCovered = 0;
 
 		Map<String, String> toPrint = new HashMap<String, String>();
@@ -96,8 +96,8 @@ public class CsvFilterIncoming {
 				}
 			}
 		}
-		System.out.println("CsvFilterIncoming.main() toPrint = " + toPrint.size());
-		System.out.println("CsvFilterIncoming.main() notPrinting = " + notPrinting.size());
+		System.err.println("CsvFilterIncoming.main() toPrint = " + toPrint.size());
+		System.err.println("CsvFilterIncoming.main() notPrinting = " + notPrinting.size());
 
 		for (String key : notPrinting.keySet()) {
 			String value = notPrinting.get(key);
