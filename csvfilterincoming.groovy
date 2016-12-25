@@ -21,7 +21,6 @@ public class CsvFilterIncoming {
 			percentageOfRelationshipsToRetain = 0.8;
 		}
 
-	//	HashMultimap<String, String> outgoingRelationships = HashMultimap.create();
 		HashMultimap<String, String> incomingRelationships = HashMultimap.create();
 		_1: {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -31,44 +30,28 @@ public class CsvFilterIncoming {
 				String[] rel = line.split(",");
 				String left = rel[0].replace("\"", "");
 				String right = rel[1].replace("\"", "");
-//				outgoingRelationships.put(left, right);
 				incomingRelationships.put(right, left);
 			}
 		}
-//		Map<String, Integer> outgoingCounts = new HashMap<String, Integer>();
-//		for (String sourceNode : outgoingRelationships.keySet()) {
-//			int outgoingRelationshipCount = outgoingRelationships.get(sourceNode).size();
-//			outgoingCounts.put(sourceNode, outgoingRelationshipCount);
-//		}
 		Map<String, Integer> incomingCounts = new HashMap<String, Integer>();
 		for (String destinationNode : incomingRelationships.keySet()) {
 			int incomingRelationshipCount = incomingRelationships.get(destinationNode).size();
 			incomingCounts.put(destinationNode, incomingRelationshipCount);
 		}
 
-//		for (String sourceNode : outgoingCounts.keySet()) {
-//			System.out.println(outgoingCounts.get(sourceNode) + "\t" + sourceNode);
-//		}
-
 		for (String destinationNode : incomingCounts.keySet()) {
-			System.err.println("ARITY: " + incomingCounts.get(destinationNode) + "\t" + destinationNode);
+			System.err.println("ARITY: " + incomingCounts.get(destinationNode) + "\t"
+					+ destinationNode);
 		}
-//		int outgoingCountAccumulator = count(outgoingCounts.values());
 		int incomingCountAccumulator = count(incomingCounts.values());
 		int totalCount = incomingCountAccumulator;
 
-//		Set<String> keySetOutgoing = outgoingRelationships.keySet();
 		Set<String> keySetIncoming = incomingRelationships.keySet();
 		Set<String> allNodesMutable = new HashSet<String>();
-//		allNodesMutable.addAll(keySetOutgoing);
 		allNodesMutable.addAll(keySetIncoming);
 
-//		Set<String> allNodes = ImmutableSet.copyOf(allNodesMutable);
-
-		// TODO: come to think of it, I want to keep ones with high outgoing
+		// come to think of it, I want to keep ones with high outgoing
 		// counts
-		// Map<String, Integer> totalContributionPerNode = merge(outgoingCounts,
-		// incomingCounts);
 		// Make sure it's sorted in ascending size
 		List<Contribution> contributions = populateContributions(incomingCounts);
 		Preconditions.checkState(contributions.size() > 0);
@@ -81,7 +64,6 @@ public class CsvFilterIncoming {
 		for (Contribution node : contributions) {
 			int edgesCovered = node.getCount();
 			String nodeName = node.getName();
-
 
 			amountCovered += edgesCovered;
 			if (amountCovered < maximumDesired) {
@@ -103,7 +85,7 @@ public class CsvFilterIncoming {
 			String value = notPrinting.get(key);
 			System.err.println("NOT PRINTING \"" + key + "\",\"" + value + "\"");
 		}
-		
+
 		// Finally print everything desired
 		for (String key : toPrint.keySet()) {
 			String value = toPrint.get(key);
