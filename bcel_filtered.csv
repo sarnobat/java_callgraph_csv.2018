@@ -1,0 +1,257 @@
+2	java.nio.ByteBuffer.remaining()
+2	java.util.Date.<init>()
+1	fuse.logging.FuseLog$Levels.<init>()
+1	java.nio.CharBuffer.put()
+1	java.util.Iterator.hasNext()
+1	fuse.Filesystem3.fsync()
+1	fuse.Filesystem3.chown()
+1	java.util.Map.get()
+2	java.nio.charset.CharsetEncoder.encode()
+1	fuse.FuseException.<init>()
+2	java.nio.CharBuffer.wrap()
+1	fuse.FuseFSDirFiller.add()
+1	java.nio.ByteBuffer.position()
+1	fuse.XattrSupport.removexattr()
+3	java.nio.charset.Charset.newEncoder()
+1	java.lang.Long.<init>()
+2	fuse.compat.Filesystem2.truncate()
+1	fuse.FuseFSDirFiller
+2	java.lang.String.equals()
+2	java.lang.ThreadGroup.getName()
+1	fuse.FuseMount.mount()
+1	fuse.Filesystem3.mkdir()
+2	java.lang.RuntimeException.<init>()
+29	java.nio.charset.Charset.decode()
+2	java.lang.Thread.currentThread()
+1	java.lang.Exception.<init>()
+1	fuse.XattrSupport.getxattr()
+5	java.lang.Long.longValue()
+1	java.lang.String.lastIndexOf()
+2	fuse.compat.Filesystem2.chmod()
+1	java.nio.CharBuffer.allocate()
+2	java.nio.ByteBuffer.put()
+2	java.nio.ByteBuffer.get()
+1	fuse.FuseMount$1.<init>()
+29	fuse.Filesystem3ToFuseFSAdapter.handleException()
+2	fuse.compat.Filesystem2.read()
+2	fuse.XattrSupport.listxattr()
+1	fuse.Filesystem3.rmdir()
+8	fuse.util.Struct.<init>()
+2	fuse.compat.Filesystem2ToFilesystem3Adapter.<init>()
+1	java.lang.Integer.<init>()
+2	fuse.logging.FuseLog.access$100()
+1	java.lang.Thread.<init>()
+1	fuse.Filesystem3ToFuseFSAdapter$XattrSizeLister.<init>()
+1	fuse.FuseSizeSetter.setSize()
+1	java.util.HashMap.<init>()
+2	fuse.compat.Filesystem1.release()
+1	java.util.Properties.propertyNames()
+2	fuse.compat.Filesystem1.mkdir()
+1	java.lang.Integer.intValue()
+3	fuse.Filesystem3ToFuseFSAdapter.access$000()
+2	fuse.compat.Filesystem1.symlink()
+2	java.util.ArrayList.<init>()
+2	java.nio.charset.CharsetEncoder.onUnmappableCharacter()
+1	fuse.FuseFSDirFiller.setCharset()
+2	fuse.compat.Filesystem2.chown()
+2	fuse.compat.Filesystem2.fsync()
+1	fuse.Filesystem3.mknod()
+1	java.lang.String.startsWith()
+1	fuse.compat.Filesystem1
+6	fuse.logging.FuseLog._log()
+1	fuse.Filesystem3.link()
+30	fuse.Filesystem3ToFuseFSAdapter.handleErrno()
+2	java.nio.charset.CharsetEncoder.onMalformedInput()
+2	java.lang.ThreadGroup.activeCount()
+12	java.lang.Object.<init>()
+2	fuse.compat.Filesystem2.unlink()
+33	java.lang.StringBuilder.toString()
+1	fuse.Filesystem3.getdir()
+2	java.nio.charset.Charset.encode()
+1	fuse.LifecycleSupport.init()
+2	fuse.compat.Filesystem1.mknod()
+33	org.apache.commons.logging.Log.debug()
+2	fuse.compat.Filesystem1.chmod()
+1	fuse.logging.FuseLog$Levels.isFatalEnabled()
+2	fuse.compat.Filesystem2.open()
+1	fuse.Filesystem3.chmod()
+1	java.nio.CharBuffer.flip()
+2	java.lang.Thread.isDaemon()
+2	fuse.compat.Filesystem1.getdir()
+1	java.nio.charset.CharsetEncoder.averageBytesPerChar()
+2	fuse.compat.Filesystem2.write()
+2	fuse.compat.Filesystem2.flush()
+2	fuse.compat.Filesystem1.read()
+1	java.lang.Throwable.printStackTrace()
+1	fuse.XattrSupport.getxattrsize()
+2	fuse.compat.Filesystem1.getattr()
+1	java.util.Enumeration.hasMoreElements()
+1	fuse.FuseException.getErrno()
+1	java.lang.Object.clone()
+2	fuse.compat.Filesystem2.utime()
+2	fuse.FuseContext.<init>()
+2	fuse.compat.Filesystem1.unlink()
+1	fuse.Filesystem3ToFuseFSAdapter$XattrValueLister.<init>()
+2	fuse.compat.Filesystem2.mkdir()
+1	fuse.Filesystem3.open()
+1	fuse.LifecycleSupport.destroy()
+1	fuse.Filesystem3.release()
+1	java.lang.Thread.getName()
+2	fuse.compat.Filesystem2.readlink()
+1	java.io.PrintStream.printf()
+1	java.nio.ByteBuffer.capacity()
+1	fuse.FuseMount.access$000()
+1	fuse.FuseGetattrSetter.set()
+7	fuse.logging.FuseLog$Levels.getLevelValue()
+1	java.nio.charset.CoderResult.isOverflow()
+1	java.lang.Thread.getThreadGroup()
+3	java.lang.Object.getClass()
+2	fuse.Filesystem3ToFuseFSAdapter.<init>()
+1	java.lang.Thread.setDaemon()
+2	fuse.compat.Filesystem2.statfs()
+1	fuse.FuseOpenSetter.setFh()
+1	java.lang.Class.getName()
+2	fuse.compat.Filesystem1.chown()
+1	java.util.List.add()
+1	fuse.Filesystem3.flush()
+2	fuse.compat.Filesystem1.statfs()
+1	fuse.FuseContext
+1	fuse.FuseContext.fillInFuseContext()
+2	fuse.compat.Filesystem1ToFilesystem2Adapter.<init>()
+2	fuse.compat.Filesystem1.rmdir()
+1	fuse.logging.FuseLog$Levels.isDebugEnabled()
+2	fuse.compat.Filesystem2.link()
+2	fuse.compat.Filesystem2.release()
+1	java.lang.Object.toString()
+2	fuse.compat.Filesystem1.open()
+4	java.lang.Integer.toOctalString()
+33	org.apache.commons.logging.Log.isDebugEnabled()
+1	java.lang.System.getProperty()
+1	java.lang.ThreadGroup.setDaemon()
+1	fuse.FuseFSDirFiller.iterator()
+1	fuse.Filesystem3.rename()
+9	fuse.util.Struct.appendAttributes()
+2	fuse.compat.Filesystem2.rename()
+1	fuse.Filesystem3.truncate()
+1	java.lang.IllegalArgumentException.<init>()
+1	fuse.Filesystem3.write()
+2	java.lang.String.substring()
+3	org.apache.commons.logging.LogFactory.getLog()
+1	fuse.logging.FuseLog$Levels.isTraceEnabled()
+1	fuse.FuseException.initErrno()
+2	fuse.compat.Filesystem1.write()
+1	fuse.logging.FuseLog$Levels.isInfoEnabled()
+1	fuse.Filesystem3.getattr()
+1	fuse.FuseFSDirEnt.<init>()
+1	fuse.Filesystem3.readlink()
+1	fuse.Filesystem3.unlink()
+2	fuse.compat.Filesystem1.utime()
+2	fuse.compat.Filesystem2.getdir()
+2	java.lang.ThreadGroup.enumerate()
+2	fuse.compat.Filesystem1.truncate()
+2	fuse.compat.Filesystem1.readlink()
+27	java.nio.CharBuffer.toString()
+1	fuse.logging.FuseLog$Levels.isWarnEnabled()
+1	fuse.XattrSupport.setxattr()
+1	java.nio.charset.Charset.forName()
+1	fuse.Filesystem3.statfs()
+2	org.apache.commons.logging.Log.info()
+2	fuse.compat.Filesystem2.mknod()
+33	java.lang.StringBuilder.<init>()
+2	fuse.compat.Filesystem1.rename()
+1	java.lang.System.getProperties()
+45	java.lang.StringBuilder.append()
+1	java.lang.System.loadLibrary()
+1	java.lang.Object.hashCode()
+1	fuse.FuseDirFiller.add()
+3	java.lang.String.length()
+1	java.util.Enumeration.nextElement()
+1	java.util.Iterator.next()
+2	fuse.compat.Filesystem2.rmdir()
+1	java.util.Properties.getProperty()
+2	fuse.compat.Filesystem2.getattr()
+2	fuse.compat.Filesystem1.link()
+1	java.util.Map.put()
+1	fuse.FuseStatfsSetter.set()
+1	java.nio.ByteBuffer.allocateDirect()
+4	fuse.FuseFtype.<init>()
+2	fuse.compat.Filesystem2.symlink()
+1	java.nio.ByteBuffer.flip()
+1	fuse.Filesystem3.symlink()
+1	java.lang.Thread.start()
+1	org.apache.commons.logging.Log.error()
+4	fuse.FuseFtype.appendAttributes()
+2	java.nio.ByteBuffer.wrap()
+1	java.lang.ThreadGroup.<init>()
+1	fuse.Filesystem3.read()
+1	fuse.Filesystem3.utime()
+1	fuse.logging.FuseLog$Levels.access$000()
+1	java.nio.CharBuffer.rewind()
+CsvFilterIncoming.main() toPrint = 66
+CsvFilterIncoming.main() notPrinting = 172
+"fuse.Filesystem3ToFuseFSAdapter.getattr()","fuse.Filesystem3.getattr()"
+"fuse.logging.FuseLog$Levels.<init>()","java.lang.String.equals()"
+"fuse.logging.FuseLog.isFatalEnabled()","fuse.logging.FuseLog$Levels.isFatalEnabled()"
+"fuse.compat.Filesystem2ToFilesystem3Adapter.getdir()","fuse.FuseDirFiller.add()"
+"fuse.FuseFSDirFiller.toString()","java.util.Iterator.next()"
+"fuse.Filesystem3ToFuseFSAdapter.fsync()","fuse.Filesystem3.fsync()"
+"fuse.Filesystem3ToFuseFSAdapter.chown()","fuse.Filesystem3.chown()"
+"fuse.Filesystem3ToFuseFSAdapter.flush()","fuse.Filesystem3.flush()"
+"fuse.FuseContext.get()","fuse.FuseContext.fillInFuseContext()"
+"fuse.compat.Filesystem2ToFilesystem3Adapter.open()","fuse.FuseOpenSetter.setFh()"
+"fuse.FuseMount.access$000()","fuse.FuseMount.mount()"
+"fuse.logging.FuseLog$Levels.getLevelValue()","java.lang.Integer.intValue()"
+"fuse.logging.FuseLog.isTraceEnabled()","fuse.logging.FuseLog$Levels.isTraceEnabled()"
+"fuse.FuseException.<init>()","java.lang.Exception.<init>()"
+"fuse.Filesystem3ToFuseFSAdapter.<init>()","java.nio.charset.Charset.forName()"
+"fuse.FuseFSDirFiller.add()","java.nio.CharBuffer.wrap()"
+"fuse.Filesystem3ToFuseFSAdapter$XattrSizeLister.add()","java.nio.charset.CharsetEncoder.averageBytesPerChar()"
+"fuse.Filesystem3ToFuseFSAdapter.getdir()","fuse.Filesystem3.getdir()"
+"fuse.Filesystem3ToFuseFSAdapter.rename()","fuse.Filesystem3.rename()"
+"fuse.Filesystem3ToFuseFSAdapter.read()","fuse.Filesystem3.read()"
+"fuse.Filesystem3ToFuseFSAdapter$XattrValueLister.toString()","java.nio.ByteBuffer.position()"
+"fuse.Filesystem3ToFuseFSAdapter.mknod()","fuse.Filesystem3.mknod()"
+"fuse.FuseMount.mount()","java.lang.Thread.currentThread()"
+"fuse.Filesystem3ToFuseFSAdapter.destroy()","fuse.LifecycleSupport.destroy()"
+"fuse.compat.Filesystem2ToFilesystem3Adapter.getattr()","fuse.FuseGetattrSetter.set()"
+"fuse.Filesystem3ToFuseFSAdapter.rmdir()","fuse.Filesystem3.rmdir()"
+"fuse.Filesystem3ToFuseFSAdapter.write()","fuse.Filesystem3.write()"
+"fuse.util.FuseArgumentParser.<init>()","java.lang.String.equals()"
+"fuse.Filesystem3ToFuseFSAdapter.handleException()","org.apache.commons.logging.Log.error()"
+"fuse.Filesystem3ToFuseFSAdapter$XattrValueLister.add()","java.nio.CharBuffer.wrap()"
+"fuse.Filesystem3ToFuseFSAdapter.truncate()","fuse.Filesystem3.truncate()"
+"fuse.Filesystem3.truncate()","fuse.compat.Filesystem2.truncate()"
+"fuse.Filesystem3ToFuseFSAdapter.listxattrsize()","fuse.FuseSizeSetter.setSize()"
+"fuse.Filesystem3ToFuseFSAdapter.link()","fuse.Filesystem3.link()"
+"fuse.Filesystem3ToFuseFSAdapter.release()","fuse.Filesystem3.release()"
+"fuse.compat.Filesystem2ToFilesystem3Adapter.truncate()","fuse.compat.Filesystem2.truncate()"
+"fuse.compat.Filesystem2ToFilesystem3Adapter.readlink()","java.nio.CharBuffer.put()"
+"fuse.Filesystem3ToFuseFSAdapter.listxattr()","fuse.Filesystem3ToFuseFSAdapter$XattrValueLister.<init>()"
+"fuse.Filesystem3ToFuseFSAdapter.utime()","java.util.Date.<init>()"
+"fuse.logging.FuseLog.isWarnEnabled()","fuse.logging.FuseLog$Levels.isWarnEnabled()"
+"fuse.FuseMount$1.run()","java.lang.RuntimeException.<init>()"
+"fuse.util.Struct.toString()","java.lang.Object.hashCode()"
+"fuse.logging.FuseLog.isInfoEnabled()","fuse.logging.FuseLog$Levels.isInfoEnabled()"
+"fuse.util.Struct","fuse.FuseContext"
+"fuse.compat.Filesystem2ToFilesystem3Adapter.statfs()","fuse.FuseStatfsSetter.set()"
+"fuse.util.Struct.clone()","java.lang.RuntimeException.<init>()"
+"fuse.FuseMount.<clinit>()","java.lang.System.loadLibrary()"
+"fuse.Filesystem3ToFuseFSAdapter.symlink()","fuse.Filesystem3.symlink()"
+"fuse.compat.Filesystem2","fuse.compat.Filesystem1"
+"fuse.logging.FuseLog._log()","java.lang.Thread.currentThread()"
+"fuse.Filesystem3ToFuseFSAdapter.setxattr()","fuse.XattrSupport.setxattr()"
+"fuse.FuseDirFiller.add()","fuse.FuseFSDirFiller.add()"
+"fuse.Filesystem3ToFuseFSAdapter.mkdir()","fuse.Filesystem3.mkdir()"
+"fuse.Filesystem3ToFuseFSAdapter.getxattrsize()","fuse.XattrSupport.getxattrsize()"
+"fuse.FuseDirFiller","fuse.FuseFSDirFiller"
+"fuse.Filesystem3ToFuseFSAdapter.readlink()","java.nio.charset.CharsetEncoder.encode()"
+"fuse.logging.FuseLog.isDebugEnabled()","fuse.logging.FuseLog$Levels.isDebugEnabled()"
+"fuse.Filesystem3ToFuseFSAdapter.chmod()","fuse.Filesystem3.chmod()"
+"fuse.logging.FuseLog.<clinit>()","fuse.logging.FuseLog$Levels.<init>()"
+"fuse.Filesystem3ToFuseFSAdapter.unlink()","fuse.Filesystem3.unlink()"
+"fuse.Filesystem3ToFuseFSAdapter.removexattr()","fuse.XattrSupport.removexattr()"
+"fuse.Filesystem3ToFuseFSAdapter.getxattr()","fuse.XattrSupport.getxattr()"
+"fuse.Filesystem3ToFuseFSAdapter.init()","fuse.LifecycleSupport.init()"
+"fuse.Filesystem3ToFuseFSAdapter.open()","fuse.Filesystem3.open()"
+"fuse.FuseFSFillDir.fill()","java.nio.ByteBuffer.remaining()"
+"fuse.Filesystem3ToFuseFSAdapter.statfs()","fuse.Filesystem3.statfs()"
