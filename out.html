@@ -1,0 +1,181 @@
+<style>
+
+
+.link {
+  stroke: #777;
+  stroke-opacity: 0.3;
+  stroke-width: 1.0px;
+}
+
+.node circle {
+  fill: #ccc;
+  stroke: #000;
+  stroke-width: 0px;
+}
+
+.node text {
+  display: none;
+  font: 10px sans-serif;
+}
+
+.node:hover circle {
+  fill: #000;
+}
+
+.node:hover text {
+  display: inline;
+}
+
+.cell {
+  fill: none;
+  pointer-events: all;
+}
+
+</style>
+<body>
+<script src="d3.v3.min.js"></script>
+<script>
+
+var width = 1200,
+    height = 1200;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.layout.force()
+    .size([width, height]);
+
+//d3.csv("out.csv", function(error, links2) {
+
+	var links = getData();
+//  if (error) throw error;
+
+  var nodesByName = {};
+
+  // Create nodes for each unique source and target.
+  links.forEach(function(link) {
+    link.source = nodeByName(link.source);
+    link.target = nodeByName(link.target);
+  });
+
+  // Extract the array of nodes from the map by name.
+  var nodes = d3.values(nodesByName);
+
+  // Create the link lines.
+  var link = svg.selectAll(".link")
+      .data(links)
+    .enter().append("line")
+      .attr("class", "link");
+
+  // Create the node circles.
+  var node = svg.selectAll(".node")
+      .data(nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
+
+  var circle = node.append("circle")
+      .attr("r", 4.5);
+
+  var label = node.append("text")
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+
+  // Start the force layout.
+  force
+      .nodes(nodes)
+      .links(links)
+      .on("tick", tick)
+      .start();
+
+  function tick() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    circle.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+
+    label
+        .attr("x", function(d) { return d.x + 8; })
+        .attr("y", function(d) { return d.y; });
+  }
+
+  function nodeByName(name) {
+    return nodesByName[name] || (nodesByName[name] = {name: name});
+  }
+//});
+
+function getData() {
+return  [
+  { source : "fuse.Filesystem3ToFuseFSAdapter.getattr()", target : "fuse.Filesystem3.getattr()" },
+  { source : "fuse.logging.FuseLog$Levels.<init>()", target : "java.lang.String.equals()" },
+  { source : "fuse.logging.FuseLog.isFatalEnabled()", target : "fuse.logging.FuseLog$Levels.isFatalEnabled()" },
+  { source : "fuse.compat.Filesystem2ToFilesystem3Adapter.getdir()", target : "fuse.FuseDirFiller.add()" },
+  { source : "fuse.FuseFSDirFiller.toString()", target : "java.util.Iterator.next()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.fsync()", target : "fuse.Filesystem3.fsync()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.chown()", target : "fuse.Filesystem3.chown()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.flush()", target : "fuse.Filesystem3.flush()" },
+  { source : "fuse.FuseContext.get()", target : "fuse.FuseContext.fillInFuseContext()" },
+  { source : "fuse.compat.Filesystem2ToFilesystem3Adapter.open()", target : "fuse.FuseOpenSetter.setFh()" },
+  { source : "fuse.FuseMount.access$000()", target : "fuse.FuseMount.mount()" },
+  { source : "fuse.logging.FuseLog$Levels.getLevelValue()", target : "java.lang.Integer.intValue()" },
+  { source : "fuse.logging.FuseLog.isTraceEnabled()", target : "fuse.logging.FuseLog$Levels.isTraceEnabled()" },
+  { source : "fuse.FuseException.<init>()", target : "java.lang.Exception.<init>()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.<init>()", target : "java.nio.charset.Charset.forName()" },
+  { source : "fuse.FuseFSDirFiller.add()", target : "java.nio.CharBuffer.wrap()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter$XattrSizeLister.add()", target : "java.nio.charset.CharsetEncoder.averageBytesPerChar()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.getdir()", target : "fuse.Filesystem3.getdir()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.rename()", target : "fuse.Filesystem3.rename()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.read()", target : "fuse.Filesystem3.read()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter$XattrValueLister.toString()", target : "java.nio.ByteBuffer.position()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.mknod()", target : "fuse.Filesystem3.mknod()" },
+  { source : "fuse.FuseMount.mount()", target : "java.lang.Thread.currentThread()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.destroy()", target : "fuse.LifecycleSupport.destroy()" },
+  { source : "fuse.compat.Filesystem2ToFilesystem3Adapter.getattr()", target : "fuse.FuseGetattrSetter.set()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.rmdir()", target : "fuse.Filesystem3.rmdir()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.write()", target : "fuse.Filesystem3.write()" },
+  { source : "fuse.util.FuseArgumentParser.<init>()", target : "java.lang.String.equals()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.handleException()", target : "org.apache.commons.logging.Log.error()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter$XattrValueLister.add()", target : "java.nio.CharBuffer.wrap()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.truncate()", target : "fuse.Filesystem3.truncate()" },
+  { source : "fuse.Filesystem3.truncate()", target : "fuse.compat.Filesystem2.truncate()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.listxattrsize()", target : "fuse.FuseSizeSetter.setSize()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.link()", target : "fuse.Filesystem3.link()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.release()", target : "fuse.Filesystem3.release()" },
+  { source : "fuse.compat.Filesystem2ToFilesystem3Adapter.truncate()", target : "fuse.compat.Filesystem2.truncate()" },
+  { source : "fuse.compat.Filesystem2ToFilesystem3Adapter.readlink()", target : "java.nio.CharBuffer.put()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.listxattr()", target : "fuse.Filesystem3ToFuseFSAdapter$XattrValueLister.<init>()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.utime()", target : "java.util.Date.<init>()" },
+  { source : "fuse.logging.FuseLog.isWarnEnabled()", target : "fuse.logging.FuseLog$Levels.isWarnEnabled()" },
+  { source : "fuse.FuseMount$1.run()", target : "java.lang.RuntimeException.<init>()" },
+  { source : "fuse.util.Struct.toString()", target : "java.lang.Object.hashCode()" },
+  { source : "fuse.logging.FuseLog.isInfoEnabled()", target : "fuse.logging.FuseLog$Levels.isInfoEnabled()" },
+  { source : "fuse.util.Struct", target : "fuse.FuseContext" },
+  { source : "fuse.compat.Filesystem2ToFilesystem3Adapter.statfs()", target : "fuse.FuseStatfsSetter.set()" },
+  { source : "fuse.util.Struct.clone()", target : "java.lang.RuntimeException.<init>()" },
+  { source : "fuse.FuseMount.<clinit>()", target : "java.lang.System.loadLibrary()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.symlink()", target : "fuse.Filesystem3.symlink()" },
+  { source : "fuse.compat.Filesystem2", target : "fuse.compat.Filesystem1" },
+  { source : "fuse.logging.FuseLog._log()", target : "java.lang.Thread.currentThread()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.setxattr()", target : "fuse.XattrSupport.setxattr()" },
+  { source : "fuse.FuseDirFiller.add()", target : "fuse.FuseFSDirFiller.add()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.mkdir()", target : "fuse.Filesystem3.mkdir()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.getxattrsize()", target : "fuse.XattrSupport.getxattrsize()" },
+  { source : "fuse.FuseDirFiller", target : "fuse.FuseFSDirFiller" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.readlink()", target : "java.nio.charset.CharsetEncoder.encode()" },
+  { source : "fuse.logging.FuseLog.isDebugEnabled()", target : "fuse.logging.FuseLog$Levels.isDebugEnabled()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.chmod()", target : "fuse.Filesystem3.chmod()" },
+  { source : "fuse.logging.FuseLog.<clinit>()", target : "fuse.logging.FuseLog$Levels.<init>()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.unlink()", target : "fuse.Filesystem3.unlink()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.removexattr()", target : "fuse.XattrSupport.removexattr()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.getxattr()", target : "fuse.XattrSupport.getxattr()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.init()", target : "fuse.LifecycleSupport.init()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.open()", target : "fuse.Filesystem3.open()" },
+  { source : "fuse.FuseFSFillDir.fill()", target : "java.nio.ByteBuffer.remaining()" },
+  { source : "fuse.Filesystem3ToFuseFSAdapter.statfs()", target : "fuse.Filesystem3.statfs()" },
+];
+}
+</script>
