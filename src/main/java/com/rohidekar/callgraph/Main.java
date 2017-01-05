@@ -11,6 +11,8 @@ import com.rohidekar.callgraph.packages.RelationshipToGraphTransformerPackages;
  * put -Xmx1024m in the VM args
  *
  * @author ssarnobat@google.com (Sridhar Sarnobat)
+ *
+ * 2016-12
  */
 public class Main {
 //  private static Logger log = Logger.getLogger(Main.class);

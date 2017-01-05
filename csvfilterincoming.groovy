@@ -29,6 +29,7 @@ public class CsvFilterIncoming {
 				String line = lineOrig;
 				String[] rel = line.split(",");
 				String left = rel[0].replace("\"", "");
+				System.err.println("READING: " + line);
 				String right = rel[1].replace("\"", "");
 				incomingRelationships.put(right, left);
 			}
