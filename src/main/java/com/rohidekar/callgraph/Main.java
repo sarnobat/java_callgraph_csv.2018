@@ -33,7 +33,7 @@ public class Main {
   // Only print from roots this far below the top level package that contains classes
   public static final int ROOT_DEPTH = 27;
 
-  public static final String[] substringsToIgnore = {"java", "Logger", "Test", ".toString", "Exception",
+  public static final String[] substringsToIgnore = {"java", "Logger", ".toString", "Exception",
       };
 
 
@@ -42,7 +42,9 @@ public class Main {
     if (args == null || args.length < 1) {
 //       resource = "/Users/ssarnobat/work/src/saas/services/subscriber";
 //		resource = "/Users/ssarnobat/work/src/saas/services/plancycle/target";
-		resource = "/Users/ssarnobat/work/src/saas/";
+//		resource = "/Users/ssarnobat/work/src/saas/";
+//resource = "/Users/ssarnobat/Desktop/work/src/webservices/rms-plugin/rms-core/";
+resource = "/Users/ssarnobat/Desktop/work/src/webservices/rms-plugin/rms-ws/";
 //       resource = "/Users/ssarnobat/github/nanohttpd/target";
       //resource = "/Users/ssarnobat/github/java_callgraph_csv/target";
       // TODO: use the current working directory as the class folder, not
