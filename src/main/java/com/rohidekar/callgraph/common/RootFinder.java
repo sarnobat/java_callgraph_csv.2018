@@ -21,7 +21,7 @@ public class RootFinder {
         }
       } else {
         if (aNode.toString().equals("java.lang.System.currentTimeMillis()")) {
-          throw new IllegalAccessError();
+          throw new IllegalAccessError("getRoots");
         }
         roots.add(aNode);
       }

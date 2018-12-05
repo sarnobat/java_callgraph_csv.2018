@@ -44,7 +44,7 @@ public class Main {
 //		resource = "/Users/ssarnobat/work/src/saas/services/plancycle/target";
 //		resource = "/Users/ssarnobat/work/src/saas/";
 //resource = "/Users/ssarnobat/Desktop/work/src/webservices/rms-plugin/rms-core/";
-resource = "/Users/ssarnobat/Desktop/work/src/webservices/rms-plugin/rms-ws/";
+resource = "/Users/ssarnobat/Desktop/work/src/webservices/rms-plugin/rms-services/";
 //       resource = "/Users/ssarnobat/github/nanohttpd/target";
       //resource = "/Users/ssarnobat/github/java_callgraph_csv/target";
       // TODO: use the current working directory as the class folder, not
@@ -53,6 +53,7 @@ resource = "/Users/ssarnobat/Desktop/work/src/webservices/rms-plugin/rms-ws/";
       resource = args[0];
     }
     printGraphs(resource);
+    System.err.println("Now use d3_helloworld_csv.git/singlefile_automated/ for visualization");
   }
 
   private static void printGraphs(String classDirOrJar) {

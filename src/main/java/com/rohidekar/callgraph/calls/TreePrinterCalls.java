@@ -58,7 +58,7 @@ public class TreePrinterCalls {
     visited.add(tn);
     if (((MyInstruction) tn.getSource()).getMethodNameQualified()
         .equals("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
-      throw new IllegalAccessError();
+      throw new IllegalAccessError("printTreeTest");
     }
     for (GraphNode child : tn.getChildren()) {
       System.out.println("\"" + tn.toString() + "\",\"" + child.toString() + "\"");

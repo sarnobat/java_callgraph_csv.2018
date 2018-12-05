@@ -18,7 +18,7 @@ public class MyInstruction {
     this._qualifiedMethodName = qualifiedMethodName;
     if (qualifiedMethodName.equals(
         "com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
-      throw new IllegalAccessError();
+      throw new IllegalAccessError("MyInstruction");
     }
   }
 

@@ -18,7 +18,7 @@ public class MyTreeModel implements TreeModel {
 	public Object getChild(Object parentNode, int index) {
 		Object ret = ((GraphNode) parentNode).getChild(index);
 		if (ret == null) {
-			throw new IllegalAccessError();
+			throw new IllegalAccessError("getChild");
 		}
 		return ret;
 	}
@@ -32,7 +32,7 @@ public class MyTreeModel implements TreeModel {
 	public int getIndexOfChild(Object parentNode, Object childNode) {
 		int ret = new LinkedList<GraphNode>(((GraphNode) parentNode).getChildren()).indexOf(childNode);
 		if (this.getChild(parentNode, ret) == null) {
-			throw new IllegalAccessError();
+			throw new IllegalAccessError("getIndexOfChild");
 		}
 		return ret;
 	}

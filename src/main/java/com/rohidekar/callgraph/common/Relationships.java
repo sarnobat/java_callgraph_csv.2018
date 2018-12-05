@@ -122,10 +122,10 @@ public class Relationships {
 
   public void addContainmentRelationshipStringOnly(String parentClassName, String childClassName) {
     if (parentClassName.equals("java.lang.Object")) {
-      throw new IllegalAccessError();
+      throw new IllegalAccessError("addContainmentRelationshipStringOnly");
     }
     if (childClassName.equals("java.lang.Object")) {
-      throw new IllegalAccessError();
+      throw new IllegalAccessError("addContainmentRelationshipStringOnly");
     }
 
     classNameToFieldTypeNamesMultiMap.put(parentClassName, childClassName);

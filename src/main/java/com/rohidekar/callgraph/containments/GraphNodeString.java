@@ -12,7 +12,7 @@ class GraphNodeString extends GraphNode {
     super(iString);
     _string = iString;
     if (iString.equals("java.lang.Object")){
-      throw new IllegalAccessError();
+      throw new IllegalAccessError("GraphNodeString");
     }
   }
 

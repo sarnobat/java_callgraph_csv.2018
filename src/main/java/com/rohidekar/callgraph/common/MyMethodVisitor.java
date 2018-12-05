@@ -133,7 +133,7 @@ class MyMethodVisitor extends MethodVisitor {
         relationships.addMethodCall(
             parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified());
       }
-      if (parentInstruction != null && target != null && !target.getClassNameQualified().equals(parentInstruction.getClassNameQualified())) {
+      if (parentInstruction != null && target != null && !target.getClassNameQualified().equals(parentInstruction.getClassNameQualified()) && !"java.lang.Object".equals(target.getClassNameQualified())) {
         // TODO: this should get printed later
         System.out.println(
             //"MyMethodVisitor.linkMethodToSuperclassMethod() - SRIDHAR: " +

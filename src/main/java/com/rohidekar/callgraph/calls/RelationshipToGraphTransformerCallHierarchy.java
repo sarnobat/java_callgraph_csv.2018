@@ -19,6 +19,9 @@ public class RelationshipToGraphTransformerCallHierarchy {
     relationships.validate();
     Set<GraphNode> rootMethodNodes = RelationshipToGraphTransformerCallHierarchy
         .findRootCallers(allMethodNamesToMethodNodes);
+    if (rootMethodNodes.size() < 1) {
+    		System.err.println("ERROR: no root nodes to print call tree from."); 
+    }
     TreePrinterCalls.printTrees(relationships, rootMethodNodes);
   }
 
@@ -56,11 +59,11 @@ public class RelationshipToGraphTransformerCallHierarchy {
         parentEnd = new GraphNodeInstruction(parentMethodInstruction);
         allMethodNamesToMethods.put(parentMethodNameKey, parentEnd);
         if (parentEnd.toString().contains("Millis") && parentMethodNameKey.contains("Repository")) {
-          throw new IllegalAccessError();
+          throw new IllegalAccessError("determineCallHierarchy() 1 ");
         }
       }
       if (parentEnd.toString().contains("Millis") && parentMethodNameKey.contains("Repository")) {
-        throw new IllegalAccessError();
+    	  	throw new IllegalAccessError("determineCallHierarchy() 2 ");
       }
       Collection<MyInstruction> calledMethods = relationships.getCalledMethods(parentMethodNameKey);
       for (MyInstruction childMethod : calledMethods) {
