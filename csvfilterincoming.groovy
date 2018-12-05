@@ -27,6 +27,9 @@ public class CsvFilterIncoming {
 			String lineOrig = null;
 			while ((lineOrig = reader.readLine()) != null) {
 				String line = lineOrig;
+				if (line.trim().length() == 0) {
+					continue;
+				}
 				String[] rel = line.split(",");
 				String left = rel[0].replace("\"", "");
 				System.err.println("READING: " + line);
