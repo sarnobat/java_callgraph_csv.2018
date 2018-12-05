@@ -53,7 +53,8 @@ resource = "/Users/ssarnobat/Desktop/work/src/webservices/rms-plugin/rms-service
       resource = args[0];
     }
     printGraphs(resource);
-    System.err.println("Now use d3_helloworld_csv.git/singlefile_automated/ for visualization");
+    System.err.println("Now use d3_helloworld_csv.git/singlefile_automated/ for visualization. For example: ");
+    System.err.println("  cat /tmp/calls.csv | sh csv2d3.sh | tee /tmp/index.html");
   }
 
   private static void printGraphs(String classDirOrJar) {
