@@ -62,19 +62,15 @@ public class Main {
     classNameToJavaClassMap = ImmutableMap.copyOf(javaClassesFromResource);
     for (JavaClass jc : getClassNameToJavaClassMapValues()) {
       try {
-        new MyClassVisitor(
-                jc)
-            .visitJavaClass(jc);
+        new MyClassVisitor(jc).visitJavaClass(jc);
       } catch (ClassFormatException e) {
         throw new RuntimeException(e);
       }
     }
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
-    for (DeferredParentContainment aDeferredParentContainment :
-        getDeferredParentContainments()) {
-      JavaClass parentClass1 =
-          getClassDef(aDeferredParentContainment.getParentClassName());
+    for (DeferredParentContainment aDeferredParentContainment : getDeferredParentContainments()) {
+      JavaClass parentClass1 = getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
           parentClass1 = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
@@ -276,26 +272,28 @@ public class Main {
       addUnvisitedMethod(childMethodQualifiedName);
     }
   }
+
   private static Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
 
   @Deprecated // should not be public
-  public  static void setVisitedMethod(String parentMethodQualifiedName) {
+  public static void setVisitedMethod(String parentMethodQualifiedName) {
     if (isMethodVisited.keySet().contains(parentMethodQualifiedName)) {
       isMethodVisited.remove(parentMethodQualifiedName);
     }
     isMethodVisited.put(parentMethodQualifiedName, true);
   }
 
-  private  static void addUnvisitedMethod(String childMethodQualifiedName) {
+  private static void addUnvisitedMethod(String childMethodQualifiedName) {
     isMethodVisited.put(childMethodQualifiedName, false);
   }
 
-private static   boolean isVisitedMethod(String childMethodQualifiedName) {
+  private static boolean isVisitedMethod(String childMethodQualifiedName) {
     if (!isMethodVisited.keySet().contains(childMethodQualifiedName)) {
       addUnvisitedMethod(childMethodQualifiedName);
     }
     return isMethodVisited.get(childMethodQualifiedName);
   }
+
   private static void printTreeTest(
       Multimap<Integer, TreeModel> depthToRootNodes, PrintStream out) {
     for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
@@ -413,15 +411,16 @@ private static   boolean isVisitedMethod(String childMethodQualifiedName) {
       }
     }
   }
-  private static	Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
-	private  static boolean visited(GraphNode aNode) {
-		return visitedNodes.contains(aNode);
-	}
+  private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
-	private static void addVisited(GraphNode aNode) {
-		visitedNodes.add(aNode);
-	}
+  private static boolean visited(GraphNode aNode) {
+    return visitedNodes.contains(aNode);
+  }
+
+  private static void addVisited(GraphNode aNode) {
+    visitedNodes.add(aNode);
+  }
   // Relationships
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
@@ -490,6 +489,7 @@ private static   boolean isVisitedMethod(String childMethodQualifiedName) {
   //Name to Value mappings
   private static Map<String, MyInstruction> allMethodNameToMyInstructionMap =
       new HashMap<String, MyInstruction>();
+
   @Deprecated // should not be public
   public static MyInstruction getMethod(String qualifiedMethodName) {
     return allMethodNameToMyInstructionMap.get(qualifiedMethodName);
@@ -518,7 +518,7 @@ private static   boolean isVisitedMethod(String childMethodQualifiedName) {
   }
 
   @Deprecated // should not be public
-  public  static JavaClass getClassDef(String aClassFullName) {
+  public static JavaClass getClassDef(String aClassFullName) {
     JavaClass jc = null;
     try {
       jc = Repository.lookupClass(aClassFullName);
@@ -534,7 +534,7 @@ private static   boolean isVisitedMethod(String childMethodQualifiedName) {
   }
 
   @Deprecated // This should not be public
-  public  static Collection<JavaClass> getParentClassesAndInterfaces(JavaClass childClass) {
+  public static Collection<JavaClass> getParentClassesAndInterfaces(JavaClass childClass) {
     Collection<JavaClass> superClassesAndInterfaces = new HashSet<JavaClass>();
     String[] interfaceNames = childClass.getInterfaceNames();
     for (String interfaceName : interfaceNames) {
@@ -562,34 +562,34 @@ private static   boolean isVisitedMethod(String childMethodQualifiedName) {
     return ImmutableSet.copyOf(superClassesAndInterfaces);
   }
 
-  private  static  Set<DeferredParentContainment> deferredParentContainments =
+  private static Set<DeferredParentContainment> deferredParentContainments =
       new HashSet<DeferredParentContainment>();
 
   @Deprecated // This should not be public
-  public  static void deferParentContainment(String parentClassName, JavaClass javaClass) {
+  public static void deferParentContainment(String parentClassName, JavaClass javaClass) {
     System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
     deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
   }
 
-  private static  Collection<JavaClass> getClassNameToJavaClassMapValues() {
+  private static Collection<JavaClass> getClassNameToJavaClassMapValues() {
     return classNameToJavaClassMap.values();
   }
 
-  public  static  Set<DeferredParentContainment> getDeferredParentContainments() {
+  private static Set<DeferredParentContainment> getDeferredParentContainments() {
     return ImmutableSet.copyOf(deferredParentContainments);
   }
   // nodes
   private static ImmutableMap<String, JavaClass> classNameToJavaClassMap;
 
-
   // The top level package with classes in it
   private static int minPackageDepth = Integer.MAX_VALUE;
 
-  private static  int getMinPackageDepth() {
+  private static int getMinPackageDepth() {
     return minPackageDepth;
   }
+
   @Deprecated // should not be public
-  public  static void updateMinPackageDepth(JavaClass javaClass) {
+  public static void updateMinPackageDepth(JavaClass javaClass) {
     int packageDepth = getPackageDepth(javaClass.getClassName());
     if (packageDepth < minPackageDepth) {
       minPackageDepth = packageDepth;
@@ -602,5 +602,4 @@ private static   boolean isVisitedMethod(String childMethodQualifiedName) {
     int packageDepth = periodCount + 1;
     return packageDepth;
   }
-
 }
