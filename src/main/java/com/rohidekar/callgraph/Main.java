@@ -75,8 +75,7 @@ public class Main {
                 relationshipsPackageDepth,
                 relationshipsMethodCalls,
                 callingMethodToMethodInvocationMultiMap,
-                allMethodNameToMyInstructionMap,
-                isMethodVisited)
+                allMethodNameToMyInstructionMap)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
         throw new RuntimeException(e);
@@ -124,13 +123,13 @@ public class Main {
               deferredSuperMethod.gettarget().getMethodNameQualified(),
               parentInstruction.getMethodNameQualified(),
               callingMethodToMethodInvocationMultiMap)) {
-            addMethodCall(
+            MyMethodVisitor.addMethodCall(
                 parentInstruction.getMethodNameQualified(),
                 deferredSuperMethod.gettarget(),
                 deferredSuperMethod.gettarget().getMethodNameQualified(),
                 callingMethodToMethodInvocationMultiMap,
                 allMethodNameToMyInstructionMap,
-                isMethodVisited);
+                null);
             // This will still happen for methods called that reside in dependencies
           }
         }
@@ -280,54 +279,6 @@ public class Main {
       }
     }
     return ImmutableMap.copyOf(javaClasses);
-  }
-
-  @Deprecated // encapsulate
-  private static void addMethodCall(
-      String parentMethodQualifiedName,
-      MyInstruction childMethod,
-      String childMethodQualifiedName,
-      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
-      Map<String, MyInstruction> allMethodNameToMyInstructionMap,
-      Map<String, Boolean> isMethodVisited) {
-    if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
-      throw new IllegalAccessError("No such thing");
-    }
-    if ("java.lang.System.currentTimeMillis()".equals(childMethodQualifiedName)) {
-      // throw new IllegalAccessError("No such thing");
-    }
-    allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
-    if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
-      if (parentMethodQualifiedName.contains("Millis")) {
-        System.out.println("");
-      }
-      callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
-    }
-    if (!isVisitedMethod(childMethodQualifiedName)) {
-      addUnvisitedMethod(childMethodQualifiedName);
-    }
-  }
-
-  @Deprecated // encapsulate again
-  private static final Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
-
-  @Deprecated // should not be public
-  public static void setVisitedMethod(String parentMethodQualifiedName) {
-    if (isMethodVisited.keySet().contains(parentMethodQualifiedName)) {
-      isMethodVisited.remove(parentMethodQualifiedName);
-    }
-    isMethodVisited.put(parentMethodQualifiedName, true);
-  }
-
-  private static void addUnvisitedMethod(String childMethodQualifiedName) {
-    isMethodVisited.put(childMethodQualifiedName, false);
-  }
-
-  private static boolean isVisitedMethod(String childMethodQualifiedName) {
-    if (!isMethodVisited.keySet().contains(childMethodQualifiedName)) {
-      addUnvisitedMethod(childMethodQualifiedName);
-    }
-    return isMethodVisited.get(childMethodQualifiedName);
   }
 
   private static void printTreeTest(

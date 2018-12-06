@@ -29,8 +29,6 @@ class MyClassVisitor extends ClassVisitor {
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
   @Deprecated
   private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
-  @Deprecated
-  private final Map<String, Boolean> isMethodVisited;
 
   public MyClassVisitor(
       JavaClass classToVisit,
@@ -41,8 +39,7 @@ class MyClassVisitor extends ClassVisitor {
       RelationshipsPackageDepth relationshipsPackageDepth,
       RelationshipsMethodCalls relationshipsMethodCalls,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
-      Map<String, MyInstruction> allMethodNameToMyInstructionMap,
-      Map<String, Boolean> isMethodVisited) {
+      Map<String, MyInstruction> allMethodNameToMyInstructionMap) {
 
     super(classToVisit);
     this.relationshipsPackageDepth = relationshipsPackageDepth;
@@ -51,7 +48,6 @@ class MyClassVisitor extends ClassVisitor {
     this.relationshipsClassNames = relationshipsClassNames;
     this.relationshipsDeferred = relationshipsDeferred;
     this.relationshipsMethodCalls = relationshipsMethodCalls;
-    this.isMethodVisited = isMethodVisited;
     this.callingMethodToMethodInvocationMultiMap = callingMethodToMethodInvocationMultiMap;
     this.allMethodNameToMyInstructionMap = allMethodNameToMyInstructionMap;
     this.classToVisit = classToVisit;
