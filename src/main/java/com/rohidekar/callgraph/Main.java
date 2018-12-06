@@ -83,10 +83,27 @@ public class Main {
               child = new GraphNodeInstruction(childMethod);
               allMethodNamesToMethods.put(childMethod.getMethodNameQualified(), child);
             }
-            parentEnd.addChild(child);
-            child.addParent(parentEnd);
           }
         }
+        
+        
+        for (MyInstruction childMethod : calledMethods) {
+            if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
+            } else {
+              System.err.println(
+                  "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
+                      + childMethod.getMethodNameQualified());
+              GraphNodeInstruction child =
+                  (GraphNodeInstruction)
+                      allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
+              if (child == null) {
+                child = new GraphNodeInstruction(childMethod);
+              }
+              parentEnd.addChild(child);
+              child.addParent(parentEnd);
+            }
+          }
+        
       }
     }
     relationships.validate();
