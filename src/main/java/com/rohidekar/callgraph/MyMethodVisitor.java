@@ -47,8 +47,7 @@ class MyMethodVisitor extends MethodVisitor {
       RelationshipsDeferred relationshipsDeferred,
       RelationshipsMethodCalls relationshipsMethodCalls,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
-      Map<String, MyInstruction> allMethodNameToMyInstructionMap,
-      Map<String, Boolean> isMethodVisited) {
+      Map<String, MyInstruction> allMethodNameToMyInstructionMap) {
     super(methodGen, javaClass);
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();

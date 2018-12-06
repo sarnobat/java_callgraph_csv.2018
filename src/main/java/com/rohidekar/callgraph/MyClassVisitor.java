@@ -121,8 +121,7 @@ class MyClassVisitor extends ClassVisitor {
             relationshipsDeferred,
             relationshipsMethodCalls,
             callingMethodToMethodInvocationMultiMap,
-            allMethodNameToMyInstructionMap,
-            isMethodVisited)
+            allMethodNameToMyInstructionMap)
         .start();
   }
 }
