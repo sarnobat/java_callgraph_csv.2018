@@ -209,10 +209,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
     this.classNames.add(childClassName);
   }
 
-  public Collection<String> getAllClassNames() {
-    return ImmutableSet.copyOf(classNames); // classNameToJavaClassMap.keySet();
-  }
-
   public Collection<String> getAllMethodCallers() {
     return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet());
   }
