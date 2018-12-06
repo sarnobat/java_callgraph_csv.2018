@@ -1,25 +1,13 @@
 package com.rohidekar.callgraph;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.ClassFormatException;
-import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -44,19 +32,58 @@ public class Relationships
     relationshipsInstructions = new RelationshipsInstructions();
     relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
-      visitJavaClass(jc, this);
+      try {
+        new MyClassVisitor(jc, this).visitJavaClass(jc);
+      } catch (ClassFormatException e) {
+        e.printStackTrace();
+      }
     }
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
-    handleDeferredRelationships(this);
-  }
-
-
-  private static void visitJavaClass(JavaClass javaClass, Relationships relationships) {
-    try {
-      new MyClassVisitor(javaClass, relationships).visitJavaClass(javaClass);
-    } catch (ClassFormatException e) {
-      e.printStackTrace();
+    for (DeferredParentContainment aDeferredParentContainment :
+        this.getDeferredParentContainments()) {
+      JavaClass parentClass = this.getClassDef(aDeferredParentContainment.getParentClassName());
+      JavaClass parentClass1 = parentClass;
+      if (parentClass1 == null) {
+        try {
+          parentClass1 = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
+        } catch (ClassNotFoundException e) {
+          if (!Ignorer.shouldIgnore(aDeferredParentContainment.getParentClassName())) {
+            System.err.println(aDeferredParentContainment.getParentClassName());
+          }
+        }
+      }
+      if (parentClass1 != null) {
+        MyClassVisitor.addContainmentRelationship(
+            parentClass1, aDeferredParentContainment.getChildClass().getClassName(), this, false);
+      }
+    }
+    for (DeferredChildContainment containment : this.getDeferredChildContainment()) {
+      MyClassVisitor.addContainmentRelationship(
+          containment.getParentClass(), containment.getClassQualifiedName(), this, false);
+    }
+    for (DeferredSuperMethod deferredSuperMethod : this.getDeferSuperMethodRelationships()) {
+      MyInstruction parentInstruction =
+          MyMethodVisitor.getInstruction(
+              deferredSuperMethod.getparentClassOrInterface(),
+              deferredSuperMethod.getunqualifiedMethodName(),
+              (RelationshipsMethodVisitor) this);
+      if (parentInstruction == null) {
+        System.err.println("Parent instruction was not found");
+      } else {
+        System.err.println(
+            parentInstruction.getMethodNameQualified()
+                + " -> "
+                + deferredSuperMethod.gettarget().getMethodNameQualified());
+        if (!this.methodCallExists(
+            deferredSuperMethod.gettarget().getMethodNameQualified(),
+            parentInstruction.getMethodNameQualified())) {
+          this.addMethodCall(
+              parentInstruction.getMethodNameQualified(),
+              deferredSuperMethod.gettarget(),
+              deferredSuperMethod.gettarget().getMethodNameQualified());
+        }
+      }
     }
   }
 
@@ -182,70 +209,6 @@ public class Relationships
 
   public Set<DeferredParentContainment> getDeferredParentContainments() {
     return relationshipsClassNames.getDeferredParentContainments();
-  }
-
-  static void handleDeferredRelationships(Relationships relationships) {
-    for (DeferredParentContainment aDeferredParentContainment :
-        relationships.getDeferredParentContainments()) {
-      JavaClass parentClass =
-          relationships.getClassDef(aDeferredParentContainment.getParentClassName());
-      handleDeferredParentContainment(relationships, aDeferredParentContainment, parentClass);
-    }
-    for (DeferredChildContainment containment : relationships.getDeferredChildContainment()) {
-      MyClassVisitor.addContainmentRelationship(
-          containment.getParentClass(), containment.getClassQualifiedName(), relationships, false);
-    }
-    for (DeferredSuperMethod deferredSuperMethod :
-        relationships.getDeferSuperMethodRelationships()) {
-      handleDeferredSuperMethod(relationships, deferredSuperMethod);
-    }
-  }
-
-  private static void handleDeferredSuperMethod(
-      Relationships relationships, DeferredSuperMethod deferredSuperMethod) {
-    MyInstruction parentInstruction =
-        MyMethodVisitor.getInstruction(
-            deferredSuperMethod.getparentClassOrInterface(),
-            deferredSuperMethod.getunqualifiedMethodName(),
-            (RelationshipsMethodVisitor) relationships);
-    if (parentInstruction == null) {
-      System.err.println("Parent instruction was not found");
-    } else {
-      System.err.println(
-          parentInstruction.getMethodNameQualified()
-              + " -> "
-              + deferredSuperMethod.gettarget().getMethodNameQualified());
-      if (!relationships.methodCallExists(
-          deferredSuperMethod.gettarget().getMethodNameQualified(),
-          parentInstruction.getMethodNameQualified())) {
-        relationships.addMethodCall(
-            parentInstruction.getMethodNameQualified(),
-            deferredSuperMethod.gettarget(),
-            deferredSuperMethod.gettarget().getMethodNameQualified());
-      }
-    }
-  }
-
-  private static void handleDeferredParentContainment(
-      Relationships relationships,
-      DeferredParentContainment aDeferredParentContainment,
-      JavaClass parentClass) {
-    if (parentClass == null) {
-      try {
-        parentClass = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
-      } catch (ClassNotFoundException e) {
-        if (!Ignorer.shouldIgnore(aDeferredParentContainment.getParentClassName())) {
-          System.err.println(aDeferredParentContainment.getParentClassName());
-        }
-      }
-    }
-    if (parentClass != null) {
-      MyClassVisitor.addContainmentRelationship(
-          parentClass,
-          aDeferredParentContainment.getChildClass().getClassName(),
-          relationships,
-          false);
-    }
   }
 
   @Deprecated
