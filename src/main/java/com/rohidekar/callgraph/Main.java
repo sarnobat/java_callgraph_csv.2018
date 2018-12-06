@@ -90,8 +90,7 @@ public class Main {
         }
       }
     }
-    for (DeferredSuperMethod deferredSuperMethod :
-        getDeferSuperMethodRelationships()) {
+    for (DeferredSuperMethod deferredSuperMethod : getDeferSuperMethodRelationships()) {
       MyInstruction parentInstruction =
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
@@ -106,7 +105,8 @@ public class Main {
                 + deferredSuperMethod.gettarget().getMethodNameQualified());
         if (!methodCallExists(
             deferredSuperMethod.gettarget().getMethodNameQualified(),
-            parentInstruction.getMethodNameQualified(), callingMethodToMethodInvocationMultiMap)) {
+            parentInstruction.getMethodNameQualified(),
+            callingMethodToMethodInvocationMultiMap)) {
           addMethodCall(
               parentInstruction.getMethodNameQualified(),
               deferredSuperMethod.gettarget(),
@@ -120,7 +120,8 @@ public class Main {
     validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
-    for (String parentMethodNameKey : getAllMethodCallers(callingMethodToMethodInvocationMultiMap)) {
+    for (String parentMethodNameKey :
+        getAllMethodCallers(callingMethodToMethodInvocationMultiMap)) {
       System.err.println(
           "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - "
               + parentMethodNameKey);
@@ -129,8 +130,7 @@ public class Main {
         GraphNodeInstruction parentEnd =
             (GraphNodeInstruction) allMethodNamesToMethods.get(parentMethodNameKey);
         if (parentEnd == null) {
-          MyInstruction parentMethodInstruction =
-              getMethod(parentMethodNameKey);
+          MyInstruction parentMethodInstruction = getMethod(parentMethodNameKey);
           if (parentMethodInstruction == null) {
             System.err.println(
                 "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - WARNING: couldn't find instruction for  "
@@ -410,30 +410,41 @@ public class Main {
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
 
-
-  public static Collection<String> getAllMethodCallers(Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+  public static Collection<String> getAllMethodCallers(
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet());
   }
 
-  public static Collection<MyInstruction> getCalledMethods(String parentMethodNameKey, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+  public static Collection<MyInstruction> getCalledMethods(
+      String parentMethodNameKey,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
   }
 
-  public static void put(String parentMethodQualifiedName, MyInstruction childMethod, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+  public static void put(
+      String parentMethodQualifiedName,
+      MyInstruction childMethod,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
   }
 
-  public static Collection<MyInstruction> get(String parentMethodQualifiedName, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+  public static Collection<MyInstruction> get(
+      String parentMethodQualifiedName,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return callingMethodToMethodInvocationMultiMap.get(parentMethodQualifiedName);
   }
 
-  public static Collection<String> keySet(Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+  public static Collection<String> keySet(
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return callingMethodToMethodInvocationMultiMap.keySet();
   }
 
   public static boolean methodCallExists(
-      String parentMethodQualifiedName, String childMethodQualifiedName, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
-    for (MyInstruction childMethod : get(parentMethodQualifiedName, callingMethodToMethodInvocationMultiMap)) {
+      String parentMethodQualifiedName,
+      String childMethodQualifiedName,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+    for (MyInstruction childMethod :
+        get(parentMethodQualifiedName, callingMethodToMethodInvocationMultiMap)) {
       if (childMethod.getMethodNameQualified().equals(childMethodQualifiedName)) {
         return true;
       }
@@ -448,7 +459,6 @@ public class Main {
       throw new IllegalAccessError("No such thing");
     }
   }
-  
 
   private static Set<DeferredSuperMethod> deferredSuperMethod = new HashSet<DeferredSuperMethod>();
 
@@ -460,33 +470,33 @@ public class Main {
   private static Set<DeferredSuperMethod> getDeferSuperMethodRelationships() {
     return ImmutableSet.copyOf(deferredSuperMethod);
   }
-  
-//Name to Value mappings
- private static Map<String, MyInstruction> allMethodNameToMyInstructionMap =
-     new HashMap<String, MyInstruction>();
 
- public static MyInstruction getMethod(String qualifiedMethodName) {
-   return allMethodNameToMyInstructionMap.get(qualifiedMethodName);
- }
+  //Name to Value mappings
+  private static Map<String, MyInstruction> allMethodNameToMyInstructionMap =
+      new HashMap<String, MyInstruction>();
 
- public static void addMethodDefinition(MyInstruction myInstructionImpl) {
-   allMethodNameToMyInstructionMap.put(
-       myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
- }
+  public static MyInstruction getMethod(String qualifiedMethodName) {
+    return allMethodNameToMyInstructionMap.get(qualifiedMethodName);
+  }
 
- static void putInstruction(MyInstruction childMethod, String childMethodQualifiedName) {
-   allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
- }
+  public static void addMethodDefinition(MyInstruction myInstructionImpl) {
+    allMethodNameToMyInstructionMap.put(
+        myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
+  }
 
- public static Set<String> keySet() {
+  static void putInstruction(MyInstruction childMethod, String childMethodQualifiedName) {
+    allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
+  }
 
-   return allMethodNameToMyInstructionMap.keySet();
- }
+  public static Set<String> keySet() {
 
- public static void validate2() {
-   if (keySet()
-       .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
-     throw new IllegalAccessError("No such thing");
-   }
- }
+    return allMethodNameToMyInstructionMap.keySet();
+  }
+
+  public static void validate2() {
+    if (keySet()
+        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
+      throw new IllegalAccessError("No such thing");
+    }
+  }
 }
