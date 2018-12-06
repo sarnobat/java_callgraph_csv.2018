@@ -23,18 +23,16 @@ class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
   private final String parentMethodQualifiedName;
-  private final RelationshipsInstructions relationshipsInstructions;
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
 
-  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, RelationshipsIsMethodVisited relationshipsIsMethodVisited, RelationshipsInstructions relationshipsInstructions, RelationshipsClassNames relationshipsClassNames
+  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, RelationshipsIsMethodVisited relationshipsIsMethodVisited, RelationshipsClassNames relationshipsClassNames
 		    ) {
     super(methodGen, javaClass);
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
     this.parentMethodQualifiedName = MyInstruction.getQualifiedMethodName(methodGen, visitedClass);
     this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
-    this.relationshipsInstructions = relationshipsInstructions;
     this.relationshipsClassNames= relationshipsClassNames;
     // main bit
     if (methodGen.getInstructionList() != null) {
@@ -112,7 +110,7 @@ class MyMethodVisitor extends MethodVisitor {
     {
       ObjectType childClass = (ObjectType) iClass;
       MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
-      Main.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true), relationshipsInstructions, relationshipsIsMethodVisited);
+      Main.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true), relationshipsIsMethodVisited);
       if (Main.getMethod(parentMethodQualifiedName) == null) {
     	  Main.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
@@ -138,7 +136,7 @@ class MyMethodVisitor extends MethodVisitor {
     Collection<JavaClass> superClasses = relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
     for (JavaClass parentClassOrInterface : superClasses) {
       MyInstruction parentInstruction =
-          getInstruction(parentClassOrInterface, unqualifiedMethodName, relationshipsInstructions);
+          getInstruction(parentClassOrInterface, unqualifiedMethodName);
       if (parentInstruction == null) {
         // It may be that we're looking in the wrong superclass/interface and that we should just
         // continue
@@ -149,7 +147,7 @@ class MyMethodVisitor extends MethodVisitor {
         System.err.println(
             parentInstruction.getMethodNameQualified() + " -> " + target.getMethodNameQualified());
         Main.addMethodCall(
-            parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified(), relationshipsInstructions, relationshipsIsMethodVisited);
+            parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified(), relationshipsIsMethodVisited);
       }
       if (parentInstruction != null
           && target != null
@@ -169,8 +167,7 @@ class MyMethodVisitor extends MethodVisitor {
 
   public static MyInstruction getInstruction(
       JavaClass parentClassOrInterface,
-      String unqualifiedChildMethodName,
-      RelationshipsInstructions relationshipsInstructions) {
+      String unqualifiedChildMethodName) {
     String methodName =
         MyInstruction.getQualifiedMethodName(
             parentClassOrInterface.getClassName(), unqualifiedChildMethodName);

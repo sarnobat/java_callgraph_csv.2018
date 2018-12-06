@@ -59,13 +59,11 @@ public class Main {
     RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
     RelationshipsClassNames relationshipsClassNames =
         new RelationshipsClassNames(javaClassesFromResource);
-    RelationshipsInstructions relationshipsInstructions = new RelationshipsInstructions();
     RelationshipsIsMethodVisited relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(
                 jc,
-                relationshipsInstructions,
                 relationshipsIsMethodVisited,
                 relationshipsClassNames,
                 relationshipsPackageDepth)
@@ -94,8 +92,7 @@ public class Main {
       MyInstruction parentInstruction =
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
-              deferredSuperMethod.getunqualifiedMethodName(),
-              relationshipsInstructions);
+              deferredSuperMethod.getunqualifiedMethodName());
       if (parentInstruction == null) {
         System.err.println("Parent instruction was not found");
       } else {
@@ -111,7 +108,6 @@ public class Main {
               parentInstruction.getMethodNameQualified(),
               deferredSuperMethod.gettarget(),
               deferredSuperMethod.gettarget().getMethodNameQualified(),
-              relationshipsInstructions,
               relationshipsIsMethodVisited);
         }
       }
@@ -267,7 +263,6 @@ public class Main {
       String parentMethodQualifiedName,
       MyInstruction childMethod,
       String childMethodQualifiedName,
-      RelationshipsInstructions relationshipsInstructions,
       RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");

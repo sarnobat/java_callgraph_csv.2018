@@ -20,7 +20,6 @@ dnl/utils/text/table/LastRowSeparatorPolicy.class
 dnl/utils/text/table/TextTreeTable$1.class
 dnl/utils/text/table/TextTableRenderer.class
 gr/gousiosg/javacg/dyn/Instrumenter.class
-com/rohidekar/callgraph/RelationshipsMethodCalls.class
 com/rohidekar/callgraph/MyMethodVisitor.class
 com/rohidekar/callgraph/Ignorer.class
 dnl/utils/text/tree/TextTree.class
