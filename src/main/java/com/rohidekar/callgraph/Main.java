@@ -45,9 +45,11 @@ public class Main {
   // Only print from roots this far below the top level package that contains classes
   private static final int ROOT_DEPTH = 27;
 
+  @Deprecated
   private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
   // Relationships
+  @Deprecated
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
 
@@ -470,6 +472,7 @@ public class Main {
     }
   }
 
+  @Deprecated
   private static Set<DeferredSuperMethod> deferredSuperMethods = new HashSet<DeferredSuperMethod>();
 
   @Deprecated // this should not be public
@@ -478,6 +481,7 @@ public class Main {
   }
 
   //Name to Value mappings
+  @Deprecated
   private static Map<String, MyInstruction> allMethodNameToMyInstructionMap =
       new HashMap<String, MyInstruction>();
 
