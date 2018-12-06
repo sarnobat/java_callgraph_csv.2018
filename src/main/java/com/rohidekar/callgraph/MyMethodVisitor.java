@@ -1,6 +1,8 @@
 package com.rohidekar.callgraph;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ConstantPoolGen;
@@ -17,19 +19,32 @@ import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReturnInstruction;
 import org.apache.bcel.generic.Type;
 
+import com.google.common.collect.Multimap;
+
 import gr.gousiosg.javacg.stat.MethodVisitor;
 
 class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
   private final String parentMethodQualifiedName;
+  private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
+  private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
+  private final Map<String, Boolean> isMethodVisited;
+  
 
-  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass
-		    ) {
+  MyMethodVisitor(
+      MethodGen methodGen,
+      JavaClass javaClass,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
+      Map<String, MyInstruction> allMethodNameToMyInstructionMap, Map<String, Boolean> isMethodVisited) {
     super(methodGen, javaClass);
+    this.isMethodVisited = isMethodVisited;
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
     this.parentMethodQualifiedName = MyInstruction.getQualifiedMethodName(methodGen, visitedClass);
+    this.callingMethodToMethodInvocationMultiMap = callingMethodToMethodInvocationMultiMap;
+    this.allMethodNameToMyInstructionMap = allMethodNameToMyInstructionMap;
+
     // main bit
     if (methodGen.getInstructionList() != null) {
       for (InstructionHandle instructionHandle = methodGen.getInstructionList().getStart();
@@ -48,8 +63,7 @@ class MyMethodVisitor extends MethodVisitor {
         MyInstruction.getMethodNameUnqualified(parentMethodQualifiedName);
     Main.setVisitedMethod(parentMethodQualifiedName);
     if (Main.getMethod(parentMethodQualifiedName) == null) {
-    	Main.addMethodDefinition(
-          new MyInstruction(javaClass.getClassName(), unqualifiedMethodName));
+      Main.addMethodDefinition(new MyInstruction(javaClass.getClassName(), unqualifiedMethodName));
     }
   }
 
@@ -66,7 +80,10 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
+        iInstruction.getArgumentTypes(constantsPool),
+        parentMethodQualifiedName,
+        callingMethodToMethodInvocationMultiMap,
+        allMethodNameToMyInstructionMap);
   }
 
   /** super method, private method, constructor */
@@ -76,7 +93,10 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
+        iInstruction.getArgumentTypes(constantsPool),
+        parentMethodQualifiedName,
+        callingMethodToMethodInvocationMultiMap,
+        allMethodNameToMyInstructionMap);
   }
 
   @Override
@@ -85,7 +105,10 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
+        iInstruction.getArgumentTypes(constantsPool),
+        parentMethodQualifiedName,
+        callingMethodToMethodInvocationMultiMap,
+        allMethodNameToMyInstructionMap);
   }
 
   @Override
@@ -94,11 +117,20 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
+        iInstruction.getArgumentTypes(constantsPool),
+        parentMethodQualifiedName,
+        callingMethodToMethodInvocationMultiMap,
+        allMethodNameToMyInstructionMap);
   }
 
   private void addMethodCallRelationship(
-      Type iClass, String unqualifiedMethodName, Instruction anInstruction, Type[] argumentTypes, String parentMethodQualifiedName) {
+      Type iClass,
+      String unqualifiedMethodName,
+      Instruction anInstruction,
+      Type[] argumentTypes,
+      String parentMethodQualifiedName,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
+      Map<String, MyInstruction> allMethodNameToMyInstructionMap) {
     if (!(iClass instanceof ObjectType)) {
       return;
     }
@@ -106,9 +138,14 @@ class MyMethodVisitor extends MethodVisitor {
     {
       ObjectType childClass = (ObjectType) iClass;
       MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
-      Main.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true));
+      addMethodCall(
+          parentMethodQualifiedName,
+          target,
+          target.printInstruction(true),
+          callingMethodToMethodInvocationMultiMap,
+          allMethodNameToMyInstructionMap, isMethodVisited);
       if (Main.getMethod(parentMethodQualifiedName) == null) {
-    	  Main.addMethodDefinition(
+        Main.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
       }
       // link to superclass method - note: this will not work for the top-level
@@ -122,9 +159,7 @@ class MyMethodVisitor extends MethodVisitor {
     // class dependencies for method calls
   }
 
-  private void linkMethodToSuperclassMethod(
-      String unqualifiedMethodName,
-      MyInstruction target)
+  private void linkMethodToSuperclassMethod(String unqualifiedMethodName, MyInstruction target)
       throws IllegalAccessError {
 
     Collection<JavaClass> superClasses = Main.getParentClassesAndInterfaces(visitedClass);
@@ -135,13 +170,17 @@ class MyMethodVisitor extends MethodVisitor {
         // It may be that we're looking in the wrong superclass/interface and that we should just
         // continue
         // carry on
-    	  Main.deferSuperMethodRelationshipCapture(
+        Main.deferSuperMethodRelationshipCapture(
             new DeferredSuperMethod(parentClassOrInterface, unqualifiedMethodName, target));
       } else {
         System.err.println(
             parentInstruction.getMethodNameQualified() + " -> " + target.getMethodNameQualified());
-        Main.addMethodCall(
-            parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified());
+        addMethodCall(
+            parentInstruction.getMethodNameQualified(),
+            target,
+            target.getMethodNameQualified(),
+            callingMethodToMethodInvocationMultiMap,
+            allMethodNameToMyInstructionMap,  isMethodVisited);
       }
       if (parentInstruction != null
           && target != null
@@ -159,9 +198,42 @@ class MyMethodVisitor extends MethodVisitor {
     }
   }
 
+  private static void addMethodCall(
+      String parentMethodQualifiedName,
+      MyInstruction childMethod,
+      String childMethodQualifiedName,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
+      Map<String, MyInstruction> allMethodNameToMyInstructionMap, Map<String, Boolean> isMethodVisited) {
+    if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
+      throw new IllegalAccessError("No such thing");
+    }
+    if ("java.lang.System.currentTimeMillis()".equals(childMethodQualifiedName)) {
+      // throw new IllegalAccessError("No such thing");
+    }
+    allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
+    if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
+      if (parentMethodQualifiedName.contains("Millis")) {
+        System.out.println("");
+      }
+      callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
+    }
+    if (!isVisitedMethod(childMethodQualifiedName, isMethodVisited)) {
+      addUnvisitedMethod(childMethodQualifiedName, isMethodVisited);
+    }
+  }
+  private static void addUnvisitedMethod(String childMethodQualifiedName, Map<String, Boolean> isMethodVisited) {
+    isMethodVisited.put(childMethodQualifiedName, false);
+  }
+
+  private static boolean isVisitedMethod(String childMethodQualifiedName, Map<String, Boolean> isMethodVisited) {
+    if (!isMethodVisited.keySet().contains(childMethodQualifiedName)) {
+      addUnvisitedMethod(childMethodQualifiedName, isMethodVisited);
+    }
+    return isMethodVisited.get(childMethodQualifiedName);
+  }
+
   public static MyInstruction getInstruction(
-      JavaClass parentClassOrInterface,
-      String unqualifiedChildMethodName) {
+      JavaClass parentClassOrInterface, String unqualifiedChildMethodName) {
     String methodName =
         MyInstruction.getQualifiedMethodName(
             parentClassOrInterface.getClassName(), unqualifiedChildMethodName);

@@ -11,18 +11,28 @@ import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.MethodGen;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 
 import gr.gousiosg.javacg.stat.ClassVisitor;
 
 class MyClassVisitor extends ClassVisitor {
 
   private final JavaClass classToVisit;
-  private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
+  private final Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
+  private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
+  private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
+  private final Map<String, Boolean> isMethodVisited;
 
   public MyClassVisitor(
-      JavaClass classToVisit) {
+      JavaClass classToVisit,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
+      Map<String, MyInstruction> allMethodNameToMyInstructionMap,
+      Map<String, Boolean> isMethodVisited) {
 
     super(classToVisit);
+    this.isMethodVisited = isMethodVisited;
+    this.callingMethodToMethodInvocationMultiMap = callingMethodToMethodInvocationMultiMap;
+    this.allMethodNameToMyInstructionMap = allMethodNameToMyInstructionMap;
     this.classToVisit = classToVisit;
   }
 
@@ -83,7 +93,10 @@ class MyClassVisitor extends ClassVisitor {
     MethodGen methodGen = new MethodGen(method, className, classConstants);
     new MyMethodVisitor(
             methodGen,
-            classToVisit)
+            classToVisit,
+            callingMethodToMethodInvocationMultiMap,
+            allMethodNameToMyInstructionMap,
+            isMethodVisited)
         .start();
   }
 }

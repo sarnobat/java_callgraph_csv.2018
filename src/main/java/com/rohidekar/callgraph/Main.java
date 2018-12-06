@@ -68,7 +68,12 @@ public class Main {
     classNameToJavaClassMap = javaClassesFromResource;
     for (JavaClass jc : classNameToJavaClassMap.values()) {
       try {
-        new MyClassVisitor(jc).visitJavaClass(jc);
+        new MyClassVisitor(
+                jc,
+                callingMethodToMethodInvocationMultiMap,
+                allMethodNameToMyInstructionMap,
+                isMethodVisited)
+            .visitJavaClass(jc);
       } catch (ClassFormatException e) {
         throw new RuntimeException(e);
       }
@@ -116,7 +121,10 @@ public class Main {
             addMethodCall(
                 parentInstruction.getMethodNameQualified(),
                 deferredSuperMethod.gettarget(),
-                deferredSuperMethod.gettarget().getMethodNameQualified());
+                deferredSuperMethod.gettarget().getMethodNameQualified(),
+                callingMethodToMethodInvocationMultiMap,
+                allMethodNameToMyInstructionMap,
+                isMethodVisited);
             // This will still happen for methods called that reside in dependencies
           }
         }
@@ -268,11 +276,13 @@ public class Main {
     return ImmutableMap.copyOf(javaClasses);
   }
 
-  @Deprecated // This should not be public
-  public static void addMethodCall(
+  private static void addMethodCall(
       String parentMethodQualifiedName,
       MyInstruction childMethod,
-      String childMethodQualifiedName) {
+      String childMethodQualifiedName,
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
+      Map<String, MyInstruction> allMethodNameToMyInstructionMap,
+      Map<String, Boolean> isMethodVisited) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
     }
@@ -291,7 +301,7 @@ public class Main {
     }
   }
 
-  private static Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
+  private static final Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
 
   @Deprecated // should not be public
   public static void setVisitedMethod(String parentMethodQualifiedName) {
