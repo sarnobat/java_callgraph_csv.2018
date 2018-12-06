@@ -1,14 +1,25 @@
 package com.rohidekar.callgraph;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.ClassFormatException;
+import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -51,7 +62,7 @@ public class Relationships {
   Relationships() {}
 
   public Relationships(String resource) {
-    Map<String, JavaClass> javaClasses = JavaClassGenerator.getJavaClassesFromResource(resource);
+    Map<String, JavaClass> javaClasses = getJavaClassesFromResource(resource);
     this.classNameToJavaClassMap = ImmutableMap.copyOf(javaClasses);
     for (JavaClass jc : this.classNameToJavaClassMap.values()) {
       visitJavaClass(jc, this);
@@ -59,6 +70,69 @@ public class Relationships {
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
     DeferredRelationships.handleDeferredRelationships(this);
+  }
+
+  public static Map<String, JavaClass> getJavaClassesFromResource(String resource) {
+    Map<String, JavaClass> javaClasses = new HashMap<String, JavaClass>();
+    boolean isJar = resource.endsWith("jar");
+    if (isJar) {
+      String zipFile = null;
+      zipFile = resource;
+      File jarFile = new File(resource);
+      if (!jarFile.exists()) {
+        System.out.println(
+            "JavaClassGenerator.getJavaClassesFromResource(): WARN: Jar file "
+                + resource
+                + " does not exist");
+      }
+      Collection<JarEntry> entries = null;
+      try {
+        entries = Collections.list(new JarFile(jarFile).entries());
+      } catch (IOException e) {
+        System.err.println("JavaClassGenerator.getJavaClassesFromResource() - " + e);
+      }
+      if (entries == null) {
+        System.err.println("JavaClassGenerator.getJavaClassesFromResource() - No entry");
+        return javaClasses;
+      }
+      for (JarEntry entry : entries) {
+        if (entry.isDirectory()) {
+          continue;
+        }
+        if (!entry.getName().endsWith(".class")) {
+          continue;
+        }
+        ClassParser classParser = isJar ? new ClassParser(zipFile, entry.getName()) : null;
+        if (classParser == null) {
+          System.err.println("JavaClassGenerator.getJavaClassesFromResource() - No class parser");
+          continue;
+        }
+        try {
+          JavaClass jc = classParser.parse();
+          javaClasses.put(jc.getClassName(), jc);
+        } catch (ClassFormatException e) {
+          e.printStackTrace();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    } else {
+      // Assume it's a directory
+      String[] extensions = {"class"};
+      Iterator<File> classesIter = FileUtils.iterateFiles(new File(resource), extensions, true);
+      @SuppressWarnings("unchecked")
+      Collection<File> files = IteratorUtils.toList(classesIter);
+      for (File aClass : files) {
+        try {
+          ClassParser classParser = new ClassParser(checkNotNull(aClass.getAbsolutePath()));
+          JavaClass jc = checkNotNull(checkNotNull(classParser).parse());
+          javaClasses.put(jc.getClassName(), jc);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return javaClasses;
   }
 
   private static void visitJavaClass(JavaClass javaClass, Relationships relationships) {
@@ -69,7 +143,9 @@ public class Relationships {
     }
   }
 
-  public void addMethodCall(String parentMethodQualifiedName, MyInstruction childMethod,
+  public void addMethodCall(
+      String parentMethodQualifiedName,
+      MyInstruction childMethod,
       String childMethodQualifiedName) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
@@ -78,7 +154,7 @@ public class Relationships {
       // throw new IllegalAccessError("No such thing");
     }
     allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
-    if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) {// don't allow cycles
+    if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
       if (parentMethodQualifiedName.contains("Millis")) {
         System.out.println("");
       }
@@ -134,7 +210,7 @@ public class Relationships {
   }
 
   public Collection<String> getAllClassNames() {
-    return ImmutableSet.copyOf(classNames);// classNameToJavaClassMap.keySet();
+    return ImmutableSet.copyOf(classNames); // classNameToJavaClassMap.keySet();
   }
 
   public Collection<String> getAllMethodCallers() {
@@ -169,8 +245,6 @@ public class Relationships {
     int periodCount = StringUtils.countMatches(packageName, ".");
     int packageDepth = periodCount + 1;
     return packageDepth;
-
-
   }
 
   public void addPackageOf(JavaClass classToVisit) {
@@ -233,16 +307,16 @@ public class Relationships {
   }
 
   public void validate() {
-    if (this.allMethodNameToMyInstructionMap.keySet()
+    if (this.allMethodNameToMyInstructionMap
+        .keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
-    if (this.callingMethodToMethodInvocationMultiMap.keySet()
+    if (this.callingMethodToMethodInvocationMultiMap
+        .keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
-
-
   }
 
   public void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod) {
