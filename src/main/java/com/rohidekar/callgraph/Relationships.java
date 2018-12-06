@@ -37,7 +37,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
   // Relationships
   private Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
-  private Multimap<String, String> classNameToFieldTypeNamesMultiMap = LinkedHashMultimap.create();
 
   // Name to Value mappings
   private Map<String, MyInstruction> allMethodNameToMyInstructionMap =
