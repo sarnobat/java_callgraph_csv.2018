@@ -29,7 +29,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
-public class Relationships implements RelationshipsClassVisitor, RelationshipsMain, RelationshipsMethodVisitor {
+public class Relationships
+    implements RelationshipsClassVisitor, RelationshipsMain, RelationshipsMethodVisitor {
 
   // The top level package with classes in it
   int minPackageDepth = Integer.MAX_VALUE;
@@ -51,8 +52,7 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
   private Set<DeferredSuperMethod> deferredSuperMethod = new HashSet<DeferredSuperMethod>();
   private Set<DeferredParentContainment> deferredParentContainments =
       new HashSet<DeferredParentContainment>();
-
-  private Set<String> classNames = new HashSet<String>();
+  private final RelationshipsIsMethodVisited isMethodVisited = new RelationshipsIsMethodVisited();
 
   @VisibleForTesting
   Relationships() {}
@@ -69,7 +69,7 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
   }
 
   @SuppressWarnings("resource")
-public static Map<String, JavaClass> getJavaClassesFromResource(String resource) {
+  public static Map<String, JavaClass> getJavaClassesFromResource(String resource) {
     Map<String, JavaClass> javaClasses = new HashMap<String, JavaClass>();
     boolean isJar = resource.endsWith("jar");
     if (isJar) {
@@ -157,8 +157,8 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
       }
       callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
     }
-    if (!this.isVisitedMethod(childMethodQualifiedName)) {
-      this.addUnvisitedMethod(childMethodQualifiedName);
+    if (!isMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
+      isMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
     }
   }
 
@@ -171,18 +171,6 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
       }
     }
     return false;
-  }
-
-  private void addUnvisitedMethod(String childMethodQualifiedName) {
-    this.isMethodVisited.put(childMethodQualifiedName, false);
-  }
-
-  @VisibleForTesting
-  boolean isVisitedMethod(String childMethodQualifiedName) {
-    if (!isMethodVisited.keySet().contains(childMethodQualifiedName)) {
-      addUnvisitedMethod(childMethodQualifiedName);
-    }
-    return isMethodVisited.get(childMethodQualifiedName);
   }
 
   public void addContainmentRelationship(String parentClassFullName, JavaClass javaClass) {
@@ -208,6 +196,7 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
   public Collection<MyInstruction> getCalledMethods(String parentMethodNameKey) {
     return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
   }
+
   public int getMinPackageDepth() {
     return minPackageDepth;
   }
@@ -309,15 +298,6 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
     return ImmutableSet.copyOf(deferredParentContainments);
   }
 
-  private Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
-
-  public void setVisitedMethod(String parentMethodQualifiedName) {
-    if (this.isMethodVisited.keySet().contains(parentMethodQualifiedName)) {
-      this.isMethodVisited.remove(parentMethodQualifiedName);
-    }
-    this.isMethodVisited.put(parentMethodQualifiedName, true);
-  }
-
   public MyInstruction getMethod(String qualifiedMethodName) {
     return this.allMethodNameToMyInstructionMap.get(qualifiedMethodName);
   }
@@ -389,5 +369,10 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
           relationships,
           false);
     }
+  }
+
+  @Override
+  public void setVisitedMethod(String parentMethodQualifiedName) {
+    isMethodVisited.setVisitedMethod(parentMethodQualifiedName);
   }
 }
