@@ -25,7 +25,6 @@ dnl/utils/text/tree/TextTree.class
 com/rohidekar/callgraph/DeferredChildContainment.class
 com/rohidekar/callgraph/TreeDepthVisitor.class
 gr/gousiosg/javacg/dyn/MethodStack.class
-com/rohidekar/callgraph/RelationshipsClassNames.class
 dnl/utils/text/table/TextTreeTable$TreeTableSeparatorPolicy.class
 com/rohidekar/callgraph/GraphNodeInstruction.class
 com/rohidekar/callgraph/GraphNode.class

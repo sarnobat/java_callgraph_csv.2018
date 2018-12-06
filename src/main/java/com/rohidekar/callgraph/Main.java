@@ -26,6 +26,8 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -182,7 +184,7 @@ public class Main {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
     Multimap<Integer, TreeModel> depthToRootNodes =
-        getDepthToRootNodes(rootMethodNodes, relationshipsPackageDepth.getMinPackageDepth());
+        getDepthToRootNodes(rootMethodNodes, getMinPackageDepth());
     PrintStream out = System.out;
     printTreeTest(depthToRootNodes, out);
     System.err.println(
@@ -577,4 +579,27 @@ public class Main {
   }
   // nodes
   private static ImmutableMap<String, JavaClass> classNameToJavaClassMap;
+
+
+  // The top level package with classes in it
+  private static int minPackageDepth = Integer.MAX_VALUE;
+
+  public static  int getMinPackageDepth() {
+    return minPackageDepth;
+  }
+
+  public  static void updateMinPackageDepth(JavaClass javaClass) {
+    int packageDepth = getPackageDepth(javaClass.getClassName());
+    if (packageDepth < minPackageDepth) {
+      minPackageDepth = packageDepth;
+    }
+  }
+
+  public static int getPackageDepth(String qualifiedClassName) {
+    String packageName = ClassUtils.getPackageName(qualifiedClassName);
+    int periodCount = StringUtils.countMatches(packageName, ".");
+    int packageDepth = periodCount + 1;
+    return packageDepth;
+  }
+
 }

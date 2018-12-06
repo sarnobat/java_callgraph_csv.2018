@@ -52,7 +52,7 @@ class MyClassVisitor extends ClassVisitor {
     if (Ignorer.shouldIgnore(javaClass)) {
       return;
     }
-    relationshipsPackageDepth.updateMinPackageDepth(javaClass);
+    Main.updateMinPackageDepth(javaClass);
 
     // Parent classes
     List<String> parentClasses = getInterfacesAndSuperClasses(javaClass);
