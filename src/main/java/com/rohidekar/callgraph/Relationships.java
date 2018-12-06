@@ -28,9 +28,8 @@ public class Relationships
   private final RelationshipsCalling relationshipsCalling;
 
   public Relationships(String resource, Map<String, JavaClass> javaClassesFromResource) {
-    Map<String, JavaClass> javaClasses = javaClassesFromResource;
     relationshipsCalling = new RelationshipsCalling();
-    relationshipsClassNames = new RelationshipsClassNames(javaClasses);
+    relationshipsClassNames = new RelationshipsClassNames(javaClassesFromResource);
     relationshipsInstructions = new RelationshipsInstructions();
     relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
@@ -118,12 +117,8 @@ public class Relationships
 
   public boolean methodCallExists(
       String parentMethodQualifiedName, String childMethodQualifiedName) {
-    for (MyInstruction childMethod : relationshipsCalling.get(parentMethodQualifiedName)) {
-      if (childMethod.getMethodNameQualified().equals(childMethodQualifiedName)) {
-        return true;
-      }
-    }
-    return false;
+    return relationshipsCalling.methodCallExists(
+        parentMethodQualifiedName, childMethodQualifiedName);
   }
 
   public void addContainmentRelationship(String parentClassFullName, JavaClass javaClass) {

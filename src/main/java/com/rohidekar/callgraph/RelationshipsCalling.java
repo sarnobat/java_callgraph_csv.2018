@@ -30,4 +30,14 @@ public class RelationshipsCalling {
   public Collection<String> keySet() {
     return this.callingMethodToMethodInvocationMultiMap.keySet();
   }
+
+  public boolean methodCallExists(
+      String parentMethodQualifiedName, String childMethodQualifiedName) {
+    for (MyInstruction childMethod : get(parentMethodQualifiedName)) {
+      if (childMethod.getMethodNameQualified().equals(childMethodQualifiedName)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
