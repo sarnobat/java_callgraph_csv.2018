@@ -19,13 +19,17 @@ import gr.gousiosg.javacg.stat.ClassVisitor;
 
 class MyClassVisitor extends ClassVisitor {
 
-  private JavaClass classToVisit;
-  private Relationships relationships;
+  private final JavaClass classToVisit;
+  private final Relationships relationships;
+  private final RelationshipsInstructions relationshipsInstructions;
+  private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
 
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
 
-  public MyClassVisitor(JavaClass classToVisit, Relationships relationships) {
+  public MyClassVisitor(JavaClass classToVisit, Relationships relationships, RelationshipsInstructions relationshipsInstructions, RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
     super(classToVisit);
+    this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
+    this.relationshipsInstructions = relationshipsInstructions;
     this.classToVisit = classToVisit;
     this.relationships = relationships;
   }
@@ -89,7 +93,7 @@ class MyClassVisitor extends ClassVisitor {
     String className = classToVisit.getClassName();
     ConstantPoolGen classConstants = new ConstantPoolGen(classToVisit.getConstantPool());
     MethodGen methodGen = new MethodGen(method, className, classConstants);
-    new MyMethodVisitor(methodGen, classToVisit, relationships).start();
+    new MyMethodVisitor(methodGen, classToVisit, relationships, relationshipsIsMethodVisited, relationshipsInstructions).start();
   }
 
   @Override

@@ -38,7 +38,7 @@ public class Relationships
     relationshipsDeferred = relationshipsDeferred2;
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       try {
-        new MyClassVisitor(jc, this).visitJavaClass(jc);
+        new MyClassVisitor(jc, this, relationshipsInstructions2, relationshipsIsMethodVisited2).visitJavaClass(jc);
       } catch (ClassFormatException e) {
         e.printStackTrace();
       }
