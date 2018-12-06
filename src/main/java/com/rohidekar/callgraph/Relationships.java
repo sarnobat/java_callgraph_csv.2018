@@ -37,7 +37,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
   // Relationships
   private Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
-  private Multimap<String, JavaClass> classNameToFieldTypesMultiMap = LinkedHashMultimap.create();
   private Multimap<String, String> classNameToFieldTypeNamesMultiMap = LinkedHashMultimap.create();
 
   // Name to Value mappings
@@ -191,7 +190,6 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
     if (!Ignorer.shouldIgnore(javaClass)) {
       System.err.println("CONTAINMENT: " + parentClassFullName + "--> " + javaClass.getClassName());
     }
-    classNameToFieldTypesMultiMap.put(parentClassFullName, javaClass);
     addContainmentRelationshipStringOnly(parentClassFullName, javaClass.getClassName());
   }
 
@@ -202,10 +200,6 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
     if (childClassName.equals("java.lang.Object")) {
       throw new IllegalAccessError("addContainmentRelationshipStringOnly");
     }
-
-    classNameToFieldTypeNamesMultiMap.put(parentClassName, childClassName);
-    this.classNames.add(parentClassName);
-    this.classNames.add(childClassName);
   }
 
   public Collection<String> getAllMethodCallers() {
