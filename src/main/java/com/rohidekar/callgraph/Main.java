@@ -66,6 +66,7 @@ public class Main {
     RelationshipsInstructions relationshipsInstructions = new RelationshipsInstructions();
     RelationshipsIsMethodVisited relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
     RelationshipsDeferred relationshipsDeferred = new RelationshipsDeferred();
+    RelationshipsMethodCalls relationshipsMethodCalls = new RelationshipsMethodCalls();
     for (JavaClass jc : javaClassesFromResource.values()) {
       try {
         new MyClassVisitor(
@@ -75,6 +76,7 @@ public class Main {
                 relationshipsClassNames,
                 relationshipsDeferred,
                 relationshipsPackageDepth,
+                relationshipsMethodCalls,
                 callingMethodToMethodInvocationMultiMap,
                 allMethodNameToMyInstructionMap,
                 isMethodVisited)

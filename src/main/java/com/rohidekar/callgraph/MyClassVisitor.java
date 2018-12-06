@@ -23,6 +23,7 @@ class MyClassVisitor extends ClassVisitor {
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsDeferred relationshipsDeferred;
   private final RelationshipsPackageDepth relationshipsPackageDepth;
+  private final RelationshipsMethodCalls relationshipsMethodCalls;
   private final Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
   @Deprecated
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
@@ -38,6 +39,7 @@ class MyClassVisitor extends ClassVisitor {
       RelationshipsClassNames relationshipsClassNames,
       RelationshipsDeferred relationshipsDeferred,
       RelationshipsPackageDepth relationshipsPackageDepth,
+      RelationshipsMethodCalls relationshipsMethodCalls,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
       Map<String, Boolean> isMethodVisited) {
@@ -48,6 +50,7 @@ class MyClassVisitor extends ClassVisitor {
     this.relationshipsInstructions = relationshipsInstructions;
     this.relationshipsClassNames = relationshipsClassNames;
     this.relationshipsDeferred = relationshipsDeferred;
+    this.relationshipsMethodCalls = relationshipsMethodCalls;
     this.isMethodVisited = isMethodVisited;
     this.callingMethodToMethodInvocationMultiMap = callingMethodToMethodInvocationMultiMap;
     this.allMethodNameToMyInstructionMap = allMethodNameToMyInstructionMap;
@@ -116,6 +119,7 @@ class MyClassVisitor extends ClassVisitor {
             relationshipsInstructions,
             relationshipsClassNames,
             relationshipsDeferred,
+            relationshipsMethodCalls,
             callingMethodToMethodInvocationMultiMap,
             allMethodNameToMyInstructionMap,
             isMethodVisited)

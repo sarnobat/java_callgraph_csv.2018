@@ -32,6 +32,7 @@ class MyMethodVisitor extends MethodVisitor {
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsDeferred relationshipsDeferred;
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
+  private final RelationshipsMethodCalls relationshipsMethodCalls;
   @Deprecated // Use RelationshipsMethodCalls
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
   @Deprecated // Use RelationshipsInstructions
@@ -44,6 +45,7 @@ class MyMethodVisitor extends MethodVisitor {
       RelationshipsInstructions relationshipsInstructions,
       RelationshipsClassNames relationshipsClassNames,
       RelationshipsDeferred relationshipsDeferred,
+      RelationshipsMethodCalls relationshipsMethodCalls,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
       Map<String, Boolean> isMethodVisited) {
@@ -55,6 +57,7 @@ class MyMethodVisitor extends MethodVisitor {
     this.relationshipsInstructions = relationshipsInstructions;
     this.relationshipsClassNames = relationshipsClassNames;
     this.relationshipsDeferred = relationshipsDeferred;
+    this.relationshipsMethodCalls=relationshipsMethodCalls;
     this.callingMethodToMethodInvocationMultiMap = callingMethodToMethodInvocationMultiMap;
     this.allMethodNameToMyInstructionMap = allMethodNameToMyInstructionMap;
 
@@ -212,7 +215,7 @@ class MyMethodVisitor extends MethodVisitor {
     }
   }
 
-  private static void addMethodCall(
+  private void addMethodCall(
       String parentMethodQualifiedName,
       MyInstruction childMethod,
       String childMethodQualifiedName,
