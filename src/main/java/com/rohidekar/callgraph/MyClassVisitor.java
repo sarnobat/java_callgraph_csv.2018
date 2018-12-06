@@ -27,7 +27,6 @@ class MyClassVisitor extends ClassVisitor {
   public MyClassVisitor(JavaClass classToVisit, RelationshipsClassVisitor relationships) {
     super(classToVisit);
     this.classToVisit = classToVisit;
-    relationships.addPackageOf(classToVisit);
     this.relationships = relationships;
   }
 
@@ -51,7 +50,6 @@ class MyClassVisitor extends ClassVisitor {
     if (Ignorer.shouldIgnore(javaClass)) {
       return;
     }
-    relationships.addPackageOf(javaClass);
     relationships.updateMinPackageDepth(javaClass);
 
     // Parent classes

@@ -4,7 +4,6 @@ import org.apache.bcel.classfile.JavaClass;
 
 public interface RelationshipsClassVisitor {
 
-  void addPackageOf(JavaClass javaClass);
 
   void updateMinPackageDepth(JavaClass javaClass);
 

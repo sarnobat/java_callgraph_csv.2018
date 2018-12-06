@@ -39,8 +39,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
       LinkedHashMultimap.create();
   private Multimap<String, JavaClass> classNameToFieldTypesMultiMap = LinkedHashMultimap.create();
   private Multimap<String, String> classNameToFieldTypeNamesMultiMap = LinkedHashMultimap.create();
-  private Multimap<String, String> parentPackageNameToChildPackageNameMultiMap =
-      LinkedHashMultimap.create();
 
   // Name to Value mappings
   private Map<String, MyInstruction> allMethodNameToMyInstructionMap =
@@ -233,12 +231,6 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
     int periodCount = StringUtils.countMatches(packageName, ".");
     int packageDepth = periodCount + 1;
     return packageDepth;
-  }
-
-  public void addPackageOf(JavaClass classToVisit) {
-    String pkgFullName = classToVisit.getPackageName();
-    String parentPktFullName = ClassUtils.getPackageName(pkgFullName);
-    this.parentPackageNameToChildPackageNameMultiMap.put(parentPktFullName, pkgFullName);
   }
 
   public JavaClass getClassDef(String aClassFullName) {
