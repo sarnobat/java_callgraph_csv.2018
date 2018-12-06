@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
-public class Relationships implements RelationshipsClassVisitor {
+public class Relationships implements RelationshipsClassVisitor, RelationshipsMain {
 
   // The top level package with classes in it
   int minPackageDepth = Integer.MAX_VALUE;

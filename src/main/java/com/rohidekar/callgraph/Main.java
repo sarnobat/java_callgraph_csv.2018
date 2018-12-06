@@ -38,7 +38,7 @@ public class Main {
     } else {
       resource = args[0];
     }
-    Relationships relationships = new Relationships(resource);
+    RelationshipsMain relationships = new Relationships(resource);
     relationships.validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
