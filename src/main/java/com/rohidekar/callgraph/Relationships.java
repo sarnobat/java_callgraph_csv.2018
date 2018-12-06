@@ -9,7 +9,7 @@ import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.JavaClass;
 
 public class Relationships
-    implements RelationshipsClassVisitor, RelationshipsMain, RelationshipsMethodVisitor {
+    implements RelationshipsClassVisitor, RelationshipsMethodVisitor {
 
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final RelationshipsClassNames relationshipsClassNames;
