@@ -13,7 +13,6 @@ import com.rohidekar.callgraph.common.GraphNode;
 import com.rohidekar.callgraph.common.MyInstruction;
 import com.rohidekar.callgraph.common.MyTreeModel;
 import com.rohidekar.callgraph.common.Relationships;
-import com.rohidekar.callgraph.containments.TreeDepthCalculator;
 
 public class TreePrinterCalls {
 

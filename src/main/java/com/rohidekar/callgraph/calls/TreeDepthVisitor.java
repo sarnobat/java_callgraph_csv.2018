@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph.containments;
+package com.rohidekar.callgraph.calls;
 
 import com.rohidekar.callgraph.common.*;
 import java.util.HashMap;
