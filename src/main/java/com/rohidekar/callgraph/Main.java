@@ -27,6 +27,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.io.FileUtils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
@@ -59,7 +60,8 @@ public class Main {
     RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
     RelationshipsClassNames relationshipsClassNames =
         new RelationshipsClassNames(javaClassesFromResource);
-    for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
+    classNameToJavaClassMap = ImmutableMap.copyOf(javaClassesFromResource);
+    for (JavaClass jc : getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(
                 jc,
@@ -73,9 +75,9 @@ public class Main {
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
     for (DeferredParentContainment aDeferredParentContainment :
-        relationshipsClassNames.getDeferredParentContainments()) {
+        getDeferredParentContainments()) {
       JavaClass parentClass1 =
-          relationshipsClassNames.getClassDef(aDeferredParentContainment.getParentClassName());
+          getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
           parentClass1 = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
@@ -516,4 +518,66 @@ public class Main {
       throw new IllegalAccessError("No such thing");
     }
   }
+
+
+  public  static JavaClass getClassDef(String aClassFullName) {
+    JavaClass jc = null;
+    try {
+      jc = Repository.lookupClass(aClassFullName);
+    } catch (ClassNotFoundException e) {
+      if (classNameToJavaClassMap.get(aClassFullName) != null) {
+        System.err.println("We do need our own homemade repository. I don't know why");
+      }
+    }
+    if (jc == null) {
+      jc = classNameToJavaClassMap.get(aClassFullName);
+    }
+    return jc;
+  }
+
+  public  static Collection<JavaClass> getParentClassesAndInterfaces(JavaClass childClass) {
+    Collection<JavaClass> superClassesAndInterfaces = new HashSet<JavaClass>();
+    String[] interfaceNames = childClass.getInterfaceNames();
+    for (String interfaceName : interfaceNames) {
+      JavaClass anInterface = classNameToJavaClassMap.get(interfaceName);
+      if (anInterface == null) {
+        // Do it later
+        deferParentContainment(interfaceName, childClass);
+      } else {
+        superClassesAndInterfaces.add(anInterface);
+      }
+    }
+    String superclassNames = childClass.getSuperclassName();
+    if (!superclassNames.equals("java.lang.Object")) {
+      JavaClass theSuperclass = classNameToJavaClassMap.get(superclassNames);
+      if (theSuperclass == null) {
+        // Do it later
+        deferParentContainment(superclassNames, childClass);
+      } else {
+        superClassesAndInterfaces.add(theSuperclass);
+      }
+    }
+    if (superClassesAndInterfaces.size() > 0) {
+      System.err.println("Has a parent (" + childClass.getClassName() + ")");
+    }
+    return ImmutableSet.copyOf(superClassesAndInterfaces);
+  }
+
+  private  static  Set<DeferredParentContainment> deferredParentContainments =
+      new HashSet<DeferredParentContainment>();
+
+  public  static void deferParentContainment(String parentClassName, JavaClass javaClass) {
+    System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
+    deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
+  }
+
+  public static  Collection<JavaClass> getClassNameToJavaClassMapValues() {
+    return classNameToJavaClassMap.values();
+  }
+
+  public  static  Set<DeferredParentContainment> getDeferredParentContainments() {
+    return ImmutableSet.copyOf(deferredParentContainments);
+  }
+  // nodes
+  private static ImmutableMap<String, JavaClass> classNameToJavaClassMap;
 }

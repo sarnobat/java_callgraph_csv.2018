@@ -130,7 +130,7 @@ class MyMethodVisitor extends MethodVisitor {
       RelationshipsClassNames relationshipsClassNames)
       throws IllegalAccessError {
 
-    Collection<JavaClass> superClasses = relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
+    Collection<JavaClass> superClasses = Main.getParentClassesAndInterfaces(visitedClass);
     for (JavaClass parentClassOrInterface : superClasses) {
       MyInstruction parentInstruction =
           getInstruction(parentClassOrInterface, unqualifiedMethodName);
