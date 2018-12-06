@@ -49,9 +49,13 @@ public class Main {
 
   // nodes
   private static Map<String, JavaClass> classNameToJavaClassMap;
-
   private static Set<DeferredParentContainment> deferredParentContainments =
       new HashSet<DeferredParentContainment>();
+  private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
+
+  // Relationships
+  private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
+      LinkedHashMultimap.create();
 
   public static void main(String[] args) {
     String resource;
@@ -425,12 +429,6 @@ public class Main {
       }
     }
   }
-
-  private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
-
-  // Relationships
-  private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
-      LinkedHashMultimap.create();
 
   private static boolean methodCallExists(
       String parentMethodQualifiedName,
