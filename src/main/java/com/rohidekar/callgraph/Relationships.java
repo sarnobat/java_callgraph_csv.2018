@@ -72,7 +72,8 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
     handleDeferredRelationships(this);
   }
 
-  public static Map<String, JavaClass> getJavaClassesFromResource(String resource) {
+  @SuppressWarnings("resource")
+public static Map<String, JavaClass> getJavaClassesFromResource(String resource) {
     Map<String, JavaClass> javaClasses = new HashMap<String, JavaClass>();
     boolean isJar = resource.endsWith("jar");
     if (isJar) {
