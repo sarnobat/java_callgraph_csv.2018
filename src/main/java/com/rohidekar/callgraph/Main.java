@@ -107,15 +107,15 @@ public class Main {
       Integer treeDepth = new Integer(i);
       if (treeDepth < Main.MIN_TREE_DEPTH) {
         continue;
-      }
-      if (treeDepth > Main.MAX_TREE_DEPTH) {
+      } else if (treeDepth > Main.MAX_TREE_DEPTH) {
         continue;
-      }
-      for (Object aTreeModel : depthToRootNodes.get(treeDepth)) {
-        TreeModel aTreeModel2 = (TreeModel) aTreeModel;
-        // new TextTree(aTreeModel2).printTree();
-        GraphNode rootNode = (GraphNode) aTreeModel2.getRoot();
-        printTreeTest(rootNode, 0, new HashSet<GraphNode>());
+      } else {
+        for (Object aTreeModel : depthToRootNodes.get(treeDepth)) {
+          TreeModel aTreeModel2 = (TreeModel) aTreeModel;
+          // new TextTree(aTreeModel2).printTree();
+          GraphNode rootNode = (GraphNode) aTreeModel2.getRoot();
+          printTreeTest(rootNode, 0, new HashSet<GraphNode>());
+        }
       }
     }
     System.err.println(
