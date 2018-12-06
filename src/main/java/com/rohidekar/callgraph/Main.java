@@ -94,17 +94,8 @@ public class Main {
     if (rootMethodNodes.size() < 1) {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
-    Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();
-    for (GraphNode aRootNode : rootMethodNodes) {
-      TreeModel tree = new MyTreeModel(aRootNode);
-      int treeDepth = getTreeDepth(tree);
-      // TODO: move this to the loop below
-      if (aRootNode.getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
-        //continue;
-      } else {
-        depthToRootNodes.put(treeDepth, tree);
-      }
-    }
+    Multimap<Integer, TreeModel> depthToRootNodes =
+      getDepthToRootNodes(relationships, rootMethodNodes);
     PrintStream out = System.out;
     for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
       Integer treeDepth = new Integer(i);
@@ -125,6 +116,18 @@ public class Main {
         "Now use d3_helloworld_csv.git/singlefile_automated/ for visualization. For example: ");
     System.err.println("  cat /tmp/calls.csv | sh csv2d3.sh | tee /tmp/index.html");
   }
+
+private static Multimap<Integer, TreeModel> getDepthToRootNodes(RelationshipsMain relationships,Set<GraphNode> rootMethodNodes){Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();
+for (GraphNode aRootNode : rootMethodNodes) {
+  TreeModel tree = new MyTreeModel(aRootNode);
+  int treeDepth = getTreeDepth(tree);
+  // TODO: move this to the loop below
+  if (aRootNode.getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
+    //continue;
+  } else {
+    depthToRootNodes.put(treeDepth, tree);
+  }
+}return depthToRootNodes;}
 
   // parameter mutated
   private static void printTreeTest(
