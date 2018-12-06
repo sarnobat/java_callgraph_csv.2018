@@ -26,12 +26,14 @@ public class Relationships
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsInstructions relationshipsInstructions;
   private final RelationshipsCalling relationshipsCalling;
+  private final RelationshipsDeferred relationshipsDeferred;
 
   public Relationships(String resource, Map<String, JavaClass> javaClassesFromResource) {
     relationshipsCalling = new RelationshipsCalling();
     relationshipsClassNames = new RelationshipsClassNames(javaClassesFromResource);
     relationshipsInstructions = new RelationshipsInstructions();
     relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
+    relationshipsDeferred = new RelationshipsDeferred();
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(jc, this).visitJavaClass(jc);
@@ -188,16 +190,17 @@ public class Relationships
     }
   }
 
-  private final RelationshipsDeferred relationshipsDeferred = new RelationshipsDeferred();
-
+  @Deprecated
   public void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod) {
     this.relationshipsDeferred.deferSuperMethodRelationshipCapture(deferredSuperMethod);
   }
 
+  @Deprecated
   public Set<DeferredSuperMethod> getDeferSuperMethodRelationships() {
     return this.relationshipsDeferred.getDeferSuperMethodRelationships();
   }
 
+  @Deprecated
   public void deferParentContainment(String parentClassName, JavaClass javaClass) {
     relationshipsClassNames.deferParentContainment(parentClassName, javaClass);
   }
@@ -224,9 +227,13 @@ public class Relationships
     return relationshipsClassNames.getClassDef(anInterfaceName);
   }
 
+  @Deprecated
   @Override
-  public void addMethodDefinition(MyInstruction myInstruction) {}
+  public void addMethodDefinition(MyInstruction myInstruction) {
+    relationshipsInstructions.addMethodDefinition(myInstruction);
+  }
 
+  @Deprecated
   @Override
   public MyInstruction getMethod(String parentMethodNameKey) {
     return relationshipsInstructions.getMethod(parentMethodNameKey);
