@@ -95,9 +95,7 @@ public class Main {
       }
     }
     relationships.validate();
-    Map<String, GraphNode> allMethodNamesToMethodNodes = allMethodNamesToMethods;
-    relationships.validate();
-    Set<GraphNode> rootMethodNodes = findRootCallers(allMethodNamesToMethodNodes);
+    Set<GraphNode> rootMethodNodes = findRootCallers(allMethodNamesToMethods);
     if (rootMethodNodes.size() < 1) {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
@@ -145,8 +143,7 @@ public class Main {
   }
 
   private static Set<GraphNode> findRootCallers(Map<String, GraphNode> allMethodNamesToMethods) {
-    Set<GraphNode> rootMethodNodes;
-    rootMethodNodes = new HashSet<GraphNode>();
+    Set<GraphNode> rootMethodNodes = new HashSet<GraphNode>();
     for (GraphNode aNode : allMethodNamesToMethods.values()) {
       Set<GraphNode> roots = new HashSet<GraphNode>();
       RootsVisitor rootsVisitor = new RootsVisitor();
