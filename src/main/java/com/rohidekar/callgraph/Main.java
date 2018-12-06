@@ -490,12 +490,6 @@ public class Main {
     return allMethodNameToMyInstructionMap.get(qualifiedMethodName);
   }
 
-  @Deprecated // should not be public
-  public static void addMethodDefinition(MyInstruction myInstructionImpl) {
-    allMethodNameToMyInstructionMap.put(
-        myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
-  }
-
   private static void validate2(Collection<String> ks) {
     if (ks.contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
