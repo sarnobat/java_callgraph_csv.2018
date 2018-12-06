@@ -26,4 +26,11 @@ public class RelationshipsInstructions {
 
     return allMethodNameToMyInstructionMap.keySet();
   }
+
+  public void validate() {
+    if (keySet()
+        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
+      throw new IllegalAccessError("No such thing");
+    }
+  }
 }

@@ -1,34 +1,27 @@
 package com.rohidekar.callgraph;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.JavaClass;
-import org.apache.commons.lang.ClassUtils;
-import org.apache.commons.lang.StringUtils;
-
-import com.google.common.collect.ImmutableSet;
 
 public class Relationships
     implements RelationshipsClassVisitor, RelationshipsMain, RelationshipsMethodVisitor {
 
-  // The top level package with classes in it
-  private int minPackageDepth = Integer.MAX_VALUE;
-
-  // Objects that cannot yet be found
-  private Set<DeferredChildContainment> deferredChildContainments =
-      new HashSet<DeferredChildContainment>();
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsInstructions relationshipsInstructions;
   private final RelationshipsCalling relationshipsCalling;
   private final RelationshipsDeferred relationshipsDeferred;
+  private final RelationshipsPackageDepth relationshipsPackageDepth;
+  private final RelationshipsContainment relationshipsContainment;
 
   public Relationships(String resource, Map<String, JavaClass> javaClassesFromResource) {
+    relationshipsContainment = new RelationshipsContainment();
+    relationshipsPackageDepth = new RelationshipsPackageDepth();
     relationshipsCalling = new RelationshipsCalling();
     relationshipsClassNames = new RelationshipsClassNames(javaClassesFromResource);
     relationshipsInstructions = new RelationshipsInstructions();
@@ -117,6 +110,7 @@ public class Relationships
     relationshipsCalling.put(parentMethodQualifiedName, childMethod);
   }
 
+  @Deprecated
   public boolean methodCallExists(
       String parentMethodQualifiedName, String childMethodQualifiedName) {
     return relationshipsCalling.methodCallExists(
@@ -149,45 +143,37 @@ public class Relationships
     return relationshipsCalling.getCalledMethods(parentMethodNameKey);
   }
 
+  @Deprecated
   public int getMinPackageDepth() {
-    return minPackageDepth;
+    return relationshipsPackageDepth.getMinPackageDepth();
   }
 
+  @Deprecated
   public void updateMinPackageDepth(JavaClass javaClass) {
-    int packageDepth = getPackageDepth(javaClass.getClassName());
-    if (packageDepth < minPackageDepth) {
-      minPackageDepth = packageDepth;
-    }
+    relationshipsPackageDepth.updateMinPackageDepth(javaClass);
   }
 
+  @Deprecated
   public static int getPackageDepth(String qualifiedClassName) {
-    String packageName = ClassUtils.getPackageName(qualifiedClassName);
-    int periodCount = StringUtils.countMatches(packageName, ".");
-    int packageDepth = periodCount + 1;
-    return packageDepth;
+    return RelationshipsPackageDepth.getPackageDepth(qualifiedClassName);
   }
 
+  @Deprecated
   public boolean deferContainmentVisit(
       JavaClass parentClassToVisit, String childClassQualifiedName) {
-    return this.deferredChildContainments.add(
-        new DeferredChildContainment(parentClassToVisit, childClassQualifiedName));
+    return relationshipsContainment.deferContainmentVisit(
+        parentClassToVisit, childClassQualifiedName);
   }
 
+  @Deprecated
   public Set<DeferredChildContainment> getDeferredChildContainment() {
-    return ImmutableSet.copyOf(this.deferredChildContainments);
+    return relationshipsContainment.getDeferredChildContainment();
   }
 
+  @Deprecated
   public void validate() {
-    if (this.relationshipsInstructions
-        .keySet()
-        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
-      throw new IllegalAccessError("No such thing");
-    }
-    if (relationshipsCalling
-        .keySet()
-        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
-      throw new IllegalAccessError("No such thing");
-    }
+    this.relationshipsInstructions.validate();
+    this.relationshipsCalling.validate();
   }
 
   @Deprecated

@@ -40,4 +40,12 @@ public class RelationshipsCalling {
     }
     return false;
   }
+
+  public void validate() {
+
+    if (keySet()
+        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
+      throw new IllegalAccessError("No such thing");
+    }
+  }
 }

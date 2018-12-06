@@ -12,6 +12,7 @@ gr/gousiosg/javacg/stat/JCallGraph.class
 gr/gousiosg/javacg/dyn/MethodStack$1$1.class
 com/rohidekar/callgraph/DeferredSuperMethod.class
 com/rohidekar/callgraph/DeferredParentContainment.class
+com/rohidekar/callgraph/RelationshipsPackageDepth.class
 com/rohidekar/callgraph/RelationshipsDeferred.class
 dnl/utils/text/table/TextTreeTableRenderer.class
 gr/gousiosg/javacg/stat/ClassVisitor.class
@@ -24,6 +25,7 @@ gr/gousiosg/javacg/dyn/Instrumenter.class
 com/rohidekar/callgraph/RelationshipsMethodCalls.class
 com/rohidekar/callgraph/RelationshipsMain.class
 com/rohidekar/callgraph/MyMethodVisitor.class
+com/rohidekar/callgraph/RelationshipsContainment.class
 com/rohidekar/callgraph/Ignorer.class
 com/rohidekar/callgraph/RelationshipsCalling.class
 dnl/utils/text/tree/TextTree.class
