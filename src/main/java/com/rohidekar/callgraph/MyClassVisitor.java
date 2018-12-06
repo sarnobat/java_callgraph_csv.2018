@@ -20,7 +20,6 @@ import gr.gousiosg.javacg.stat.ClassVisitor;
 class MyClassVisitor extends ClassVisitor {
 
   private final JavaClass classToVisit;
-  private final Relationships relationships;
   private final RelationshipsInstructions relationshipsInstructions;
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final RelationshipsClassNames relationshipsClassNames;
@@ -32,7 +31,6 @@ class MyClassVisitor extends ClassVisitor {
 
   public MyClassVisitor(
       JavaClass classToVisit,
-      Relationships relationships,
       RelationshipsInstructions relationshipsInstructions,
       RelationshipsIsMethodVisited relationshipsIsMethodVisited,
       RelationshipsClassNames relationshipsClassNames,
@@ -52,7 +50,6 @@ class MyClassVisitor extends ClassVisitor {
     this.relationshipsClassNames= relationshipsClassNames;
     this.relationshipsDeferred=relationshipsDeferred;
     this.classToVisit = classToVisit;
-    this.relationships = relationships;
   }
 
   public void setVisited(JavaClass javaClass) {
@@ -111,7 +108,7 @@ class MyClassVisitor extends ClassVisitor {
     String className = classToVisit.getClassName();
     ConstantPoolGen classConstants = new ConstantPoolGen(classToVisit.getConstantPool());
     MethodGen methodGen = new MethodGen(method, className, classConstants);
-    new MyMethodVisitor(methodGen, classToVisit, relationships, relationshipsIsMethodVisited, relationshipsInstructions,relationshipsClassNames, relationshipsDeferred, relationshipsCalling).start();
+    new MyMethodVisitor(methodGen, classToVisit, relationshipsIsMethodVisited, relationshipsInstructions, relationshipsClassNames,relationshipsDeferred, relationshipsCalling).start();
   }
 
   @Override

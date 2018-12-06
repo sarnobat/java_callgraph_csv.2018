@@ -63,22 +63,10 @@ public class Main {
     RelationshipsInstructions relationshipsInstructions = new RelationshipsInstructions();
     RelationshipsIsMethodVisited relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
     RelationshipsDeferred relationshipsDeferred = new RelationshipsDeferred();
-    Relationships relationships =
-        new Relationships(
-            resource,
-            javaClassesFromResource,
-            relationshipsContainment,
-            relationshipsPackageDepth,
-            relationshipsCalling,
-            relationshipsClassNames,
-            relationshipsInstructions,
-            relationshipsIsMethodVisited,
-            relationshipsDeferred);
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(
                 jc,
-                relationships,
                 relationshipsInstructions,
                 relationshipsIsMethodVisited,
                 relationshipsClassNames,
@@ -130,7 +118,6 @@ public class Main {
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
               deferredSuperMethod.getunqualifiedMethodName(),
-              relationships,
               relationshipsInstructions);
       if (parentInstruction == null) {
         System.err.println("Parent instruction was not found");
