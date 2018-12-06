@@ -80,7 +80,7 @@ class MyClassVisitor extends ClassVisitor {
       if (Ignorer.shouldIgnore(anInterfaceName)) {
         continue;
       }
-      JavaClass anInterface = relationships.getClassDef(anInterfaceName);
+      JavaClass anInterface = relationshipsClassNames.getClassDef(anInterfaceName);
       if (anInterface == null) {
     	  	relationshipsClassNames.deferParentContainment(anInterfaceName, javaClass);
       } else {
@@ -116,12 +116,12 @@ class MyClassVisitor extends ClassVisitor {
     Type fieldType = field.getType();
     if (fieldType instanceof ObjectType) {
       ObjectType objectType = (ObjectType) fieldType;
-      addContainmentRelationship(this.classToVisit, objectType.getClassName(), relationships, true, relationshipsClassNames, relationshipsContainment);
+      addContainmentRelationship(this.classToVisit, objectType.getClassName(), true, relationshipsClassNames, relationshipsContainment);
     }
   }
 
   public static void addContainmentRelationship(JavaClass classToVisit,
-      String childClassNameQualified, RelationshipsClassVisitor relationships, boolean allowDeferral, RelationshipsClassNames relationshipsClassNames2, RelationshipsContainment relationshipsContainment) {
+      String childClassNameQualified,boolean allowDeferral, RelationshipsClassNames relationshipsClassNames2, RelationshipsContainment relationshipsContainment) {
     if (Ignorer.shouldIgnore(childClassNameQualified)) {
       return;
     }

@@ -7,8 +7,7 @@ import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.JavaClass;
 
-public class Relationships
-    implements RelationshipsClassVisitor {
+public class Relationships  {
 
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final RelationshipsClassNames relationshipsClassNames;
@@ -66,12 +65,12 @@ public class Relationships
       }
       if (parentClass1 != null) {
         MyClassVisitor.addContainmentRelationship(
-            parentClass1, aDeferredParentContainment.getChildClass().getClassName(), this, false, relationshipsClassNames, relationshipsContainment);
+            parentClass1, aDeferredParentContainment.getChildClass().getClassName(), false, relationshipsClassNames, relationshipsContainment);
       }
     }
     for (DeferredChildContainment containment : this.relationshipsContainment.getDeferredChildContainment()) {
       MyClassVisitor.addContainmentRelationship(
-          containment.getParentClass(), containment.getClassQualifiedName(), this, false, relationshipsClassNames,relationshipsContainment);
+          containment.getParentClass(), containment.getClassQualifiedName(), false, relationshipsClassNames,relationshipsContainment);
     }
     for (DeferredSuperMethod deferredSuperMethod : this.relationshipsDeferred.getDeferSuperMethodRelationships()) {
       MyInstruction parentInstruction =
@@ -139,12 +138,6 @@ public class Relationships
   @Deprecated
   public void deferParentContainment(String parentClassName, JavaClass javaClass) {
     relationshipsClassNames.deferParentContainment(parentClassName, javaClass);
-  }
-
-  @Deprecated
-  @Override
-  public JavaClass getClassDef(String anInterfaceName) {
-    return relationshipsClassNames.getClassDef(anInterfaceName);
   }
 
   @Deprecated
