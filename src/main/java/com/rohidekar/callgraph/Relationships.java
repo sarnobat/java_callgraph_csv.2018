@@ -35,10 +35,6 @@ public class Relationships
   // The top level package with classes in it
   int minPackageDepth = Integer.MAX_VALUE;
 
-  // Relationships
-  private Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
-      LinkedHashMultimap.create();
-
   // Name to Value mappings
   private Map<String, MyInstruction> allMethodNameToMyInstructionMap =
       new HashMap<String, MyInstruction>();
@@ -147,17 +143,20 @@ public class Relationships
       if (parentMethodQualifiedName.contains("Millis")) {
         System.out.println("");
       }
-      callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
+      putCalling(parentMethodQualifiedName, childMethod);
     }
     if (!isMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
       isMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
     }
   }
 
+  private void putCalling(String parentMethodQualifiedName, MyInstruction childMethod) {
+    relationshipsCalling.put(parentMethodQualifiedName, childMethod);
+  }
+
   public boolean methodCallExists(
       String parentMethodQualifiedName, String childMethodQualifiedName) {
-    for (MyInstruction childMethod :
-        callingMethodToMethodInvocationMultiMap.get(parentMethodQualifiedName)) {
+    for (MyInstruction childMethod : relationshipsCalling.get(parentMethodQualifiedName)) {
       if (childMethod.getMethodNameQualified().equals(childMethodQualifiedName)) {
         return true;
       }
@@ -181,12 +180,14 @@ public class Relationships
     }
   }
 
+  private final RelationshipsCalling relationshipsCalling = new RelationshipsCalling();
+
   public Collection<String> getAllMethodCallers() {
-    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet());
+    return relationshipsCalling.getAllMethodCallers();
   }
 
   public Collection<MyInstruction> getCalledMethods(String parentMethodNameKey) {
-    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
+    return relationshipsCalling.getCalledMethods(parentMethodNameKey);
   }
 
   public int getMinPackageDepth() {
@@ -223,8 +224,7 @@ public class Relationships
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
-    if (this.callingMethodToMethodInvocationMultiMap
-        .keySet()
+    if (relationshipsCalling.keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
