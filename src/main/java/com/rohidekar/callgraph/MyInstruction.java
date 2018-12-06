@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph.calls;
+package com.rohidekar.callgraph;
 
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.MethodGen;

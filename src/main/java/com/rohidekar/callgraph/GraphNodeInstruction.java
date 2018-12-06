@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph.calls;
+package com.rohidekar.callgraph;
 
 class GraphNodeInstruction extends GraphNode {
   private MyInstruction instruction;

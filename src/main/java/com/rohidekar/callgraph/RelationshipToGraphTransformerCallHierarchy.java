@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph.calls;
+package com.rohidekar.callgraph;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,7 +10,6 @@ import javax.swing.tree.TreeModel;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import com.rohidekar.callgraph.Main;
 
 /** Transforms relationships into graphs */
 public class RelationshipToGraphTransformerCallHierarchy {

@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph.calls;
+package com.rohidekar.callgraph;
 import java.util.LinkedList;
 
 import javax.swing.event.TreeModelListener;

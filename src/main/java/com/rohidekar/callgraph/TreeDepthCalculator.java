@@ -1,6 +1,6 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 
-package com.rohidekar.callgraph.calls;
+package com.rohidekar.callgraph;
 
 import javax.swing.tree.TreeModel;
 
