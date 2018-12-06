@@ -158,7 +158,7 @@ class MyMethodVisitor extends MethodVisitor {
           callingMethodToMethodInvocationMultiMap,
           allMethodNameToMyInstructionMap,
           isMethodVisited);
-      if (Main.getMethod(parentMethodQualifiedName) == null) {
+      if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
         relationshipsInstructions.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
       }
