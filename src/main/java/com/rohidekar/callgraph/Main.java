@@ -106,7 +106,7 @@ public class Main {
         }
       }
     }
-    for (DeferredSuperMethod deferredSuperMethod : ImmutableSet.copyOf(deferredSuperMethods)) {
+    for (DeferredSuperMethod deferredSuperMethod : relationshipsDeferred.getDeferSuperMethodRelationships()) {
       MyInstruction parentInstruction =
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
@@ -469,14 +469,6 @@ public class Main {
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
-  }
-
-  @Deprecated
-  private static Set<DeferredSuperMethod> deferredSuperMethods = new HashSet<DeferredSuperMethod>();
-
-  @Deprecated // this should not be public
-  public static void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod1) {
-    deferredSuperMethods.add(deferredSuperMethod1);
   }
 
   //Name to Value mappings
