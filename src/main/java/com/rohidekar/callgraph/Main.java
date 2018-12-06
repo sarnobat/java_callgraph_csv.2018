@@ -71,19 +71,20 @@ public class Main {
       for (MyInstruction childMethod : calledMethods) {
         if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
           continue;
+        } else {
+          System.err.println(
+              "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
+                  + childMethod.getMethodNameQualified());
+          GraphNodeInstruction child =
+              (GraphNodeInstruction)
+                  allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
+          if (child == null) {
+            child = new GraphNodeInstruction(childMethod);
+            allMethodNamesToMethods.put(childMethod.getMethodNameQualified(), child);
+          }
+          parentEnd.addChild(child);
+          child.addParent(parentEnd);
         }
-        System.err.println(
-            "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
-                + childMethod.getMethodNameQualified());
-        GraphNodeInstruction child =
-            (GraphNodeInstruction)
-                allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
-        if (child == null) {
-          child = new GraphNodeInstruction(childMethod);
-          allMethodNamesToMethods.put(childMethod.getMethodNameQualified(), child);
-        }
-        parentEnd.addChild(child);
-        child.addParent(parentEnd);
       }
     }
     relationships.validate();
