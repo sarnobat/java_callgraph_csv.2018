@@ -60,7 +60,7 @@ public class Main {
     }
     Map<String, JavaClass> javaClassesFromResource = getJavaClassesFromResource(resource);
     classNameToJavaClassMap = ImmutableMap.copyOf(javaClassesFromResource);
-    for (JavaClass jc : getClassNameToJavaClassMapValues()) {
+    for (JavaClass jc : classNameToJavaClassMap.values()) {
       try {
         new MyClassVisitor(jc).visitJavaClass(jc);
       } catch (ClassFormatException e) {
@@ -69,7 +69,7 @@ public class Main {
     }
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
-    for (DeferredParentContainment aDeferredParentContainment : getDeferredParentContainments()) {
+    for (DeferredParentContainment aDeferredParentContainment : ImmutableSet.copyOf(deferredParentContainments)) {
       JavaClass parentClass1 = getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
@@ -81,7 +81,7 @@ public class Main {
         }
       }
     }
-    for (DeferredSuperMethod deferredSuperMethod : getDeferSuperMethodRelationships()) {
+    for (DeferredSuperMethod deferredSuperMethod : ImmutableSet.copyOf(deferredSuperMethod)) {
       MyInstruction parentInstruction =
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
@@ -109,7 +109,7 @@ public class Main {
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
     for (String parentMethodNameKey :
-        getAllMethodCallers(callingMethodToMethodInvocationMultiMap)) {
+        ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet())) {
       System.err.println(
           "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - "
               + parentMethodNameKey);
@@ -136,7 +136,7 @@ public class Main {
           throw new IllegalAccessError("determineCallHierarchy() 2 ");
         }
         Collection<MyInstruction> calledMethods =
-            getCalledMethods(parentMethodNameKey, callingMethodToMethodInvocationMultiMap);
+            ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
         for (MyInstruction childMethod : calledMethods) {
           if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
           } else {
@@ -178,7 +178,7 @@ public class Main {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
     Multimap<Integer, TreeModel> depthToRootNodes =
-        getDepthToRootNodes(rootMethodNodes, getMinPackageDepth());
+        getDepthToRootNodes(rootMethodNodes, minPackageDepth);
     PrintStream out = System.out;
     printTreeTest(depthToRootNodes, out);
     System.err.println(
@@ -261,12 +261,12 @@ public class Main {
     if ("java.lang.System.currentTimeMillis()".equals(childMethodQualifiedName)) {
       // throw new IllegalAccessError("No such thing");
     }
-    putInstruction(childMethod, childMethodQualifiedName);
+    allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
     if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
       if (parentMethodQualifiedName.contains("Millis")) {
         System.out.println("");
       }
-      put(parentMethodQualifiedName, childMethod, callingMethodToMethodInvocationMultiMap);
+      callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
     }
     if (!isVisitedMethod(childMethodQualifiedName)) {
       addUnvisitedMethod(childMethodQualifiedName);
@@ -395,10 +395,10 @@ public class Main {
   }
 
   private static void getRoots(GraphNode aNode, Set<GraphNode> roots) {
-    if (visited(aNode)) {
+    if (visitedNodes.contains(aNode)) {
 
     } else {
-      addVisited(aNode);
+      visitedNodes.add(aNode);
       if (aNode.getParents().size() > 0) {
         for (GraphNode parentNode : aNode.getParents()) {
           getRoots(parentNode, roots);
@@ -414,52 +414,16 @@ public class Main {
 
   private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
-  private static boolean visited(GraphNode aNode) {
-    return visitedNodes.contains(aNode);
-  }
-
-  private static void addVisited(GraphNode aNode) {
-    visitedNodes.add(aNode);
-  }
   // Relationships
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
-
-  private static Collection<String> getAllMethodCallers(
-      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
-    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet());
-  }
-
-  private static Collection<MyInstruction> getCalledMethods(
-      String parentMethodNameKey,
-      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
-    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
-  }
-
-  private static void put(
-      String parentMethodQualifiedName,
-      MyInstruction childMethod,
-      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
-    callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
-  }
-
-  private static Collection<MyInstruction> get(
-      String parentMethodQualifiedName,
-      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
-    return callingMethodToMethodInvocationMultiMap.get(parentMethodQualifiedName);
-  }
-
-  private static Collection<String> keySet(
-      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
-    return callingMethodToMethodInvocationMultiMap.keySet();
-  }
 
   private static boolean methodCallExists(
       String parentMethodQualifiedName,
       String childMethodQualifiedName,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     for (MyInstruction childMethod :
-        get(parentMethodQualifiedName, callingMethodToMethodInvocationMultiMap)) {
+        callingMethodToMethodInvocationMultiMap.get(parentMethodQualifiedName)) {
       if (childMethod.getMethodNameQualified().equals(childMethodQualifiedName)) {
         return true;
       }
@@ -469,7 +433,7 @@ public class Main {
 
   private static void validate() {
 
-    if (keySet(callingMethodToMethodInvocationMultiMap)
+    if (callingMethodToMethodInvocationMultiMap.keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
@@ -480,10 +444,6 @@ public class Main {
   @Deprecated // this should not be public
   public static void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod1) {
     deferredSuperMethod.add(deferredSuperMethod1);
-  }
-
-  private static Set<DeferredSuperMethod> getDeferSuperMethodRelationships() {
-    return ImmutableSet.copyOf(deferredSuperMethod);
   }
 
   //Name to Value mappings
@@ -501,17 +461,8 @@ public class Main {
         myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
   }
 
-  private static void putInstruction(MyInstruction childMethod, String childMethodQualifiedName) {
-    allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
-  }
-
-  private static Set<String> keySet() {
-
-    return allMethodNameToMyInstructionMap.keySet();
-  }
-
   private static void validate2() {
-    if (keySet()
+    if (allMethodNameToMyInstructionMap.keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
@@ -571,22 +522,11 @@ public class Main {
     deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
   }
 
-  private static Collection<JavaClass> getClassNameToJavaClassMapValues() {
-    return classNameToJavaClassMap.values();
-  }
-
-  private static Set<DeferredParentContainment> getDeferredParentContainments() {
-    return ImmutableSet.copyOf(deferredParentContainments);
-  }
   // nodes
   private static ImmutableMap<String, JavaClass> classNameToJavaClassMap;
 
   // The top level package with classes in it
   private static int minPackageDepth = Integer.MAX_VALUE;
-
-  private static int getMinPackageDepth() {
-    return minPackageDepth;
-  }
 
   @Deprecated // should not be public
   public static void updateMinPackageDepth(JavaClass javaClass) {
@@ -596,6 +536,7 @@ public class Main {
     }
   }
 
+  @Deprecated // shoudl not be public
   public static int getPackageDepth(String qualifiedClassName) {
     String packageName = ClassUtils.getPackageName(qualifiedClassName);
     int periodCount = StringUtils.countMatches(packageName, ".");
