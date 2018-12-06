@@ -79,7 +79,7 @@ class MyClassVisitor extends ClassVisitor {
       if (Ignorer.shouldIgnore(anInterfaceName)) {
         continue;
       }
-      JavaClass anInterface = Main.getClassDef(anInterfaceName);
+      JavaClass anInterface = relationshipsClassNames.getClassDef(anInterfaceName);
       if (anInterface == null) {
         relationshipsClassNames.deferParentContainment(anInterfaceName, javaClass);
       } else {

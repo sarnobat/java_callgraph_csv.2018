@@ -26,8 +26,6 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.ClassUtils;
-import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -47,8 +45,6 @@ public class Main {
   // Only print from roots this far below the top level package that contains classes
   private static final int ROOT_DEPTH = 27;
 
-  // nodes
-  private static Map<String, JavaClass> classNameToJavaClassMap;
   private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
   // Relationships
@@ -66,11 +62,10 @@ public class Main {
     RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
     RelationshipsClassNames relationshipsClassNames =
         new RelationshipsClassNames(javaClassesFromResource);
-    classNameToJavaClassMap = javaClassesFromResource;
     RelationshipsInstructions relationshipsInstructions = new RelationshipsInstructions();
     RelationshipsIsMethodVisited relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
     RelationshipsDeferred relationshipsDeferred = new RelationshipsDeferred();
-    for (JavaClass jc : classNameToJavaClassMap.values()) {
+    for (JavaClass jc : javaClassesFromResource.values()) {
       try {
         new MyClassVisitor(
                 jc,
@@ -91,7 +86,7 @@ public class Main {
     // they find additional relationships.
     for (DeferredParentContainment aDeferredParentContainment :
         ImmutableSet.copyOf(relationshipsClassNames.getDeferredParentContainments())) {
-      JavaClass parentClass1 = getClassDef(aDeferredParentContainment.getParentClassName());
+      JavaClass parentClass1 = relationshipsClassNames.getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
           parentClass1 = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
@@ -492,21 +487,5 @@ public class Main {
     if (ks.contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
-  }
-
-  @Deprecated // should not be public
-  public static JavaClass getClassDef(String aClassFullName) {
-    JavaClass jc = null;
-    try {
-      jc = Repository.lookupClass(aClassFullName);
-    } catch (ClassNotFoundException e) {
-      if (classNameToJavaClassMap.get(aClassFullName) != null) {
-        System.err.println("We do need our own homemade repository. I don't know why");
-      }
-    }
-    if (jc == null) {
-      jc = classNameToJavaClassMap.get(aClassFullName);
-    }
-    return jc;
   }
 }
