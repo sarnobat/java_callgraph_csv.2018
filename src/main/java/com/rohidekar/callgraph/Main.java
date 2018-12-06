@@ -100,8 +100,9 @@ public class Main {
       // TODO: move this to the loop below
       if (aRootNode.getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
         continue;
+      } else {
+    	  	depthToRootNodes.put(treeDepth, tree);
       }
-      depthToRootNodes.put(treeDepth, tree);
     }
     for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
       Integer treeDepth = new Integer(i);
