@@ -43,24 +43,17 @@ public class Relationships
   private Map<String, MyInstruction> allMethodNameToMyInstructionMap =
       new HashMap<String, MyInstruction>();
 
-  // nodes
-  private ImmutableMap<String, JavaClass> classNameToJavaClassMap;
-
   // Objects that cannot yet be found
   private Set<DeferredChildContainment> deferredChildContainments =
       new HashSet<DeferredChildContainment>();
   private Set<DeferredSuperMethod> deferredSuperMethod = new HashSet<DeferredSuperMethod>();
-  private Set<DeferredParentContainment> deferredParentContainments =
-      new HashSet<DeferredParentContainment>();
   private final RelationshipsIsMethodVisited isMethodVisited = new RelationshipsIsMethodVisited();
-
-  @VisibleForTesting
-  Relationships() {}
+  private final RelationshipsClassNames classNames;
 
   public Relationships(String resource) {
     Map<String, JavaClass> javaClasses = getJavaClassesFromResource(resource);
-    this.classNameToJavaClassMap = ImmutableMap.copyOf(javaClasses);
-    for (JavaClass jc : this.classNameToJavaClassMap.values()) {
+    classNames = new RelationshipsClassNames(javaClasses);
+    for (JavaClass jc : classNames.getClassNameToJavaClassMapValues()) {
       visitJavaClass(jc, this);
     }
     // These deferred relationships should not be necessary, but if you debug them you'll see that
@@ -215,49 +208,6 @@ public class Relationships
     return packageDepth;
   }
 
-  public JavaClass getClassDef(String aClassFullName) {
-    JavaClass jc = null;
-    try {
-      jc = Repository.lookupClass(aClassFullName);
-    } catch (ClassNotFoundException e) {
-      if (this.classNameToJavaClassMap.get(aClassFullName) != null) {
-        System.err.println("We do need our own homemade repository. I don't know why");
-      }
-    }
-    if (jc == null) {
-      jc = this.classNameToJavaClassMap.get(aClassFullName);
-    }
-    return jc;
-  }
-
-  public Collection<JavaClass> getParentClassesAndInterfaces(JavaClass childClass) {
-    Collection<JavaClass> superClassesAndInterfaces = new HashSet<JavaClass>();
-    String[] interfaceNames = childClass.getInterfaceNames();
-    for (String interfaceName : interfaceNames) {
-      JavaClass anInterface = this.classNameToJavaClassMap.get(interfaceName);
-      if (anInterface == null) {
-        // Do it later
-        deferParentContainment(interfaceName, childClass);
-      } else {
-        superClassesAndInterfaces.add(anInterface);
-      }
-    }
-    String superclassNames = childClass.getSuperclassName();
-    if (!superclassNames.equals("java.lang.Object")) {
-      JavaClass theSuperclass = this.classNameToJavaClassMap.get(superclassNames);
-      if (theSuperclass == null) {
-        // Do it later
-        deferParentContainment(superclassNames, childClass);
-      } else {
-        superClassesAndInterfaces.add(theSuperclass);
-      }
-    }
-    if (superClassesAndInterfaces.size() > 0) {
-      System.err.println("Has a parent (" + childClass.getClassName() + ")");
-    }
-    return ImmutableSet.copyOf(superClassesAndInterfaces);
-  }
-
   public boolean deferContainmentVisit(
       JavaClass parentClassToVisit, String childClassQualifiedName) {
     return this.deferredChildContainments.add(
@@ -290,12 +240,11 @@ public class Relationships
   }
 
   public void deferParentContainment(String parentClassName, JavaClass javaClass) {
-    System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
-    this.deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
+	  classNames.deferParentContainment(parentClassName, javaClass);
   }
 
   public Set<DeferredParentContainment> getDeferredParentContainments() {
-    return ImmutableSet.copyOf(deferredParentContainments);
+    return classNames.getDeferredParentContainments();
   }
 
   public MyInstruction getMethod(String qualifiedMethodName) {
@@ -374,5 +323,16 @@ public class Relationships
   @Override
   public void setVisitedMethod(String parentMethodQualifiedName) {
     isMethodVisited.setVisitedMethod(parentMethodQualifiedName);
+  }
+
+  @Override
+  public Collection<JavaClass> getParentClassesAndInterfaces(
+      JavaClass visitedClass) { // TODO Auto-generated method stub
+    return classNames.getParentClassesAndInterfaces(visitedClass);
+  }
+
+  @Override
+  public JavaClass getClassDef(String anInterfaceName) { // TODO Auto-generated method stub
+    return classNames.getClassDef(anInterfaceName);
   }
 }
