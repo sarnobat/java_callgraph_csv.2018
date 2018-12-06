@@ -46,7 +46,6 @@ public class Main {
           "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - "
               + parentMethodNameKey);
       if (Ignorer.shouldIgnore(parentMethodNameKey)) {
-        continue;
       } else {
         GraphNodeInstruction parentEnd =
             (GraphNodeInstruction) allMethodNamesToMethods.get(parentMethodNameKey);
@@ -72,7 +71,6 @@ public class Main {
             relationships.getCalledMethods(parentMethodNameKey);
         for (MyInstruction childMethod : calledMethods) {
           if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
-            continue;
           } else {
             System.err.println(
                 "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
