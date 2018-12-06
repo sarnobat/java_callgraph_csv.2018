@@ -129,7 +129,7 @@ public class Main {
                   + deferredSuperMethod.gettarget().getMethodNameQualified());
           if (!relationshipsCalling.methodCallExists(
       deferredSuperMethod.gettarget().getMethodNameQualified(), parentInstruction.getMethodNameQualified())) {
-        	  relationships.addMethodCall(
+        	  addMethodCall(
                 parentInstruction.getMethodNameQualified(),
                 deferredSuperMethod.gettarget(),
                 deferredSuperMethod.gettarget().getMethodNameQualified(), relationshipsInstructions, relationshipsCalling, relationshipsIsMethodVisited);
@@ -281,6 +281,31 @@ public class Main {
     return javaClasses;
   }
 
+  @Deprecated // This should not be public
+  public static void addMethodCall(
+      String parentMethodQualifiedName,
+      MyInstruction childMethod,
+      String childMethodQualifiedName,
+      RelationshipsInstructions relationshipsInstructions,
+      RelationshipsCalling relationshipsCalling,
+      RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
+    if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
+      throw new IllegalAccessError("No such thing");
+    }
+    if ("java.lang.System.currentTimeMillis()".equals(childMethodQualifiedName)) {
+      // throw new IllegalAccessError("No such thing");
+    }
+    relationshipsInstructions.putInstruction(childMethod, childMethodQualifiedName);
+    if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
+      if (parentMethodQualifiedName.contains("Millis")) {
+        System.out.println("");
+      }
+      relationshipsCalling.put(parentMethodQualifiedName, childMethod);
+    }
+    if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
+      relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
+    }
+  }
   private static void printTreeTest(
       Multimap<Integer, TreeModel> depthToRootNodes, PrintStream out) {
     for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {

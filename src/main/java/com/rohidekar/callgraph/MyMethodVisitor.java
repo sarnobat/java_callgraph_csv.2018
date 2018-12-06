@@ -121,7 +121,7 @@ class MyMethodVisitor extends MethodVisitor {
     {
       ObjectType childClass = (ObjectType) iClass;
       MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
-      relationships.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true), relationshipsInstructions, relationshipsCalling, relationshipsIsMethodVisited);
+      Main.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true), relationshipsInstructions, relationshipsCalling, relationshipsIsMethodVisited);
       if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
     	  relationshipsInstructions.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
@@ -159,7 +159,7 @@ class MyMethodVisitor extends MethodVisitor {
       } else {
         System.err.println(
             parentInstruction.getMethodNameQualified() + " -> " + target.getMethodNameQualified());
-        relationships.addMethodCall(
+        Main.addMethodCall(
             parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified(), relationshipsInstructions, relationshipsCalling, relationshipsIsMethodVisited);
       }
       if (parentInstruction != null
