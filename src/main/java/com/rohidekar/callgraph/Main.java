@@ -116,7 +116,7 @@ public class Main {
         }
       }
     }
-    relationshipsInstructions.validate();
+    validate2();
     validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
@@ -130,7 +130,7 @@ public class Main {
             (GraphNodeInstruction) allMethodNamesToMethods.get(parentMethodNameKey);
         if (parentEnd == null) {
           MyInstruction parentMethodInstruction =
-              relationshipsInstructions.getMethod(parentMethodNameKey);
+              getMethod(parentMethodNameKey);
           if (parentMethodInstruction == null) {
             System.err.println(
                 "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - WARNING: couldn't find instruction for  "
@@ -183,7 +183,7 @@ public class Main {
         }
       }
     }
-    relationshipsInstructions.validate();
+    validate2();
     validate();
     Set<GraphNode> rootMethodNodes = findRootCallers(allMethodNamesToMethods);
     if (rootMethodNodes.size() < 1) {
@@ -275,7 +275,7 @@ public class Main {
     if ("java.lang.System.currentTimeMillis()".equals(childMethodQualifiedName)) {
       // throw new IllegalAccessError("No such thing");
     }
-    relationshipsInstructions.putInstruction(childMethod, childMethodQualifiedName);
+    putInstruction(childMethod, childMethodQualifiedName);
     if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
       if (parentMethodQualifiedName.contains("Millis")) {
         System.out.println("");
@@ -460,4 +460,33 @@ public class Main {
   private static Set<DeferredSuperMethod> getDeferSuperMethodRelationships() {
     return ImmutableSet.copyOf(deferredSuperMethod);
   }
+  
+//Name to Value mappings
+ private static Map<String, MyInstruction> allMethodNameToMyInstructionMap =
+     new HashMap<String, MyInstruction>();
+
+ public static MyInstruction getMethod(String qualifiedMethodName) {
+   return allMethodNameToMyInstructionMap.get(qualifiedMethodName);
+ }
+
+ public static void addMethodDefinition(MyInstruction myInstructionImpl) {
+   allMethodNameToMyInstructionMap.put(
+       myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
+ }
+
+ static void putInstruction(MyInstruction childMethod, String childMethodQualifiedName) {
+   allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
+ }
+
+ public static Set<String> keySet() {
+
+   return allMethodNameToMyInstructionMap.keySet();
+ }
+
+ public static void validate2() {
+   if (keySet()
+       .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
+     throw new IllegalAccessError("No such thing");
+   }
+ }
 }

@@ -53,8 +53,8 @@ class MyMethodVisitor extends MethodVisitor {
     String unqualifiedMethodName =
         MyInstruction.getMethodNameUnqualified(parentMethodQualifiedName);
     relationshipsIsMethodVisited.setVisitedMethod(parentMethodQualifiedName);
-    if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
-    	relationshipsInstructions.addMethodDefinition(
+    if (Main.getMethod(parentMethodQualifiedName) == null) {
+    	Main.addMethodDefinition(
           new MyInstruction(javaClass.getClassName(), unqualifiedMethodName));
     }
   }
@@ -113,8 +113,8 @@ class MyMethodVisitor extends MethodVisitor {
       ObjectType childClass = (ObjectType) iClass;
       MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
       Main.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true), relationshipsInstructions, relationshipsIsMethodVisited);
-      if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
-    	  relationshipsInstructions.addMethodDefinition(
+      if (Main.getMethod(parentMethodQualifiedName) == null) {
+    	  Main.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
       }
       // link to superclass method - note: this will not work for the top-level
@@ -174,7 +174,7 @@ class MyMethodVisitor extends MethodVisitor {
     String methodName =
         MyInstruction.getQualifiedMethodName(
             parentClassOrInterface.getClassName(), unqualifiedChildMethodName);
-    MyInstruction instruction = relationshipsInstructions.getMethod(methodName);
+    MyInstruction instruction = Main.getMethod(methodName);
     return instruction;
   }
 
