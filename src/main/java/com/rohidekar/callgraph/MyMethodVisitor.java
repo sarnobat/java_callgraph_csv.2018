@@ -146,7 +146,7 @@ class MyMethodVisitor extends MethodVisitor {
         // It may be that we're looking in the wrong superclass/interface and that we should just
         // continue
         // carry on
-    	  relationshipsDeferred.deferSuperMethodRelationshipCapture(
+    	  Main.deferSuperMethodRelationshipCapture(
             new DeferredSuperMethod(parentClassOrInterface, unqualifiedMethodName, target));
       } else {
         System.err.println(

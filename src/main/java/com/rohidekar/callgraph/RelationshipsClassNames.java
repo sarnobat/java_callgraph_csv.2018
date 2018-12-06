@@ -13,12 +13,12 @@ import com.google.common.collect.ImmutableSet;
 
 public class RelationshipsClassNames {
 
-  RelationshipsClassNames(Map<String, JavaClass> javaClasses) {
-
-    this.classNameToJavaClassMap = ImmutableMap.copyOf(javaClasses);
-  }
   // nodes
   private ImmutableMap<String, JavaClass> classNameToJavaClassMap;
+
+  RelationshipsClassNames(Map<String, JavaClass> javaClasses) {
+    this.classNameToJavaClassMap = ImmutableMap.copyOf(javaClasses);
+  }
 
   public JavaClass getClassDef(String aClassFullName) {
     JavaClass jc = null;
@@ -75,8 +75,7 @@ public class RelationshipsClassNames {
     return this.classNameToJavaClassMap.values();
   }
 
-  public Set<DeferredParentContainment>
-      getDeferredParentContainments() { // TODO Auto-generated method stub
+  public Set<DeferredParentContainment> getDeferredParentContainments() {
     return ImmutableSet.copyOf(deferredParentContainments);
   }
 }
