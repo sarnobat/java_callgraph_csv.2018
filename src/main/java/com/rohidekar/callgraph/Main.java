@@ -86,7 +86,8 @@ public class Main {
     // they find additional relationships.
     for (DeferredParentContainment aDeferredParentContainment :
         ImmutableSet.copyOf(relationshipsClassNames.getDeferredParentContainments())) {
-      JavaClass parentClass1 = relationshipsClassNames.getClassDef(aDeferredParentContainment.getParentClassName());
+      JavaClass parentClass1 =
+          relationshipsClassNames.getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
           parentClass1 = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
@@ -281,6 +282,7 @@ public class Main {
     return ImmutableMap.copyOf(javaClasses);
   }
 
+  @Deprecated // encapsulate
   private static void addMethodCall(
       String parentMethodQualifiedName,
       MyInstruction childMethod,
@@ -306,6 +308,7 @@ public class Main {
     }
   }
 
+  @Deprecated // encapsulate again
   private static final Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
 
   @Deprecated // should not be public

@@ -24,8 +24,11 @@ class MyClassVisitor extends ClassVisitor {
   private final RelationshipsDeferred relationshipsDeferred;
   private final RelationshipsPackageDepth relationshipsPackageDepth;
   private final Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
+  @Deprecated
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
+  @Deprecated
   private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
+  @Deprecated
   private final Map<String, Boolean> isMethodVisited;
 
   public MyClassVisitor(
