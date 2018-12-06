@@ -1,5 +1,7 @@
 package com.rohidekar.callgraph.calls;
 
+import java.util.Collection;
+
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.ConstantPushInstruction;
@@ -16,8 +18,6 @@ import org.apache.bcel.generic.ReturnInstruction;
 import org.apache.bcel.generic.Type;
 
 import gr.gousiosg.javacg.stat.MethodVisitor;
-
-import java.util.Collection;
 
 class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;

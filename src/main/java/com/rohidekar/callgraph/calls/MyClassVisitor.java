@@ -1,6 +1,8 @@
 package com.rohidekar.callgraph.calls;
 
-import com.google.common.collect.Lists;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.Field;
@@ -11,11 +13,9 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.Type;
 
-import gr.gousiosg.javacg.stat.ClassVisitor;
+import com.google.common.collect.Lists;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import gr.gousiosg.javacg.stat.ClassVisitor;
 
 class MyClassVisitor extends ClassVisitor {
 

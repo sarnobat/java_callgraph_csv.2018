@@ -2,8 +2,6 @@
 
 package com.rohidekar.callgraph.calls;
 
-import com.rohidekar.callgraph.common.*;
-
 import javax.swing.tree.TreeModel;
 
 /**
