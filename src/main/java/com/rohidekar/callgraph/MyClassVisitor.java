@@ -4,14 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.ObjectType;
-import org.apache.bcel.generic.Type;
 
 import com.google.common.collect.Lists;
 
@@ -68,8 +65,7 @@ class MyClassVisitor extends ClassVisitor {
       method.accept(this);
     }
     // fields
-    Field[] fs = javaClass.getFields();
-    for (Field f : fs) {
+    for (Field f : javaClass.getFields()) {
       f.accept(this);
     }
   }

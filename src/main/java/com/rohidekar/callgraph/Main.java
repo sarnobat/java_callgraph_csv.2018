@@ -42,14 +42,16 @@ import com.google.common.collect.Multimap;
  */
 public class Main {
 
-  public static final int MIN_TREE_DEPTH = 1;
-  public static int MAX_TREE_DEPTH = 187; // 27 works, 30 breaks
+  private static final int MIN_TREE_DEPTH = 1;
+  private static final int MAX_TREE_DEPTH = 187; // 27 works, 30 breaks
   // Only print from roots this far below the top level package that contains classes
-  public static final int ROOT_DEPTH = 27;
+  private static final int ROOT_DEPTH = 27;
 
-  public static final String[] substringsToIgnore = {
-    "java", "Logger", ".toString", "Exception",
-  };
+  // nodes
+  private static Map<String, JavaClass> classNameToJavaClassMap;
+
+  private static Set<DeferredParentContainment> deferredParentContainments =
+      new HashSet<DeferredParentContainment>();
 
   public static void main(String[] args) {
     String resource;
@@ -59,7 +61,7 @@ public class Main {
       resource = args[0];
     }
     Map<String, JavaClass> javaClassesFromResource = getJavaClassesFromResource(resource);
-    classNameToJavaClassMap = ImmutableMap.copyOf(javaClassesFromResource);
+    classNameToJavaClassMap = javaClassesFromResource;
     for (JavaClass jc : classNameToJavaClassMap.values()) {
       try {
         new MyClassVisitor(jc).visitJavaClass(jc);
@@ -69,7 +71,8 @@ public class Main {
     }
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
-    for (DeferredParentContainment aDeferredParentContainment : ImmutableSet.copyOf(deferredParentContainments)) {
+    for (DeferredParentContainment aDeferredParentContainment :
+        ImmutableSet.copyOf(deferredParentContainments)) {
       JavaClass parentClass1 = getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
@@ -81,7 +84,7 @@ public class Main {
         }
       }
     }
-    for (DeferredSuperMethod deferredSuperMethod : ImmutableSet.copyOf(deferredSuperMethod)) {
+    for (DeferredSuperMethod deferredSuperMethod : ImmutableSet.copyOf(deferredSuperMethods)) {
       MyInstruction parentInstruction =
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
@@ -104,7 +107,7 @@ public class Main {
         }
       }
     }
-    validate2();
+    validate2(allMethodNameToMyInstructionMap.keySet());
     validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
@@ -171,7 +174,7 @@ public class Main {
         }
       }
     }
-    validate2();
+    validate2(allMethodNameToMyInstructionMap.keySet());
     validate();
     Set<GraphNode> rootMethodNodes = findRootCallers(allMethodNamesToMethods);
     if (rootMethodNodes.size() < 1) {
@@ -247,7 +250,7 @@ public class Main {
         }
       }
     }
-    return javaClasses;
+    return ImmutableMap.copyOf(javaClasses);
   }
 
   @Deprecated // This should not be public
@@ -433,17 +436,18 @@ public class Main {
 
   private static void validate() {
 
-    if (callingMethodToMethodInvocationMultiMap.keySet()
+    if (callingMethodToMethodInvocationMultiMap
+        .keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
   }
 
-  private static Set<DeferredSuperMethod> deferredSuperMethod = new HashSet<DeferredSuperMethod>();
+  private static Set<DeferredSuperMethod> deferredSuperMethods = new HashSet<DeferredSuperMethod>();
 
   @Deprecated // this should not be public
   public static void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod1) {
-    deferredSuperMethod.add(deferredSuperMethod1);
+	  deferredSuperMethods.add(deferredSuperMethod1);
   }
 
   //Name to Value mappings
@@ -461,9 +465,8 @@ public class Main {
         myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
   }
 
-  private static void validate2() {
-    if (allMethodNameToMyInstructionMap.keySet()
-        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
+  private static void validate2(Collection<String> ks) {
+    if (ks.contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
   }
@@ -513,17 +516,11 @@ public class Main {
     return ImmutableSet.copyOf(superClassesAndInterfaces);
   }
 
-  private static Set<DeferredParentContainment> deferredParentContainments =
-      new HashSet<DeferredParentContainment>();
-
   @Deprecated // This should not be public
   public static void deferParentContainment(String parentClassName, JavaClass javaClass) {
     System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
     deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
   }
-
-  // nodes
-  private static ImmutableMap<String, JavaClass> classNameToJavaClassMap;
 
   // The top level package with classes in it
   private static int minPackageDepth = Integer.MAX_VALUE;
