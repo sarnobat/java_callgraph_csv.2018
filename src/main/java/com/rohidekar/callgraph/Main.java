@@ -2,6 +2,7 @@
 
 package com.rohidekar.callgraph;
 
+import java.io.PrintStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -101,9 +102,10 @@ public class Main {
       if (aRootNode.getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
         continue;
       } else {
-    	  	depthToRootNodes.put(treeDepth, tree);
+        depthToRootNodes.put(treeDepth, tree);
       }
     }
+    PrintStream out = System.out;
     for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
       Integer treeDepth = new Integer(i);
       if (treeDepth < Main.MIN_TREE_DEPTH) {
@@ -115,7 +117,7 @@ public class Main {
           TreeModel aTreeModel2 = (TreeModel) aTreeModel;
           // new TextTree(aTreeModel2).printTree();
           GraphNode rootNode = (GraphNode) aTreeModel2.getRoot();
-          printTreeTest(rootNode, 0, new HashSet<GraphNode>());
+          printTreeTest(rootNode, 0, new HashSet<GraphNode>(), out);
         }
       }
     }
@@ -125,7 +127,8 @@ public class Main {
   }
 
   // parameter mutated
-  private static void printTreeTest(GraphNode tn, int level, Set<GraphNode> visited) {
+  private static void printTreeTest(
+      GraphNode tn, int level, Set<GraphNode> visited, PrintStream printStream) {
     if (visited.contains(tn)) {
       return;
     }
@@ -136,8 +139,8 @@ public class Main {
       throw new IllegalAccessError("printTreeTest");
     }
     for (GraphNode child : tn.getChildren()) {
-      System.out.println("\"" + tn.toString() + "\",\"" + child.toString() + "\"");
-      printTreeTest(child, level + 1, visited);
+      printStream.println("\"" + tn.toString() + "\",\"" + child.toString() + "\"");
+      printTreeTest(child, level + 1, visited, printStream);
     }
   }
 
