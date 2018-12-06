@@ -94,23 +94,6 @@ public class Main {
           }
         }
       }
-      if (parentClass1 != null) {
-        MyClassVisitor.addContainmentRelationship(
-            parentClass1,
-            aDeferredParentContainment.getChildClass().getClassName(),
-            false,
-            relationshipsClassNames,
-            relationshipsContainment);
-      }
-    }
-    for (DeferredChildContainment containment :
-        relationshipsContainment.getDeferredChildContainment()) {
-      MyClassVisitor.addContainmentRelationship(
-          containment.getParentClass(),
-          containment.getClassQualifiedName(),
-          false,
-          relationshipsClassNames,
-          relationshipsContainment);
     }
     for (DeferredSuperMethod deferredSuperMethod :
         relationshipsDeferred.getDeferSuperMethodRelationships()) {
