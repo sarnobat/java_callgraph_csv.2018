@@ -85,25 +85,23 @@ public class Main {
             }
           }
         }
-        
-        
+
         for (MyInstruction childMethod : calledMethods) {
-            if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
-            } else {
-              System.err.println(
-                  "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
-                      + childMethod.getMethodNameQualified());
-              GraphNodeInstruction child =
-                  (GraphNodeInstruction)
-                      allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
-              if (child == null) {
-                throw new RuntimeException("This should never happen");
-              }
-              parentEnd.addChild(child);
-              child.addParent(parentEnd);
+          if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
+          } else {
+            System.err.println(
+                "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
+                    + childMethod.getMethodNameQualified());
+            GraphNodeInstruction child =
+                (GraphNodeInstruction)
+                    allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
+            if (child == null) {
+              throw new RuntimeException("This should never happen");
             }
+            parentEnd.addChild(child);
+            child.addParent(parentEnd);
           }
-        
+        }
       }
     }
     relationships.validate();
@@ -112,43 +110,53 @@ public class Main {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
     Multimap<Integer, TreeModel> depthToRootNodes =
-      getDepthToRootNodes(relationships, rootMethodNodes);
+        getDepthToRootNodes(relationships, rootMethodNodes);
     PrintStream out = System.out;
-    printTreeTest(depthToRootNodes,out);
+    printTreeTest(depthToRootNodes, out);
     System.err.println(
         "Now use d3_helloworld_csv.git/singlefile_automated/ for visualization. For example: ");
     System.err.println("  cat /tmp/calls.csv | sh csv2d3.sh | tee /tmp/index.html");
   }
 
-private static void printTreeTest(Multimap<Integer, TreeModel> depthToRootNodes,PrintStream out){for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
-  Integer treeDepth = new Integer(i);
-  if (treeDepth < Main.MIN_TREE_DEPTH) {
-    //continue;
-  } else if (treeDepth > Main.MAX_TREE_DEPTH) {
-    //continue;
-  } else {
-    printTreeTest(depthToRootNodes, out, treeDepth);
+  private static void printTreeTest(
+      Multimap<Integer, TreeModel> depthToRootNodes, PrintStream out) {
+    for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
+      Integer treeDepth = new Integer(i);
+      if (treeDepth < Main.MIN_TREE_DEPTH) {
+        //continue;
+      } else if (treeDepth > Main.MAX_TREE_DEPTH) {
+        //continue;
+      } else {
+        printTreeTest(depthToRootNodes, out, treeDepth);
+      }
+    }
   }
-}}
 
-private static void printTreeTest(Multimap<Integer, TreeModel> depthToRootNodes,PrintStream out,Integer treeDepth){for (Object aTreeModel : depthToRootNodes.get(treeDepth)) {
-  TreeModel aTreeModel2 = (TreeModel) aTreeModel;
-  // new TextTree(aTreeModel2).printTree();
-  GraphNode rootNode = (GraphNode) aTreeModel2.getRoot();
-  printTreeTest(rootNode, 0, new HashSet<GraphNode>(), out);
-}}
-
-private static Multimap<Integer, TreeModel> getDepthToRootNodes(RelationshipsMain relationships,Set<GraphNode> rootMethodNodes){Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();
-for (GraphNode aRootNode : rootMethodNodes) {
-  TreeModel tree = new MyTreeModel(aRootNode);
-  int treeDepth = getTreeDepth(tree);
-  // TODO: move this to the loop below
-  if (aRootNode.getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
-    //continue;
-  } else {
-    depthToRootNodes.put(treeDepth, tree);
+  private static void printTreeTest(
+      Multimap<Integer, TreeModel> depthToRootNodes, PrintStream out, Integer treeDepth) {
+    for (Object aTreeModel : depthToRootNodes.get(treeDepth)) {
+      TreeModel aTreeModel2 = (TreeModel) aTreeModel;
+      // new TextTree(aTreeModel2).printTree();
+      GraphNode rootNode = (GraphNode) aTreeModel2.getRoot();
+      printTreeTest(rootNode, 0, new HashSet<GraphNode>(), out);
+    }
   }
-}return depthToRootNodes;}
+
+  private static Multimap<Integer, TreeModel> getDepthToRootNodes(
+      RelationshipsMain relationships, Set<GraphNode> rootMethodNodes) {
+    Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();
+    for (GraphNode aRootNode : rootMethodNodes) {
+      TreeModel tree = new MyTreeModel(aRootNode);
+      int treeDepth = getTreeDepth(tree);
+      // TODO: move this to the loop below
+      if (aRootNode.getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
+        //continue;
+      } else {
+        depthToRootNodes.put(treeDepth, tree);
+      }
+    }
+    return depthToRootNodes;
+  }
 
   // parameter mutated
   private static void printTreeTest(
