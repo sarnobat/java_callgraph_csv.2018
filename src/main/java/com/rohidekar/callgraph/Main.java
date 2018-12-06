@@ -47,43 +47,46 @@ public class Main {
               + parentMethodNameKey);
       if (Ignorer.shouldIgnore(parentMethodNameKey)) {
         continue;
-      }
-      GraphNodeInstruction parentEnd =
-          (GraphNodeInstruction) allMethodNamesToMethods.get(parentMethodNameKey);
-      if (parentEnd == null) {
-        MyInstruction parentMethodInstruction = relationships.getMethod(parentMethodNameKey);
-        if (parentMethodInstruction == null) {
-          System.err.println(
-              "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - WARNING: couldn't find instruction for  "
-                  + parentMethodNameKey);
-          continue;
-        }
-        parentEnd = new GraphNodeInstruction(parentMethodInstruction);
-        allMethodNamesToMethods.put(parentMethodNameKey, parentEnd);
-        if (parentEnd.toString().contains("Millis") && parentMethodNameKey.contains("Repository")) {
-          throw new IllegalAccessError("determineCallHierarchy() 1 ");
-        }
-      }
-      if (parentEnd.toString().contains("Millis") && parentMethodNameKey.contains("Repository")) {
-        throw new IllegalAccessError("determineCallHierarchy() 2 ");
-      }
-      Collection<MyInstruction> calledMethods = relationships.getCalledMethods(parentMethodNameKey);
-      for (MyInstruction childMethod : calledMethods) {
-        if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
-          continue;
-        } else {
-          System.err.println(
-              "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
-                  + childMethod.getMethodNameQualified());
-          GraphNodeInstruction child =
-              (GraphNodeInstruction)
-                  allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
-          if (child == null) {
-            child = new GraphNodeInstruction(childMethod);
-            allMethodNamesToMethods.put(childMethod.getMethodNameQualified(), child);
+      } else {
+        GraphNodeInstruction parentEnd =
+            (GraphNodeInstruction) allMethodNamesToMethods.get(parentMethodNameKey);
+        if (parentEnd == null) {
+          MyInstruction parentMethodInstruction = relationships.getMethod(parentMethodNameKey);
+          if (parentMethodInstruction == null) {
+            System.err.println(
+                "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - WARNING: couldn't find instruction for  "
+                    + parentMethodNameKey);
+            continue;
           }
-          parentEnd.addChild(child);
-          child.addParent(parentEnd);
+          parentEnd = new GraphNodeInstruction(parentMethodInstruction);
+          allMethodNamesToMethods.put(parentMethodNameKey, parentEnd);
+          if (parentEnd.toString().contains("Millis")
+              && parentMethodNameKey.contains("Repository")) {
+            throw new IllegalAccessError("determineCallHierarchy() 1 ");
+          }
+        }
+        if (parentEnd.toString().contains("Millis") && parentMethodNameKey.contains("Repository")) {
+          throw new IllegalAccessError("determineCallHierarchy() 2 ");
+        }
+        Collection<MyInstruction> calledMethods =
+            relationships.getCalledMethods(parentMethodNameKey);
+        for (MyInstruction childMethod : calledMethods) {
+          if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
+            continue;
+          } else {
+            System.err.println(
+                "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - -> "
+                    + childMethod.getMethodNameQualified());
+            GraphNodeInstruction child =
+                (GraphNodeInstruction)
+                    allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
+            if (child == null) {
+              child = new GraphNodeInstruction(childMethod);
+              allMethodNamesToMethods.put(childMethod.getMethodNameQualified(), child);
+            }
+            parentEnd.addChild(child);
+            child.addParent(parentEnd);
+          }
         }
       }
     }
