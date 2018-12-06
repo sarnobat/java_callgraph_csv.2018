@@ -34,8 +34,7 @@ class MyMethodVisitor extends MethodVisitor {
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   @Deprecated // Use RelationshipsMethodCalls
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
-  @Deprecated
-  private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
+  @Deprecated private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
 
   MyMethodVisitor(
       MethodGen methodGen,
@@ -173,7 +172,8 @@ class MyMethodVisitor extends MethodVisitor {
   private void linkMethodToSuperclassMethod(String unqualifiedMethodName, MyInstruction target)
       throws IllegalAccessError {
 
-    Collection<JavaClass> superClasses = relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
+    Collection<JavaClass> superClasses =
+        relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
     for (JavaClass parentClassOrInterface : superClasses) {
       MyInstruction parentInstruction =
           getInstruction(parentClassOrInterface, unqualifiedMethodName, relationshipsInstructions);
@@ -192,7 +192,8 @@ class MyMethodVisitor extends MethodVisitor {
             target.getMethodNameQualified(),
             callingMethodToMethodInvocationMultiMap,
             allMethodNameToMyInstructionMap,
-            relationshipsIsMethodVisited, relationshipsInstructions);
+            relationshipsIsMethodVisited,
+            relationshipsInstructions);
       }
       if (parentInstruction != null
           && target != null
@@ -216,7 +217,8 @@ class MyMethodVisitor extends MethodVisitor {
       String childMethodQualifiedName,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
-      RelationshipsIsMethodVisited relationshipsIsMethodVisited, RelationshipsInstructions relationshipsInstructions2) {
+      RelationshipsIsMethodVisited relationshipsIsMethodVisited,
+      RelationshipsInstructions relationshipsInstructions2) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
     }
@@ -232,7 +234,7 @@ class MyMethodVisitor extends MethodVisitor {
       callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
     }
     if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
-    	relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
+      relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
     }
   }
 
