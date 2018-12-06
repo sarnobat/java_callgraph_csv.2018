@@ -36,8 +36,6 @@ class MyMethodVisitor extends MethodVisitor {
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
   @Deprecated
   private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
-  @Deprecated
-  private final Map<String, Boolean> isMethodVisited = ImmutableMap.of();
 
   MyMethodVisitor(
       MethodGen methodGen,
@@ -160,7 +158,6 @@ class MyMethodVisitor extends MethodVisitor {
           target.printInstruction(true),
           callingMethodToMethodInvocationMultiMap,
           allMethodNameToMyInstructionMap,
-          isMethodVisited,
           relationshipsIsMethodVisited);
       if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
         relationshipsInstructions.addMethodDefinition(
@@ -199,7 +196,6 @@ class MyMethodVisitor extends MethodVisitor {
             target.getMethodNameQualified(),
             callingMethodToMethodInvocationMultiMap,
             allMethodNameToMyInstructionMap,
-            isMethodVisited,
             relationshipsIsMethodVisited);
       }
       if (parentInstruction != null
@@ -224,7 +220,6 @@ class MyMethodVisitor extends MethodVisitor {
       String childMethodQualifiedName,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
-      Map<String, Boolean> isMethodVisited,
       RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
