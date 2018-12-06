@@ -286,11 +286,11 @@ public class Main {
     isMethodVisited.put(parentMethodQualifiedName, true);
   }
 
-  public  static void addUnvisitedMethod(String childMethodQualifiedName) {
+  private  static void addUnvisitedMethod(String childMethodQualifiedName) {
     isMethodVisited.put(childMethodQualifiedName, false);
   }
 
-  static   boolean isVisitedMethod(String childMethodQualifiedName) {
+private static   boolean isVisitedMethod(String childMethodQualifiedName) {
     if (!isMethodVisited.keySet().contains(childMethodQualifiedName)) {
       addUnvisitedMethod(childMethodQualifiedName);
     }
@@ -415,47 +415,47 @@ public class Main {
   }
   private static	Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
-	public  static boolean visited(GraphNode aNode) {
+	private  static boolean visited(GraphNode aNode) {
 		return visitedNodes.contains(aNode);
 	}
 
-	public static void addVisited(GraphNode aNode) {
+	private static void addVisited(GraphNode aNode) {
 		visitedNodes.add(aNode);
 	}
   // Relationships
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
 
-  public static Collection<String> getAllMethodCallers(
+  private static Collection<String> getAllMethodCallers(
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet());
   }
 
-  public static Collection<MyInstruction> getCalledMethods(
+  private static Collection<MyInstruction> getCalledMethods(
       String parentMethodNameKey,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
   }
 
-  public static void put(
+  private static void put(
       String parentMethodQualifiedName,
       MyInstruction childMethod,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
   }
 
-  public static Collection<MyInstruction> get(
+  private static Collection<MyInstruction> get(
       String parentMethodQualifiedName,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return callingMethodToMethodInvocationMultiMap.get(parentMethodQualifiedName);
   }
 
-  public static Collection<String> keySet(
+  private static Collection<String> keySet(
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     return callingMethodToMethodInvocationMultiMap.keySet();
   }
 
-  public static boolean methodCallExists(
+  private static boolean methodCallExists(
       String parentMethodQualifiedName,
       String childMethodQualifiedName,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
@@ -468,7 +468,7 @@ public class Main {
     return false;
   }
 
-  public static void validate() {
+  private static void validate() {
 
     if (keySet(callingMethodToMethodInvocationMultiMap)
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
@@ -490,33 +490,34 @@ public class Main {
   //Name to Value mappings
   private static Map<String, MyInstruction> allMethodNameToMyInstructionMap =
       new HashMap<String, MyInstruction>();
-
+  @Deprecated // should not be public
   public static MyInstruction getMethod(String qualifiedMethodName) {
     return allMethodNameToMyInstructionMap.get(qualifiedMethodName);
   }
 
+  @Deprecated // should not be public
   public static void addMethodDefinition(MyInstruction myInstructionImpl) {
     allMethodNameToMyInstructionMap.put(
         myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
   }
 
-  static void putInstruction(MyInstruction childMethod, String childMethodQualifiedName) {
+  private static void putInstruction(MyInstruction childMethod, String childMethodQualifiedName) {
     allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
   }
 
-  public static Set<String> keySet() {
+  private static Set<String> keySet() {
 
     return allMethodNameToMyInstructionMap.keySet();
   }
 
-  public static void validate2() {
+  private static void validate2() {
     if (keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
   }
 
-
+  @Deprecated // should not be public
   public  static JavaClass getClassDef(String aClassFullName) {
     JavaClass jc = null;
     try {
@@ -532,6 +533,7 @@ public class Main {
     return jc;
   }
 
+  @Deprecated // This should not be public
   public  static Collection<JavaClass> getParentClassesAndInterfaces(JavaClass childClass) {
     Collection<JavaClass> superClassesAndInterfaces = new HashSet<JavaClass>();
     String[] interfaceNames = childClass.getInterfaceNames();
@@ -563,12 +565,13 @@ public class Main {
   private  static  Set<DeferredParentContainment> deferredParentContainments =
       new HashSet<DeferredParentContainment>();
 
+  @Deprecated // This should not be public
   public  static void deferParentContainment(String parentClassName, JavaClass javaClass) {
     System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
     deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
   }
 
-  public static  Collection<JavaClass> getClassNameToJavaClassMapValues() {
+  private static  Collection<JavaClass> getClassNameToJavaClassMapValues() {
     return classNameToJavaClassMap.values();
   }
 
@@ -582,10 +585,10 @@ public class Main {
   // The top level package with classes in it
   private static int minPackageDepth = Integer.MAX_VALUE;
 
-  public static  int getMinPackageDepth() {
+  private static  int getMinPackageDepth() {
     return minPackageDepth;
   }
-
+  @Deprecated // should not be public
   public  static void updateMinPackageDepth(JavaClass javaClass) {
     int packageDepth = getPackageDepth(javaClass.getClassName());
     if (packageDepth < minPackageDepth) {
