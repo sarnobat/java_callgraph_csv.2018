@@ -143,11 +143,6 @@ public class Relationships
   }
 
   @Deprecated
-  public Collection<String> getAllMethodCallers() {
-    return relationshipsCalling.getAllMethodCallers();
-  }
-
-  @Deprecated
   public Collection<MyInstruction> getCalledMethods(String parentMethodNameKey) {
     return relationshipsCalling.getCalledMethods(parentMethodNameKey);
   }
@@ -177,12 +172,6 @@ public class Relationships
   @Deprecated
   public Set<DeferredChildContainment> getDeferredChildContainment() {
     return relationshipsContainment.getDeferredChildContainment();
-  }
-
-  @Deprecated
-  public void validate() {
-    this.relationshipsInstructions.validate();
-    this.relationshipsCalling.validate();
   }
 
   @Deprecated

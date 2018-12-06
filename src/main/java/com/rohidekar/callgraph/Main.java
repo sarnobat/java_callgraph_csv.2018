@@ -73,10 +73,11 @@ public class Main {
             relationshipsInstructions,
             relationshipsIsMethodVisited,
             relationshipsDeferred);
-    relationships.validate();
+    relationshipsInstructions.validate();
+    relationshipsCalling.validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
-    for (String parentMethodNameKey : relationships.getAllMethodCallers()) {
+    for (String parentMethodNameKey : relationshipsCalling.getAllMethodCallers()) {
       System.err.println(
           "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - "
               + parentMethodNameKey);
@@ -85,7 +86,7 @@ public class Main {
         GraphNodeInstruction parentEnd =
             (GraphNodeInstruction) allMethodNamesToMethods.get(parentMethodNameKey);
         if (parentEnd == null) {
-          MyInstruction parentMethodInstruction = relationships.getMethod(parentMethodNameKey);
+          MyInstruction parentMethodInstruction = relationshipsInstructions.getMethod(parentMethodNameKey);
           if (parentMethodInstruction == null) {
             System.err.println(
                 "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - WARNING: couldn't find instruction for  "
@@ -103,7 +104,7 @@ public class Main {
           throw new IllegalAccessError("determineCallHierarchy() 2 ");
         }
         Collection<MyInstruction> calledMethods =
-            relationships.getCalledMethods(parentMethodNameKey);
+            relationshipsCalling.getCalledMethods(parentMethodNameKey);
         for (MyInstruction childMethod : calledMethods) {
           if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
           } else {
@@ -138,13 +139,14 @@ public class Main {
         }
       }
     }
-    relationships.validate();
+    relationshipsInstructions.validate();
+    relationshipsCalling.validate();
     Set<GraphNode> rootMethodNodes = findRootCallers(allMethodNamesToMethods);
     if (rootMethodNodes.size() < 1) {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
     Multimap<Integer, TreeModel> depthToRootNodes =
-        getDepthToRootNodes(rootMethodNodes, relationships.getMinPackageDepth());
+        getDepthToRootNodes(rootMethodNodes, relationshipsPackageDepth.getMinPackageDepth());
     PrintStream out = System.out;
     printTreeTest(depthToRootNodes, out);
     System.err.println(
