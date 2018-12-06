@@ -34,7 +34,8 @@ class MyMethodVisitor extends MethodVisitor {
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   @Deprecated // Use RelationshipsMethodCalls
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
-  @Deprecated private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
+  @Deprecated // Use RelationshipsInstructions
+  private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
 
   MyMethodVisitor(
       MethodGen methodGen,
