@@ -97,7 +97,7 @@ public class Main {
                   (GraphNodeInstruction)
                       allMethodNamesToMethods.get(childMethod.getMethodNameQualified());
               if (child == null) {
-                child = new GraphNodeInstruction(childMethod);
+                throw new RuntimeException("This should never happen");
               }
               parentEnd.addChild(child);
               child.addParent(parentEnd);
