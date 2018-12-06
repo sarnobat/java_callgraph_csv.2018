@@ -6,6 +6,7 @@ com/rohidekar/callgraph/MyTreeModel.class
 dnl/utils/text/table/TextTableModel.class
 dnl/utils/text/table/TextTable.class
 gr/gousiosg/javacg/dyn/MethodStack$1.class
+com/rohidekar/callgraph/RelationshipsClassVisitor.class
 gr/gousiosg/javacg/dyn/Pair.class
 gr/gousiosg/javacg/stat/JCallGraph.class
 gr/gousiosg/javacg/dyn/MethodStack$1$1.class

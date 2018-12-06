@@ -20,7 +20,7 @@ import gr.gousiosg.javacg.stat.ClassVisitor;
 class MyClassVisitor extends ClassVisitor {
 
   private JavaClass classToVisit;
-  private Relationships relationships;
+  private RelationshipsClassVisitor relationships;
 
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
 
@@ -91,7 +91,7 @@ class MyClassVisitor extends ClassVisitor {
     String className = classToVisit.getClassName();
     ConstantPoolGen classConstants = new ConstantPoolGen(classToVisit.getConstantPool());
     MethodGen methodGen = new MethodGen(method, className, classConstants);
-    new MyMethodVisitor(methodGen, classToVisit, relationships).start();
+    new MyMethodVisitor(methodGen, classToVisit, (Relationships) relationships).start();
   }
 
   @Override
@@ -99,7 +99,7 @@ class MyClassVisitor extends ClassVisitor {
     Type fieldType = field.getType();
     if (fieldType instanceof ObjectType) {
       ObjectType objectType = (ObjectType) fieldType;
-      addContainmentRelationship(this.classToVisit, objectType.getClassName(), relationships, true);
+      addContainmentRelationship(this.classToVisit, objectType.getClassName(), (Relationships) relationships, true);
     }
   }
 
