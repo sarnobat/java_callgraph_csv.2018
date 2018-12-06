@@ -45,10 +45,7 @@ public class Main {
   // Only print from roots this far below the top level package that contains classes
   private static final int ROOT_DEPTH = 27;
 
-  @Deprecated
   private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
-
-  @Deprecated
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
 
