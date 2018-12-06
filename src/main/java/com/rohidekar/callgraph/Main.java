@@ -37,15 +37,7 @@ public class Main {
     } else {
       resource = args[0];
     }
-    printGraphs(resource);
-    System.err.println(
-        "Now use d3_helloworld_csv.git/singlefile_automated/ for visualization. For example: ");
-    System.err.println("  cat /tmp/calls.csv | sh csv2d3.sh | tee /tmp/index.html");
-  }
-
-  private static void printGraphs(String classDirOrJar) {
-    Relationships relationships = new Relationships(classDirOrJar);
-    relationships.validate();
+    Relationships relationships = new Relationships(resource);
     relationships.validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
@@ -124,8 +116,12 @@ public class Main {
         printTreeTest(rootNode, 0, new HashSet<GraphNode>());
       }
     }
+    System.err.println(
+        "Now use d3_helloworld_csv.git/singlefile_automated/ for visualization. For example: ");
+    System.err.println("  cat /tmp/calls.csv | sh csv2d3.sh | tee /tmp/index.html");
   }
 
+  // parameter mutated
   private static void printTreeTest(GraphNode tn, int level, Set<GraphNode> visited) {
     if (visited.contains(tn)) {
       return;
@@ -153,7 +149,7 @@ public class Main {
     return rootMethodNodes;
   }
 
-  public static int getTreeDepth(TreeModel tree) {
+  private static int getTreeDepth(TreeModel tree) {
     TreeDepthVisitor tdv = new TreeDepthVisitor();
     int childCount = tree.getChildCount(tree.getRoot());
     int maxDepth = 0;
@@ -185,7 +181,7 @@ public class Main {
     return levelsAbove + maxDepth;
   }
 
-  public static void getRoots(GraphNode aNode, Set<GraphNode> roots, RootsVisitor rootsVisitor) {
+  private static void getRoots(GraphNode aNode, Set<GraphNode> roots, RootsVisitor rootsVisitor) {
     if (rootsVisitor.visited(aNode)) {
 
     } else {
@@ -201,16 +197,5 @@ public class Main {
         roots.add(aNode);
       }
     }
-  }
-
-  public static Set<GraphNode> findRootJavaClasses(
-      Map<String, GraphNode> classNameToGraphNodeJavaClassMap) {
-    Set<GraphNode> rootClasses;
-    rootClasses = new HashSet<GraphNode>();
-    for (GraphNode aNode : classNameToGraphNodeJavaClassMap.values()) {
-      RootsVisitor rootsVisitor = new RootsVisitor();
-      getRoots(aNode, rootClasses, rootsVisitor);
-    }
-    return rootClasses;
   }
 }
