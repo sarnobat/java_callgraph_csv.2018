@@ -1,6 +1,5 @@
 package com.rohidekar.callgraph;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +43,8 @@ public class Relationships
                 relationshipsInstructions2,
                 relationshipsIsMethodVisited2,
                 relationshipsClassNames,
-                relationshipsDeferred)
+                relationshipsDeferred,
+                relationshipsPackageDepth)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
         e.printStackTrace();
@@ -53,9 +53,8 @@ public class Relationships
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
     for (DeferredParentContainment aDeferredParentContainment :
-        this.getDeferredParentContainments()) {
-      JavaClass parentClass = this.getClassDef(aDeferredParentContainment.getParentClassName());
-      JavaClass parentClass1 = parentClass;
+        this.relationshipsClassNames.getDeferredParentContainments()) {
+      JavaClass parentClass1 = relationshipsClassNames.getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
           parentClass1 = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
@@ -70,11 +69,11 @@ public class Relationships
             parentClass1, aDeferredParentContainment.getChildClass().getClassName(), this, false);
       }
     }
-    for (DeferredChildContainment containment : this.getDeferredChildContainment()) {
+    for (DeferredChildContainment containment : this.relationshipsContainment.getDeferredChildContainment()) {
       MyClassVisitor.addContainmentRelationship(
           containment.getParentClass(), containment.getClassQualifiedName(), this, false);
     }
-    for (DeferredSuperMethod deferredSuperMethod : this.getDeferSuperMethodRelationships()) {
+    for (DeferredSuperMethod deferredSuperMethod : this.relationshipsDeferred.getDeferSuperMethodRelationships()) {
       MyInstruction parentInstruction =
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
@@ -87,9 +86,8 @@ public class Relationships
             parentInstruction.getMethodNameQualified()
                 + " -> "
                 + deferredSuperMethod.gettarget().getMethodNameQualified());
-        if (!this.methodCallExists(
-            deferredSuperMethod.gettarget().getMethodNameQualified(),
-            parentInstruction.getMethodNameQualified())) {
+        if (!this.relationshipsCalling.methodCallExists(
+    deferredSuperMethod.gettarget().getMethodNameQualified(), parentInstruction.getMethodNameQualified())) {
           this.addMethodCall(
               parentInstruction.getMethodNameQualified(),
               deferredSuperMethod.gettarget(),
@@ -114,23 +112,11 @@ public class Relationships
       if (parentMethodQualifiedName.contains("Millis")) {
         System.out.println("");
       }
-      putCalling(parentMethodQualifiedName, childMethod);
+      relationshipsCalling.put(parentMethodQualifiedName, childMethod);
     }
     if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
       relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
     }
-  }
-
-  @Deprecated
-  private void putCalling(String parentMethodQualifiedName, MyInstruction childMethod) {
-    relationshipsCalling.put(parentMethodQualifiedName, childMethod);
-  }
-
-  @Deprecated
-  public boolean methodCallExists(
-      String parentMethodQualifiedName, String childMethodQualifiedName) {
-    return relationshipsCalling.methodCallExists(
-        parentMethodQualifiedName, childMethodQualifiedName);
   }
 
   public void addContainmentRelationship(String parentClassFullName, JavaClass javaClass) {
@@ -147,16 +133,6 @@ public class Relationships
     if (childClassName.equals("java.lang.Object")) {
       throw new IllegalAccessError("addContainmentRelationshipStringOnly");
     }
-  }
-
-  @Deprecated
-  public Collection<MyInstruction> getCalledMethods(String parentMethodNameKey) {
-    return relationshipsCalling.getCalledMethods(parentMethodNameKey);
-  }
-
-  @Deprecated
-  public int getMinPackageDepth() {
-    return relationshipsPackageDepth.getMinPackageDepth();
   }
 
   @Deprecated
@@ -177,48 +153,14 @@ public class Relationships
   }
 
   @Deprecated
-  public Set<DeferredChildContainment> getDeferredChildContainment() {
-    return relationshipsContainment.getDeferredChildContainment();
-  }
-
-  @Deprecated
-  public void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod) {
-    this.relationshipsDeferred.deferSuperMethodRelationshipCapture(deferredSuperMethod);
-  }
-
-  @Deprecated
-  public Set<DeferredSuperMethod> getDeferSuperMethodRelationships() {
-    return this.relationshipsDeferred.getDeferSuperMethodRelationships();
-  }
-
-  @Deprecated
   public void deferParentContainment(String parentClassName, JavaClass javaClass) {
     relationshipsClassNames.deferParentContainment(parentClassName, javaClass);
-  }
-
-  public Set<DeferredParentContainment> getDeferredParentContainments() {
-    return relationshipsClassNames.getDeferredParentContainments();
-  }
-
-  @Deprecated
-  public void setVisitedMethod(String parentMethodQualifiedName) {
-    relationshipsIsMethodVisited.setVisitedMethod(parentMethodQualifiedName);
-  }
-
-  @Deprecated
-  public Collection<JavaClass> getParentClassesAndInterfaces(JavaClass visitedClass) {
-    return relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
   }
 
   @Deprecated
   @Override
   public JavaClass getClassDef(String anInterfaceName) {
     return relationshipsClassNames.getClassDef(anInterfaceName);
-  }
-
-  @Deprecated
-  public void addMethodDefinition(MyInstruction myInstruction) {
-    relationshipsInstructions.addMethodDefinition(myInstruction);
   }
 
   @Deprecated
