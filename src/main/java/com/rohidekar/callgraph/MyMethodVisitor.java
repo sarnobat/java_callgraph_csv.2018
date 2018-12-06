@@ -27,6 +27,10 @@ class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
   private final String parentMethodQualifiedName;
+  private final RelationshipsInstructions relationshipsInstructions;
+  private final RelationshipsClassNames relationshipsClassNames;
+  private final RelationshipsDeferred relationshipsDeferred;
+  private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
   private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
   private final Map<String, Boolean> isMethodVisited;
@@ -35,6 +39,10 @@ class MyMethodVisitor extends MethodVisitor {
   MyMethodVisitor(
       MethodGen methodGen,
       JavaClass javaClass,
+      RelationshipsIsMethodVisited relationshipsIsMethodVisited,
+      RelationshipsInstructions relationshipsInstructions,
+      RelationshipsClassNames relationshipsClassNames,
+      RelationshipsDeferred relationshipsDeferred,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap, Map<String, Boolean> isMethodVisited) {
     super(methodGen, javaClass);
@@ -42,6 +50,10 @@ class MyMethodVisitor extends MethodVisitor {
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
     this.parentMethodQualifiedName = MyInstruction.getQualifiedMethodName(methodGen, visitedClass);
+    this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
+    this.relationshipsInstructions = relationshipsInstructions;
+    this.relationshipsClassNames= relationshipsClassNames;
+    this.relationshipsDeferred=relationshipsDeferred;
     this.callingMethodToMethodInvocationMultiMap = callingMethodToMethodInvocationMultiMap;
     this.allMethodNameToMyInstructionMap = allMethodNameToMyInstructionMap;
 

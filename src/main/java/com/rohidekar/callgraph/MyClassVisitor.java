@@ -18,6 +18,11 @@ import gr.gousiosg.javacg.stat.ClassVisitor;
 class MyClassVisitor extends ClassVisitor {
 
   private final JavaClass classToVisit;
+  private final RelationshipsInstructions relationshipsInstructions;
+  private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
+  private final RelationshipsClassNames relationshipsClassNames;
+  private final RelationshipsDeferred relationshipsDeferred;
+  private final RelationshipsPackageDepth relationshipsPackageDepth;
   private final Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
   private final Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap;
   private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
@@ -25,11 +30,21 @@ class MyClassVisitor extends ClassVisitor {
 
   public MyClassVisitor(
       JavaClass classToVisit,
+      RelationshipsInstructions relationshipsInstructions,
+      RelationshipsIsMethodVisited relationshipsIsMethodVisited,
+      RelationshipsClassNames relationshipsClassNames,
+      RelationshipsDeferred relationshipsDeferred,
+      RelationshipsPackageDepth relationshipsPackageDepth,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
       Map<String, Boolean> isMethodVisited) {
 
     super(classToVisit);
+    this.relationshipsPackageDepth = relationshipsPackageDepth;
+    this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
+    this.relationshipsInstructions = relationshipsInstructions;
+    this.relationshipsClassNames = relationshipsClassNames;
+    this.relationshipsDeferred = relationshipsDeferred;
     this.isMethodVisited = isMethodVisited;
     this.callingMethodToMethodInvocationMultiMap = callingMethodToMethodInvocationMultiMap;
     this.allMethodNameToMyInstructionMap = allMethodNameToMyInstructionMap;
@@ -94,6 +109,10 @@ class MyClassVisitor extends ClassVisitor {
     new MyMethodVisitor(
             methodGen,
             classToVisit,
+            relationshipsIsMethodVisited,
+            relationshipsInstructions,
+            relationshipsClassNames,
+            relationshipsDeferred,
             callingMethodToMethodInvocationMultiMap,
             allMethodNameToMyInstructionMap,
             isMethodVisited)

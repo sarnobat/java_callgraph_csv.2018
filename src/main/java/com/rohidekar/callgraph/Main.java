@@ -65,11 +65,22 @@ public class Main {
       resource = args[0];
     }
     Map<String, JavaClass> javaClassesFromResource = getJavaClassesFromResource(resource);
+    RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
+    RelationshipsClassNames relationshipsClassNames =
+        new RelationshipsClassNames(javaClassesFromResource);
     classNameToJavaClassMap = javaClassesFromResource;
+    RelationshipsInstructions relationshipsInstructions = new RelationshipsInstructions();
+    RelationshipsIsMethodVisited relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
+    RelationshipsDeferred relationshipsDeferred = new RelationshipsDeferred();
     for (JavaClass jc : classNameToJavaClassMap.values()) {
       try {
         new MyClassVisitor(
                 jc,
+                relationshipsInstructions,
+                relationshipsIsMethodVisited,
+                relationshipsClassNames,
+                relationshipsDeferred,
+                relationshipsPackageDepth,
                 callingMethodToMethodInvocationMultiMap,
                 allMethodNameToMyInstructionMap,
                 isMethodVisited)
