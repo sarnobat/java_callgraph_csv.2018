@@ -34,13 +34,16 @@ public class Relationships
   // Objects that cannot yet be found
   private Set<DeferredChildContainment> deferredChildContainments =
       new HashSet<DeferredChildContainment>();
-  private final RelationshipsIsMethodVisited isMethodVisited = new RelationshipsIsMethodVisited();
-  private final RelationshipsClassNames classNames;
+  private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
+  private final RelationshipsClassNames relationshipsClassNames;
+  private final RelationshipsInstructions relationshipsInstructions;
 
   public Relationships(String resource) {
     Map<String, JavaClass> javaClasses = getJavaClassesFromResource(resource);
-    classNames = new RelationshipsClassNames(javaClasses);
-    for (JavaClass jc : classNames.getClassNameToJavaClassMapValues()) {
+    relationshipsClassNames = new RelationshipsClassNames(javaClasses);
+    relationshipsInstructions = new RelationshipsInstructions();
+    relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
+    for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       visitJavaClass(jc, this);
     }
     // These deferred relationships should not be necessary, but if you debug them you'll see that
@@ -137,8 +140,8 @@ public class Relationships
       }
       putCalling(parentMethodQualifiedName, childMethod);
     }
-    if (!isMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
-      isMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
+    if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
+      relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
     }
   }
 
@@ -237,15 +240,12 @@ public class Relationships
   }
 
   public void deferParentContainment(String parentClassName, JavaClass javaClass) {
-    classNames.deferParentContainment(parentClassName, javaClass);
+    relationshipsClassNames.deferParentContainment(parentClassName, javaClass);
   }
 
   public Set<DeferredParentContainment> getDeferredParentContainments() {
-    return classNames.getDeferredParentContainments();
+    return relationshipsClassNames.getDeferredParentContainments();
   }
-
-  private final RelationshipsInstructions relationshipsInstructions =
-      new RelationshipsInstructions();
 
   static void handleDeferredRelationships(Relationships relationships) {
     for (DeferredParentContainment aDeferredParentContainment :
@@ -310,20 +310,23 @@ public class Relationships
           false);
     }
   }
+
   @Deprecated
   @Override
   public void setVisitedMethod(String parentMethodQualifiedName) {
-    isMethodVisited.setVisitedMethod(parentMethodQualifiedName);
+    relationshipsIsMethodVisited.setVisitedMethod(parentMethodQualifiedName);
   }
+
   @Deprecated
   @Override
   public Collection<JavaClass> getParentClassesAndInterfaces(JavaClass visitedClass) {
-    return classNames.getParentClassesAndInterfaces(visitedClass);
+    return relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
   }
+
   @Deprecated
   @Override
   public JavaClass getClassDef(String anInterfaceName) {
-    return classNames.getClassDef(anInterfaceName);
+    return relationshipsClassNames.getClassDef(anInterfaceName);
   }
 
   @Override
