@@ -77,7 +77,8 @@ public class Relationships  {
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
               deferredSuperMethod.getunqualifiedMethodName(),
-              this);
+              this,
+              relationshipsInstructions);
       if (parentInstruction == null) {
         System.err.println("Parent instruction was not found");
       } else {
@@ -116,32 +117,5 @@ public class Relationships  {
     if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
       relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
     }
-  }
-
-  @Deprecated
-  public void updateMinPackageDepth(JavaClass javaClass) {
-    relationshipsPackageDepth.updateMinPackageDepth(javaClass);
-  }
-
-  @Deprecated
-  public static int getPackageDepth(String qualifiedClassName) {
-    return RelationshipsPackageDepth.getPackageDepth(qualifiedClassName);
-  }
-
-  @Deprecated
-  public boolean deferContainmentVisit(
-      JavaClass parentClassToVisit, String childClassQualifiedName) {
-    return relationshipsContainment.deferContainmentVisit(
-        parentClassToVisit, childClassQualifiedName);
-  }
-
-  @Deprecated
-  public void deferParentContainment(String parentClassName, JavaClass javaClass) {
-    relationshipsClassNames.deferParentContainment(parentClassName, javaClass);
-  }
-
-  @Deprecated
-  public MyInstruction getMethod(String parentMethodNameKey) {
-    return relationshipsInstructions.getMethod(parentMethodNameKey);
   }
 }
