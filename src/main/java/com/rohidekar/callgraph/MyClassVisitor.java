@@ -25,7 +25,6 @@ class MyClassVisitor extends ClassVisitor {
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsDeferred relationshipsDeferred;
   private final RelationshipsPackageDepth relationshipsPackageDepth;
-  private final RelationshipsCalling relationshipsCalling;
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
 
   public MyClassVisitor(
@@ -34,11 +33,9 @@ class MyClassVisitor extends ClassVisitor {
       RelationshipsIsMethodVisited relationshipsIsMethodVisited,
       RelationshipsClassNames relationshipsClassNames,
       RelationshipsDeferred relationshipsDeferred,
-      RelationshipsPackageDepth relationshipsPackageDepth,
-      RelationshipsCalling relationshipsCalling) {
+      RelationshipsPackageDepth relationshipsPackageDepth) {
 
     super(classToVisit);
-    this.relationshipsCalling = relationshipsCalling;
     this.relationshipsPackageDepth = relationshipsPackageDepth;
     this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
     this.relationshipsInstructions = relationshipsInstructions;
@@ -109,8 +106,7 @@ class MyClassVisitor extends ClassVisitor {
             relationshipsIsMethodVisited,
             relationshipsInstructions,
             relationshipsClassNames,
-            relationshipsDeferred,
-            relationshipsCalling)
+            relationshipsDeferred)
         .start();
   }
 }

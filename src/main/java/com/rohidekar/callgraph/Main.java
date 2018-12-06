@@ -57,7 +57,6 @@ public class Main {
     }
     Map<String, JavaClass> javaClassesFromResource = getJavaClassesFromResource(resource);
     RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
-    RelationshipsCalling relationshipsCalling = new RelationshipsCalling();
     RelationshipsClassNames relationshipsClassNames =
         new RelationshipsClassNames(javaClassesFromResource);
     RelationshipsInstructions relationshipsInstructions = new RelationshipsInstructions();
@@ -71,8 +70,7 @@ public class Main {
                 relationshipsIsMethodVisited,
                 relationshipsClassNames,
                 relationshipsDeferred,
-                relationshipsPackageDepth,
-                relationshipsCalling)
+                relationshipsPackageDepth)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
         throw new RuntimeException(e);
@@ -116,7 +114,6 @@ public class Main {
               deferredSuperMethod.gettarget(),
               deferredSuperMethod.gettarget().getMethodNameQualified(),
               relationshipsInstructions,
-              relationshipsCalling,
               relationshipsIsMethodVisited);
         }
       }
@@ -273,7 +270,6 @@ public class Main {
       MyInstruction childMethod,
       String childMethodQualifiedName,
       RelationshipsInstructions relationshipsInstructions,
-      RelationshipsCalling relationshipsCalling,
       RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
