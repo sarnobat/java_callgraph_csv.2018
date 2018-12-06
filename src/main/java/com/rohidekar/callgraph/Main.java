@@ -77,9 +77,16 @@ public class Main {
       if (parentClass1 == null) {
         try {
           parentClass1 = Repository.lookupClass(aDeferredParentContainment.getParentClassName());
+          throw new RuntimeException(
+              "I don't think this ever gets called 1, so the whole loop is pointless. "
+                  + aDeferredParentContainment.getParentClassName());
         } catch (ClassNotFoundException e) {
+          System.err.println("SRIDHAR Main.main() class not found: " + e.getMessage());
           if (!Ignorer.shouldIgnore(aDeferredParentContainment.getParentClassName())) {
-            System.err.println(aDeferredParentContainment.getParentClassName());
+            // probably it belongs to a dependency, not the project being scanned
+            System.err.println(
+                "Could not find deferred class " + aDeferredParentContainment.getParentClassName());
+            // This does still happen
           }
         }
       }
@@ -447,7 +454,7 @@ public class Main {
 
   @Deprecated // this should not be public
   public static void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod1) {
-	  deferredSuperMethods.add(deferredSuperMethod1);
+    deferredSuperMethods.add(deferredSuperMethod1);
   }
 
   //Name to Value mappings
