@@ -26,6 +26,7 @@ class MyClassVisitor extends ClassVisitor {
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsDeferred relationshipsDeferred;
   private final RelationshipsPackageDepth relationshipsPackageDepth; 
+  private final RelationshipsContainment relationshipsContainment;
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
 
   public MyClassVisitor(
@@ -35,11 +36,13 @@ class MyClassVisitor extends ClassVisitor {
       RelationshipsIsMethodVisited relationshipsIsMethodVisited,
       RelationshipsClassNames relationshipsClassNames,
       RelationshipsDeferred relationshipsDeferred,
-      RelationshipsPackageDepth relationshipsPackageDepth
+      RelationshipsPackageDepth relationshipsPackageDepth,
+      RelationshipsContainment relationshipsContainment
       ) {
 	  
 
     super(classToVisit);
+    this.relationshipsContainment = relationshipsContainment;
     this.relationshipsPackageDepth = relationshipsPackageDepth;
     this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
     this.relationshipsInstructions = relationshipsInstructions;
@@ -116,12 +119,12 @@ class MyClassVisitor extends ClassVisitor {
     Type fieldType = field.getType();
     if (fieldType instanceof ObjectType) {
       ObjectType objectType = (ObjectType) fieldType;
-      addContainmentRelationship(this.classToVisit, objectType.getClassName(), relationships, true);
+      addContainmentRelationship(this.classToVisit, objectType.getClassName(), relationships, true, relationshipsClassNames, relationshipsContainment);
     }
   }
 
   public static void addContainmentRelationship(JavaClass classToVisit,
-      String childClassNameQualified, RelationshipsClassVisitor relationships, boolean allowDeferral) {
+      String childClassNameQualified, RelationshipsClassVisitor relationships, boolean allowDeferral, RelationshipsClassNames relationshipsClassNames2, RelationshipsContainment relationshipsContainment) {
     if (Ignorer.shouldIgnore(childClassNameQualified)) {
       return;
     }
@@ -132,9 +135,9 @@ class MyClassVisitor extends ClassVisitor {
       
         System.err.println(e);
       if (allowDeferral) {
-        relationships.deferContainmentVisit(classToVisit, childClassNameQualified);
+    	  relationshipsContainment.deferContainmentVisit(classToVisit, childClassNameQualified);
       } else {
-        jc = relationships.getClassDef(childClassNameQualified);
+        jc = relationshipsClassNames2.getClassDef(childClassNameQualified);
         if (jc == null) {
           if (!Ignorer.shouldIgnore(childClassNameQualified)) {
             System.err.println("WARN: Still can't find " + childClassNameQualified);

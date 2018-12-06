@@ -44,7 +44,7 @@ public class Relationships
                 relationshipsIsMethodVisited2,
                 relationshipsClassNames,
                 relationshipsDeferred,
-                relationshipsPackageDepth)
+                relationshipsPackageDepth,relationshipsContainment)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
         e.printStackTrace();
@@ -66,12 +66,12 @@ public class Relationships
       }
       if (parentClass1 != null) {
         MyClassVisitor.addContainmentRelationship(
-            parentClass1, aDeferredParentContainment.getChildClass().getClassName(), this, false);
+            parentClass1, aDeferredParentContainment.getChildClass().getClassName(), this, false, relationshipsClassNames, relationshipsContainment);
       }
     }
     for (DeferredChildContainment containment : this.relationshipsContainment.getDeferredChildContainment()) {
       MyClassVisitor.addContainmentRelationship(
-          containment.getParentClass(), containment.getClassQualifiedName(), this, false);
+          containment.getParentClass(), containment.getClassQualifiedName(), this, false, relationshipsClassNames,relationshipsContainment);
     }
     for (DeferredSuperMethod deferredSuperMethod : this.relationshipsDeferred.getDeferSuperMethodRelationships()) {
       MyInstruction parentInstruction =

@@ -5,8 +5,6 @@ import org.apache.bcel.classfile.JavaClass;
 public interface RelationshipsClassVisitor {
 
 
-  void updateMinPackageDepth(JavaClass javaClass);
-
   JavaClass getClassDef(String anInterfaceName);
 
   void deferParentContainment(String anInterfaceName, JavaClass javaClass);
