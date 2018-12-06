@@ -3,7 +3,7 @@
 package com.rohidekar.callgraph;
 
 import com.rohidekar.callgraph.calls.RelationshipToGraphTransformerCallHierarchy;
-import com.rohidekar.callgraph.common.Relationships;
+import com.rohidekar.callgraph.calls.Relationships;
 
 /**
  * put -Xmx1024m in the VM args

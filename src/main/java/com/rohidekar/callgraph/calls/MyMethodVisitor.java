@@ -1,4 +1,4 @@
-package com.rohidekar.callgraph.common;
+package com.rohidekar.callgraph.calls;
 
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ConstantPoolGen;
