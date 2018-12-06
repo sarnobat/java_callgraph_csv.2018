@@ -19,14 +19,23 @@ public class Relationships
   private final RelationshipsPackageDepth relationshipsPackageDepth;
   private final RelationshipsContainment relationshipsContainment;
 
-  public Relationships(String resource, Map<String, JavaClass> javaClassesFromResource) {
-    relationshipsContainment = new RelationshipsContainment();
-    relationshipsPackageDepth = new RelationshipsPackageDepth();
-    relationshipsCalling = new RelationshipsCalling();
-    relationshipsClassNames = new RelationshipsClassNames(javaClassesFromResource);
-    relationshipsInstructions = new RelationshipsInstructions();
-    relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
-    relationshipsDeferred = new RelationshipsDeferred();
+  public Relationships(
+      String resource,
+      Map<String, JavaClass> javaClassesFromResource,
+      RelationshipsContainment relationshipsContainment2,
+      RelationshipsPackageDepth relationshipsPackageDepth2,
+      RelationshipsCalling relationshipsCalling2,
+      RelationshipsClassNames relationshipsClassNames2,
+      RelationshipsInstructions relationshipsInstructions2,
+      RelationshipsIsMethodVisited relationshipsIsMethodVisited2,
+      RelationshipsDeferred relationshipsDeferred2) {
+    relationshipsContainment = relationshipsContainment2;
+    relationshipsPackageDepth = relationshipsPackageDepth2;
+    relationshipsCalling = relationshipsCalling2;
+    relationshipsClassNames = relationshipsClassNames2;
+    relationshipsInstructions = relationshipsInstructions2;
+    relationshipsIsMethodVisited = relationshipsIsMethodVisited2;
+    relationshipsDeferred = relationshipsDeferred2;
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(jc, this).visitJavaClass(jc);

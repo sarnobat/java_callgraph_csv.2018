@@ -53,8 +53,18 @@ public class Main {
     } else {
       resource = args[0];
     }
+    Map<String, JavaClass> javaClassesFromResource = getJavaClassesFromResource(resource);
     RelationshipsMain relationships =
-        new Relationships(resource, getJavaClassesFromResource(resource));
+        new Relationships(
+            resource,
+            javaClassesFromResource,
+            new RelationshipsContainment(),
+            new RelationshipsPackageDepth(),
+            new RelationshipsCalling(),
+            new RelationshipsClassNames(javaClassesFromResource),
+            new RelationshipsInstructions(),
+            new RelationshipsIsMethodVisited(),
+            new RelationshipsDeferred());
     relationships.validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
