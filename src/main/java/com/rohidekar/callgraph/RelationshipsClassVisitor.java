@@ -1,7 +1,7 @@
 package com.rohidekar.callgraph;
 
 import org.apache.bcel.classfile.JavaClass;
-
+@Deprecated
 public interface RelationshipsClassVisitor {
 
 

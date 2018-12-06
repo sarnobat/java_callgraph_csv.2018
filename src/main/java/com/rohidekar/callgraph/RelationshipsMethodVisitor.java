@@ -3,7 +3,7 @@ package com.rohidekar.callgraph;
 import java.util.Collection;
 
 import org.apache.bcel.classfile.JavaClass;
-
+@Deprecated
 public interface RelationshipsMethodVisitor {
 
   void setVisitedMethod(String parentMethodQualifiedName);

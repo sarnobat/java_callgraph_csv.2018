@@ -31,10 +31,6 @@ public class Relationships
   // The top level package with classes in it
   private int minPackageDepth = Integer.MAX_VALUE;
 
-  // Name to Value mappings
-  private Map<String, MyInstruction> allMethodNameToMyInstructionMap =
-      new HashMap<String, MyInstruction>();
-
   // Objects that cannot yet be found
   private Set<DeferredChildContainment> deferredChildContainments =
       new HashSet<DeferredChildContainment>();
@@ -134,7 +130,7 @@ public class Relationships
     if ("java.lang.System.currentTimeMillis()".equals(childMethodQualifiedName)) {
       // throw new IllegalAccessError("No such thing");
     }
-    allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
+    relationshipsInstructions.putInstruction(childMethod, childMethodQualifiedName);
     if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
       if (parentMethodQualifiedName.contains("Millis")) {
         System.out.println("");
@@ -146,6 +142,7 @@ public class Relationships
     }
   }
 
+  @Deprecated
   private void putCalling(String parentMethodQualifiedName, MyInstruction childMethod) {
     relationshipsCalling.put(parentMethodQualifiedName, childMethod);
   }
@@ -178,10 +175,12 @@ public class Relationships
 
   private final RelationshipsCalling relationshipsCalling = new RelationshipsCalling();
 
+  @Deprecated
   public Collection<String> getAllMethodCallers() {
     return relationshipsCalling.getAllMethodCallers();
   }
 
+  @Deprecated
   public Collection<MyInstruction> getCalledMethods(String parentMethodNameKey) {
     return relationshipsCalling.getCalledMethods(parentMethodNameKey);
   }
@@ -215,12 +214,13 @@ public class Relationships
   }
 
   public void validate() {
-    if (this.allMethodNameToMyInstructionMap
+    if (this.relationshipsInstructions
         .keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
-    if (relationshipsCalling.keySet()
+    if (relationshipsCalling
+        .keySet()
         .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
       throw new IllegalAccessError("No such thing");
     }
@@ -244,14 +244,8 @@ public class Relationships
     return classNames.getDeferredParentContainments();
   }
 
-  public MyInstruction getMethod(String qualifiedMethodName) {
-    return this.allMethodNameToMyInstructionMap.get(qualifiedMethodName);
-  }
-
-  public void addMethodDefinition(MyInstruction myInstructionImpl) {
-    allMethodNameToMyInstructionMap.put(
-        myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
-  }
+  private final RelationshipsInstructions relationshipsInstructions =
+      new RelationshipsInstructions();
 
   static void handleDeferredRelationships(Relationships relationships) {
     for (DeferredParentContainment aDeferredParentContainment :
@@ -316,20 +310,27 @@ public class Relationships
           false);
     }
   }
-
+  @Deprecated
   @Override
   public void setVisitedMethod(String parentMethodQualifiedName) {
     isMethodVisited.setVisitedMethod(parentMethodQualifiedName);
   }
-
+  @Deprecated
   @Override
-  public Collection<JavaClass> getParentClassesAndInterfaces(
-      JavaClass visitedClass) { // TODO Auto-generated method stub
+  public Collection<JavaClass> getParentClassesAndInterfaces(JavaClass visitedClass) {
     return classNames.getParentClassesAndInterfaces(visitedClass);
+  }
+  @Deprecated
+  @Override
+  public JavaClass getClassDef(String anInterfaceName) {
+    return classNames.getClassDef(anInterfaceName);
   }
 
   @Override
-  public JavaClass getClassDef(String anInterfaceName) { // TODO Auto-generated method stub
-    return classNames.getClassDef(anInterfaceName);
+  public void addMethodDefinition(MyInstruction myInstruction) {}
+
+  @Override
+  public MyInstruction getMethod(String parentMethodNameKey) {
+    return relationshipsInstructions.getMethod(parentMethodNameKey);
   }
 }

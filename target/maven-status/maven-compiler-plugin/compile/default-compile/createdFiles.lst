@@ -31,6 +31,7 @@ com/rohidekar/callgraph/DeferredChildContainment.class
 com/rohidekar/callgraph/Relationships.class
 com/rohidekar/callgraph/TreeDepthVisitor.class
 gr/gousiosg/javacg/dyn/MethodStack.class
+com/rohidekar/callgraph/RelationshipsInstructions.class
 com/rohidekar/callgraph/RelationshipsClassNames.class
 com/rohidekar/callgraph/RelationshipsIsMethodVisited.class
 dnl/utils/text/table/TextTreeTable$TreeTableSeparatorPolicy.class

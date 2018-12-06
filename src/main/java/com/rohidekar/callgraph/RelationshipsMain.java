@@ -1,7 +1,7 @@
 package com.rohidekar.callgraph;
 
 import java.util.Collection;
-
+@Deprecated
 public interface RelationshipsMain {
 
   void validate();
