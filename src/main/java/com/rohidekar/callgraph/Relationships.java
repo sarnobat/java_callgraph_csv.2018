@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
-public class Relationships implements RelationshipsClassVisitor, RelationshipsMain {
+public class Relationships implements RelationshipsClassVisitor, RelationshipsMain, RelationshipsMethodVisitor {
 
   // The top level package with classes in it
   int minPackageDepth = Integer.MAX_VALUE;
@@ -365,7 +365,7 @@ public static Map<String, JavaClass> getJavaClassesFromResource(String resource)
         MyMethodVisitor.getInstruction(
             deferredSuperMethod.getparentClassOrInterface(),
             deferredSuperMethod.getunqualifiedMethodName(),
-            relationships);
+            (RelationshipsMethodVisitor) relationships);
     if (parentInstruction == null) {
       System.err.println("Parent instruction was not found");
     } else {

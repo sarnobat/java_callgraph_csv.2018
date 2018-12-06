@@ -110,7 +110,7 @@ public class Main {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
     Multimap<Integer, TreeModel> depthToRootNodes =
-        getDepthToRootNodes(relationships, rootMethodNodes, relationships.getMinPackageDepth());
+        getDepthToRootNodes(rootMethodNodes, relationships.getMinPackageDepth());
     PrintStream out = System.out;
     printTreeTest(depthToRootNodes, out);
     System.err.println(
@@ -143,7 +143,7 @@ public class Main {
   }
 
   private static Multimap<Integer, TreeModel> getDepthToRootNodes(
-      RelationshipsMain relationshipsMain, Set<GraphNode> rootMethodNodes, int minPackageDepth) {
+      Set<GraphNode> rootMethodNodes, int minPackageDepth) {
     Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();
     for (GraphNode aRootNode : rootMethodNodes) {
       TreeModel tree = new MyTreeModel(aRootNode);

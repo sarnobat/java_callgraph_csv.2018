@@ -24,7 +24,7 @@ class MyClassVisitor extends ClassVisitor {
 
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
 
-  public MyClassVisitor(JavaClass classToVisit, Relationships relationships) {
+  public MyClassVisitor(JavaClass classToVisit, RelationshipsClassVisitor relationships) {
     super(classToVisit);
     this.classToVisit = classToVisit;
     relationships.addPackageOf(classToVisit);
@@ -91,7 +91,7 @@ class MyClassVisitor extends ClassVisitor {
     String className = classToVisit.getClassName();
     ConstantPoolGen classConstants = new ConstantPoolGen(classToVisit.getConstantPool());
     MethodGen methodGen = new MethodGen(method, className, classConstants);
-    new MyMethodVisitor(methodGen, classToVisit, (Relationships) relationships).start();
+    new MyMethodVisitor(methodGen, classToVisit, (RelationshipsMethodVisitor)relationships).start();
   }
 
   @Override

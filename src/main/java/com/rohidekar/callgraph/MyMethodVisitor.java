@@ -22,10 +22,10 @@ import gr.gousiosg.javacg.stat.MethodVisitor;
 class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
-  private final Relationships relationships;
+  private final RelationshipsMethodVisitor relationships;
   private final String parentMethodQualifiedName;
 
-  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, Relationships relationships) {
+  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, RelationshipsMethodVisitor relationships) {
     super(methodGen, javaClass);
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
@@ -144,10 +144,10 @@ class MyMethodVisitor extends MethodVisitor {
   }
 
   public static MyInstruction getInstruction(JavaClass parentClassOrInterface,
-      String unqualifiedChildMethodName, Relationships relationships) {
+      String unqualifiedChildMethodName, RelationshipsMethodVisitor relationships2) {
     String methodName = MyInstruction.getQualifiedMethodName(
         parentClassOrInterface.getClassName(), unqualifiedChildMethodName);
-    MyInstruction instruction = relationships.getMethod(methodName);
+    MyInstruction instruction = relationships2.getMethod(methodName);
     return instruction;
   }
 

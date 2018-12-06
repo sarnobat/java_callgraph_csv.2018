@@ -30,5 +30,6 @@ com/rohidekar/callgraph/TreeDepthVisitor.class
 gr/gousiosg/javacg/dyn/MethodStack.class
 dnl/utils/text/table/TextTreeTable$TreeTableSeparatorPolicy.class
 com/rohidekar/callgraph/GraphNodeInstruction.class
+com/rohidekar/callgraph/RelationshipsMethodVisitor.class
 com/rohidekar/callgraph/GraphNode.class
 dnl/utils/text/table/TextTreeTable.class
