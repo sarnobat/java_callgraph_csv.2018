@@ -344,8 +344,7 @@ public class Main {
     Set<GraphNode> rootMethodNodes = new HashSet<GraphNode>();
     for (GraphNode aNode : allMethodNamesToMethods.values()) {
       Set<GraphNode> roots = new HashSet<GraphNode>();
-      RootsVisitor rootsVisitor = new RootsVisitor();
-      getRoots(aNode, roots, rootsVisitor);
+      getRoots(aNode, roots);
       rootMethodNodes.addAll(roots);
     }
     return rootMethodNodes;
@@ -383,14 +382,14 @@ public class Main {
     return levelsAbove + maxDepth;
   }
 
-  private static void getRoots(GraphNode aNode, Set<GraphNode> roots, RootsVisitor rootsVisitor) {
-    if (rootsVisitor.visited(aNode)) {
+  private static void getRoots(GraphNode aNode, Set<GraphNode> roots) {
+    if (visited(aNode)) {
 
     } else {
-      rootsVisitor.addVisited(aNode);
+      addVisited(aNode);
       if (aNode.getParents().size() > 0) {
         for (GraphNode parentNode : aNode.getParents()) {
-          getRoots(parentNode, roots, rootsVisitor);
+          getRoots(parentNode, roots);
         }
       } else {
         if (aNode.toString().equals("java.lang.System.currentTimeMillis()")) {
@@ -400,7 +399,15 @@ public class Main {
       }
     }
   }
+  private static	Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
+	public  static boolean visited(GraphNode aNode) {
+		return visitedNodes.contains(aNode);
+	}
+
+	public static void addVisited(GraphNode aNode) {
+		visitedNodes.add(aNode);
+	}
   // Relationships
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
