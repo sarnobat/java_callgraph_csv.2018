@@ -76,7 +76,7 @@ public class Main {
                 relationshipsCalling)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
     }
     // These deferred relationships should not be necessary, but if you debug them you'll see that
