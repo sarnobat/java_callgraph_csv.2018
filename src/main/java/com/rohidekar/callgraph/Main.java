@@ -59,12 +59,10 @@ public class Main {
     RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
     RelationshipsClassNames relationshipsClassNames =
         new RelationshipsClassNames(javaClassesFromResource);
-    RelationshipsIsMethodVisited relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(
                 jc,
-                relationshipsIsMethodVisited,
                 relationshipsClassNames,
                 relationshipsPackageDepth)
             .visitJavaClass(jc);
@@ -107,8 +105,7 @@ public class Main {
           addMethodCall(
               parentInstruction.getMethodNameQualified(),
               deferredSuperMethod.gettarget(),
-              deferredSuperMethod.gettarget().getMethodNameQualified(),
-              relationshipsIsMethodVisited);
+              deferredSuperMethod.gettarget().getMethodNameQualified());
         }
       }
     }
@@ -262,8 +259,7 @@ public class Main {
   public static void addMethodCall(
       String parentMethodQualifiedName,
       MyInstruction childMethod,
-      String childMethodQualifiedName,
-      RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
+      String childMethodQualifiedName) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
     }
@@ -277,11 +273,30 @@ public class Main {
       }
       put(parentMethodQualifiedName, childMethod, callingMethodToMethodInvocationMultiMap);
     }
-    if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
-      relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
+    if (!isVisitedMethod(childMethodQualifiedName)) {
+      addUnvisitedMethod(childMethodQualifiedName);
     }
   }
+  private static Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
 
+  @Deprecated // should not be public
+  public  static void setVisitedMethod(String parentMethodQualifiedName) {
+    if (isMethodVisited.keySet().contains(parentMethodQualifiedName)) {
+      isMethodVisited.remove(parentMethodQualifiedName);
+    }
+    isMethodVisited.put(parentMethodQualifiedName, true);
+  }
+
+  public  static void addUnvisitedMethod(String childMethodQualifiedName) {
+    isMethodVisited.put(childMethodQualifiedName, false);
+  }
+
+  static   boolean isVisitedMethod(String childMethodQualifiedName) {
+    if (!isMethodVisited.keySet().contains(childMethodQualifiedName)) {
+      addUnvisitedMethod(childMethodQualifiedName);
+    }
+    return isMethodVisited.get(childMethodQualifiedName);
+  }
   private static void printTreeTest(
       Multimap<Integer, TreeModel> depthToRootNodes, PrintStream out) {
     for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
