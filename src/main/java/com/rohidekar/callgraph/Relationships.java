@@ -220,15 +220,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
   public Collection<MyInstruction> getCalledMethods(String parentMethodNameKey) {
     return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
   }
-
-  public Collection<JavaClass> getContainedClasses(String parentClassNameKey) {
-    return ImmutableSet.copyOf(classNameToFieldTypesMultiMap.get(parentClassNameKey));
-  }
-
-  public Collection<String> getContainedClassNames(String parentClassNameKey) {
-    return ImmutableSet.copyOf(classNameToFieldTypeNamesMultiMap.get(parentClassNameKey));
-  }
-
   public int getMinPackageDepth() {
     return minPackageDepth;
   }
@@ -352,10 +343,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
   public void addMethodDefinition(MyInstruction myInstructionImpl) {
     allMethodNameToMyInstructionMap.put(
         myInstructionImpl.getMethodNameQualified(), myInstructionImpl);
-  }
-
-  public Collection<String> getPackagesKeySet() {
-    return ImmutableSet.copyOf(this.parentPackageNameToChildPackageNameMultiMap.keySet());
   }
 
   static void handleDeferredRelationships(Relationships relationships) {
