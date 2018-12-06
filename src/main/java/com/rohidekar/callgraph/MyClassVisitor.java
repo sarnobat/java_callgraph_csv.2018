@@ -27,6 +27,7 @@ class MyClassVisitor extends ClassVisitor {
   private final RelationshipsDeferred relationshipsDeferred;
   private final RelationshipsPackageDepth relationshipsPackageDepth; 
   private final RelationshipsContainment relationshipsContainment;
+  private final RelationshipsCalling relationshipsCalling;
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
 
   public MyClassVisitor(
@@ -37,11 +38,13 @@ class MyClassVisitor extends ClassVisitor {
       RelationshipsClassNames relationshipsClassNames,
       RelationshipsDeferred relationshipsDeferred,
       RelationshipsPackageDepth relationshipsPackageDepth,
-      RelationshipsContainment relationshipsContainment
+      RelationshipsContainment relationshipsContainment,
+      RelationshipsCalling relationshipsCalling
       ) {
 	  
 
     super(classToVisit);
+    this.relationshipsCalling = relationshipsCalling;
     this.relationshipsContainment = relationshipsContainment;
     this.relationshipsPackageDepth = relationshipsPackageDepth;
     this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
@@ -108,7 +111,7 @@ class MyClassVisitor extends ClassVisitor {
     String className = classToVisit.getClassName();
     ConstantPoolGen classConstants = new ConstantPoolGen(classToVisit.getConstantPool());
     MethodGen methodGen = new MethodGen(method, className, classConstants);
-    new MyMethodVisitor(methodGen, classToVisit, relationships, relationshipsIsMethodVisited, relationshipsInstructions,relationshipsClassNames, relationshipsDeferred).start();
+    new MyMethodVisitor(methodGen, classToVisit, relationships, relationshipsIsMethodVisited, relationshipsInstructions,relationshipsClassNames, relationshipsDeferred, relationshipsCalling).start();
   }
 
   @Override

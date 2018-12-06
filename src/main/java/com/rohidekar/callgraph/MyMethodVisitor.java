@@ -27,16 +27,21 @@ class MyMethodVisitor extends MethodVisitor {
   private final RelationshipsInstructions relationshipsInstructions;
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsDeferred relationshipsDeferred;
+  private final RelationshipsCalling relationshipsCalling;
+  private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
 
   MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, Relationships relationships, RelationshipsIsMethodVisited relationshipsIsMethodVisited, RelationshipsInstructions relationshipsInstructions,
 		  RelationshipsClassNames relationshipsClassNames,
-  RelationshipsDeferred relationshipsDeferred
+  RelationshipsDeferred relationshipsDeferred,
+  RelationshipsCalling relationshipsCalling
 		  ) {
     super(methodGen, javaClass);
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
     this.parentMethodQualifiedName = MyInstruction.getQualifiedMethodName(methodGen, visitedClass);
     this.relationships = relationships;
+    this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
+    this.relationshipsCalling = relationshipsCalling;
     this.relationshipsInstructions = relationshipsInstructions;
     this.relationshipsClassNames= relationshipsClassNames;
     this.relationshipsDeferred=relationshipsDeferred;
@@ -76,7 +81,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred);
+        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred,relationshipsCalling, relationshipsIsMethodVisited);
   }
 
   /** super method, private method, constructor */
@@ -86,7 +91,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred);
+        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred,relationshipsCalling, relationshipsIsMethodVisited);
   }
 
   @Override
@@ -95,7 +100,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred);
+        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred,relationshipsCalling, relationshipsIsMethodVisited);
   }
 
   @Override
@@ -104,11 +109,11 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred);
+        iInstruction.getArgumentTypes(constantsPool), relationships, parentMethodQualifiedName,relationshipsClassNames, relationshipsDeferred,relationshipsCalling, relationshipsIsMethodVisited);
   }
 
   private void addMethodCallRelationship(
-      Type iClass, String unqualifiedMethodName, Instruction anInstruction, Type[] argumentTypes, Relationships relationships, String parentMethodQualifiedName,RelationshipsClassNames relationshipsClassNames, RelationshipsDeferred relationshipsDeferred) {
+      Type iClass, String unqualifiedMethodName, Instruction anInstruction, Type[] argumentTypes, Relationships relationships, String parentMethodQualifiedName,RelationshipsClassNames relationshipsClassNames, RelationshipsDeferred relationshipsDeferred, RelationshipsCalling relationshipsCalling, RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
     if (!(iClass instanceof ObjectType)) {
       return;
     }
@@ -116,7 +121,7 @@ class MyMethodVisitor extends MethodVisitor {
     {
       ObjectType childClass = (ObjectType) iClass;
       MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
-      relationships.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true));
+      relationships.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true), relationshipsInstructions, relationshipsCalling, relationshipsIsMethodVisited);
       if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
     	  relationshipsInstructions.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
@@ -127,7 +132,7 @@ class MyMethodVisitor extends MethodVisitor {
       // We can't do it for the superclass without a JavaClass object. We don't
       // know which superclass
       // the method overrides.
-      linkMethodToSuperclassMethod(unqualifiedMethodName, target, relationships, relationshipsClassNames, relationshipsDeferred);
+      linkMethodToSuperclassMethod(unqualifiedMethodName, target, relationships, relationshipsClassNames, relationshipsDeferred,relationshipsCalling, relationshipsIsMethodVisited);
     }
     // class dependencies for method calls
   }
@@ -137,7 +142,8 @@ class MyMethodVisitor extends MethodVisitor {
       MyInstruction target,
       Relationships relationships,
       RelationshipsClassNames relationshipsClassNames,
-      RelationshipsDeferred relationshipsDeferred)
+      RelationshipsDeferred relationshipsDeferred,
+      RelationshipsCalling relationshipsCalling, RelationshipsIsMethodVisited relationshipsIsMethodVisited)
       throws IllegalAccessError {
 
     Collection<JavaClass> superClasses = relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
@@ -154,7 +160,7 @@ class MyMethodVisitor extends MethodVisitor {
         System.err.println(
             parentInstruction.getMethodNameQualified() + " -> " + target.getMethodNameQualified());
         relationships.addMethodCall(
-            parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified());
+            parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified(), relationshipsInstructions, relationshipsCalling, relationshipsIsMethodVisited);
       }
       if (parentInstruction != null
           && target != null

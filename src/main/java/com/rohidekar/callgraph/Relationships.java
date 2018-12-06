@@ -1,7 +1,6 @@
 package com.rohidekar.callgraph;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.ClassFormatException;
@@ -43,7 +42,8 @@ public class Relationships  {
                 relationshipsIsMethodVisited2,
                 relationshipsClassNames,
                 relationshipsDeferred,
-                relationshipsPackageDepth,relationshipsContainment)
+                relationshipsPackageDepth,relationshipsContainment,
+                relationshipsCalling)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
         e.printStackTrace();
@@ -91,7 +91,7 @@ public class Relationships  {
           this.addMethodCall(
               parentInstruction.getMethodNameQualified(),
               deferredSuperMethod.gettarget(),
-              deferredSuperMethod.gettarget().getMethodNameQualified());
+              deferredSuperMethod.gettarget().getMethodNameQualified(), relationshipsInstructions, relationshipsCalling, relationshipsIsMethodVisited);
         }
       }
     }
@@ -100,7 +100,7 @@ public class Relationships  {
   public void addMethodCall(
       String parentMethodQualifiedName,
       MyInstruction childMethod,
-      String childMethodQualifiedName) {
+      String childMethodQualifiedName, RelationshipsInstructions relationshipsInstructions, RelationshipsCalling relationshipsCalling, RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
     }
