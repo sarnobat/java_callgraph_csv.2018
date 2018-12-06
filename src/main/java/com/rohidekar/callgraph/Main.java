@@ -99,18 +99,22 @@ public class Main {
       if (parentInstruction == null) {
         System.err.println("Parent instruction was not found");
       } else {
+
         System.err.println(
             parentInstruction.getMethodNameQualified()
                 + " -> "
                 + deferredSuperMethod.gettarget().getMethodNameQualified());
-        if (!methodCallExists(
-            deferredSuperMethod.gettarget().getMethodNameQualified(),
-            parentInstruction.getMethodNameQualified(),
-            callingMethodToMethodInvocationMultiMap)) {
-          addMethodCall(
+        if (!deferredSuperMethod.gettarget().getMethodNameQualified().startsWith("java.")) {
+          if (!methodCallExists(
+              deferredSuperMethod.gettarget().getMethodNameQualified(),
               parentInstruction.getMethodNameQualified(),
-              deferredSuperMethod.gettarget(),
-              deferredSuperMethod.gettarget().getMethodNameQualified());
+              callingMethodToMethodInvocationMultiMap)) {
+            addMethodCall(
+                parentInstruction.getMethodNameQualified(),
+                deferredSuperMethod.gettarget(),
+                deferredSuperMethod.gettarget().getMethodNameQualified());
+            // This will still happen for methods called that reside in dependencies
+          }
         }
       }
     }
