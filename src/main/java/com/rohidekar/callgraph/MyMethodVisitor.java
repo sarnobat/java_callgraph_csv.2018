@@ -23,15 +23,13 @@ class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
   private final String parentMethodQualifiedName;
-  private final RelationshipsClassNames relationshipsClassNames;
 
-  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, RelationshipsClassNames relationshipsClassNames
+  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass
 		    ) {
     super(methodGen, javaClass);
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
     this.parentMethodQualifiedName = MyInstruction.getQualifiedMethodName(methodGen, visitedClass);
-    this.relationshipsClassNames= relationshipsClassNames;
     // main bit
     if (methodGen.getInstructionList() != null) {
       for (InstructionHandle instructionHandle = methodGen.getInstructionList().getStart();
@@ -68,7 +66,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName, relationshipsClassNames);
+        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
   }
 
   /** super method, private method, constructor */
@@ -78,7 +76,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName, relationshipsClassNames);
+        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
   }
 
   @Override
@@ -87,7 +85,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName, relationshipsClassNames);
+        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
   }
 
   @Override
@@ -96,11 +94,11 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction.getReferenceType(constantsPool),
         iInstruction.getMethodName(constantsPool),
         iInstruction,
-        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName, relationshipsClassNames);
+        iInstruction.getArgumentTypes(constantsPool), parentMethodQualifiedName);
   }
 
   private void addMethodCallRelationship(
-      Type iClass, String unqualifiedMethodName, Instruction anInstruction, Type[] argumentTypes, String parentMethodQualifiedName, RelationshipsClassNames relationshipsClassNames) {
+      Type iClass, String unqualifiedMethodName, Instruction anInstruction, Type[] argumentTypes, String parentMethodQualifiedName) {
     if (!(iClass instanceof ObjectType)) {
       return;
     }
@@ -119,15 +117,14 @@ class MyMethodVisitor extends MethodVisitor {
       // We can't do it for the superclass without a JavaClass object. We don't
       // know which superclass
       // the method overrides.
-      linkMethodToSuperclassMethod(unqualifiedMethodName, target, relationshipsClassNames);
+      linkMethodToSuperclassMethod(unqualifiedMethodName, target);
     }
     // class dependencies for method calls
   }
 
   private void linkMethodToSuperclassMethod(
       String unqualifiedMethodName,
-      MyInstruction target,
-      RelationshipsClassNames relationshipsClassNames)
+      MyInstruction target)
       throws IllegalAccessError {
 
     Collection<JavaClass> superClasses = Main.getParentClassesAndInterfaces(visitedClass);
