@@ -155,7 +155,7 @@ public class Main {
   }
 
   @SuppressWarnings("resource")
-  public static Map<String, JavaClass> getJavaClassesFromResource(String resource) {
+  private static Map<String, JavaClass> getJavaClassesFromResource(String resource) {
     Map<String, JavaClass> javaClasses = new HashMap<String, JavaClass>();
     boolean isJar = resource.endsWith("jar");
     if (isJar) {
