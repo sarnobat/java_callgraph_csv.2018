@@ -216,7 +216,7 @@ public class Main {
       System.err.println("ERROR: no root nodes to print call tree from.");
     }
     Multimap<Integer, TreeModel> depthToRootNodes =
-        getDepthToRootNodes(rootMethodNodes, minPackageDepth);
+        getDepthToRootNodes(rootMethodNodes, relationshipsPackageDepth.getMinPackageDepth());
     PrintStream out = System.out;
     printTreeTest(depthToRootNodes, out);
     System.err.println(
@@ -545,24 +545,5 @@ public class Main {
   public static void deferParentContainment(String parentClassName, JavaClass javaClass) {
     System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
     deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
-  }
-
-  // The top level package with classes in it
-  private static int minPackageDepth = Integer.MAX_VALUE;
-
-  @Deprecated // should not be public
-  public static void updateMinPackageDepth(JavaClass javaClass) {
-    int packageDepth = getPackageDepth(javaClass.getClassName());
-    if (packageDepth < minPackageDepth) {
-      minPackageDepth = packageDepth;
-    }
-  }
-
-  @Deprecated // shoudl not be public
-  public static int getPackageDepth(String qualifiedClassName) {
-    String packageName = ClassUtils.getPackageName(qualifiedClassName);
-    int periodCount = StringUtils.countMatches(packageName, ".");
-    int packageDepth = periodCount + 1;
-    return packageDepth;
   }
 }
