@@ -104,7 +104,7 @@ public class Main {
     Multimap<Integer, TreeModel> depthToRootNodes = LinkedHashMultimap.create();
     for (GraphNode aRootNode : rootMethodNodes) {
       TreeModel tree = new MyTreeModel(aRootNode);
-      int treeDepth = TreeDepthCalculator.getTreeDepth(tree);
+      int treeDepth = getTreeDepth(tree);
       // TODO: move this to the loop below
       if (aRootNode.getPackageDepth() > relationships.getMinPackageDepth() + Main.ROOT_DEPTH) {
         continue;
@@ -150,9 +150,70 @@ public class Main {
     for (GraphNode aNode : allMethodNamesToMethods.values()) {
       Set<GraphNode> roots = new HashSet<GraphNode>();
       RootsVisitor rootsVisitor = new RootsVisitor();
-      RootFinder.getRoots(aNode, roots, rootsVisitor);
+      getRoots(aNode, roots, rootsVisitor);
       rootMethodNodes.addAll(roots);
     }
     return rootMethodNodes;
+  }
+
+  public static int getTreeDepth(TreeModel tree) {
+    TreeDepthVisitor tdv = new TreeDepthVisitor();
+    int childCount = tree.getChildCount(tree.getRoot());
+    int maxDepth = 0;
+    for (int i = 0; i < childCount; i++) {
+      int aDepth = getTreeDepth((GraphNode) tree.getChild(tree.getRoot(), i), 1, tdv);
+      if (aDepth > maxDepth) {
+        maxDepth = aDepth;
+      }
+    }
+    return 1 + maxDepth;
+  }
+
+  private static int getTreeDepth(GraphNode iParent, int levelsAbove, TreeDepthVisitor tdv) {
+    int maxDepth = 0;
+    tdv.visit(iParent);
+    for (GraphNode aChild : iParent.getChildren()) {
+      if (tdv.isVisited(aChild)) {
+        continue;
+      }
+
+      if (iParent.toString().equals(aChild.toString())) {
+        throw new AssertionError("cycle");
+      }
+      int aDepth = getTreeDepth(aChild, levelsAbove + 1, tdv);
+      if (aDepth > maxDepth) {
+        maxDepth = aDepth;
+      }
+    }
+    return levelsAbove + maxDepth;
+  }
+
+  public static void getRoots(GraphNode aNode, Set<GraphNode> roots, RootsVisitor rootsVisitor) {
+    if (rootsVisitor.visited(aNode)) {
+
+    } else {
+      rootsVisitor.addVisited(aNode);
+      if (aNode.getParents().size() > 0) {
+        for (GraphNode parentNode : aNode.getParents()) {
+          getRoots(parentNode, roots, rootsVisitor);
+        }
+      } else {
+        if (aNode.toString().equals("java.lang.System.currentTimeMillis()")) {
+          throw new IllegalAccessError("getRoots");
+        }
+        roots.add(aNode);
+      }
+    }
+  }
+
+  public static Set<GraphNode> findRootJavaClasses(
+      Map<String, GraphNode> classNameToGraphNodeJavaClassMap) {
+    Set<GraphNode> rootClasses;
+    rootClasses = new HashSet<GraphNode>();
+    for (GraphNode aNode : classNameToGraphNodeJavaClassMap.values()) {
+      RootsVisitor rootsVisitor = new RootsVisitor();
+      getRoots(aNode, rootClasses, rootsVisitor);
+    }
+    return rootClasses;
   }
 }

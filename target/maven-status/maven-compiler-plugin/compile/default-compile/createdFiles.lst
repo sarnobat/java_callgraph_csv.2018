@@ -1,7 +1,6 @@
 dnl/utils/text/table/SeparatorPolicy.class
 com/rohidekar/callgraph/MyInstruction.class
 gr/gousiosg/javacg/stat/MethodVisitor.class
-com/rohidekar/callgraph/TreeDepthCalculator.class
 com/rohidekar/callgraph/Main.class
 com/rohidekar/callgraph/MyTreeModel.class
 dnl/utils/text/table/TextTableModel.class
@@ -33,5 +32,4 @@ com/rohidekar/callgraph/DeferredRelationships.class
 dnl/utils/text/table/TextTreeTable$TreeTableSeparatorPolicy.class
 com/rohidekar/callgraph/GraphNodeInstruction.class
 com/rohidekar/callgraph/GraphNode.class
-com/rohidekar/callgraph/TreePrinterCalls.class
 dnl/utils/text/table/TextTreeTable.class
