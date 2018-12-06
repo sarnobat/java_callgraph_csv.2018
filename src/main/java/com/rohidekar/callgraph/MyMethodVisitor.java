@@ -19,6 +19,7 @@ import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReturnInstruction;
 import org.apache.bcel.generic.Type;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import gr.gousiosg.javacg.stat.MethodVisitor;
@@ -36,7 +37,7 @@ class MyMethodVisitor extends MethodVisitor {
   @Deprecated
   private final Map<String, MyInstruction> allMethodNameToMyInstructionMap;
   @Deprecated
-  private final Map<String, Boolean> isMethodVisited;
+  private final Map<String, Boolean> isMethodVisited = ImmutableMap.of();
 
   MyMethodVisitor(
       MethodGen methodGen,
@@ -49,7 +50,6 @@ class MyMethodVisitor extends MethodVisitor {
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
       Map<String, Boolean> isMethodVisited) {
     super(methodGen, javaClass);
-    this.isMethodVisited = isMethodVisited;
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
     this.parentMethodQualifiedName = MyInstruction.getQualifiedMethodName(methodGen, visitedClass);
@@ -160,7 +160,8 @@ class MyMethodVisitor extends MethodVisitor {
           target.printInstruction(true),
           callingMethodToMethodInvocationMultiMap,
           allMethodNameToMyInstructionMap,
-          isMethodVisited);
+          isMethodVisited,
+          relationshipsIsMethodVisited);
       if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
         relationshipsInstructions.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
@@ -198,7 +199,8 @@ class MyMethodVisitor extends MethodVisitor {
             target.getMethodNameQualified(),
             callingMethodToMethodInvocationMultiMap,
             allMethodNameToMyInstructionMap,
-            isMethodVisited);
+            isMethodVisited,
+            relationshipsIsMethodVisited);
       }
       if (parentInstruction != null
           && target != null
@@ -222,7 +224,8 @@ class MyMethodVisitor extends MethodVisitor {
       String childMethodQualifiedName,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
-      Map<String, Boolean> isMethodVisited) {
+      Map<String, Boolean> isMethodVisited,
+      RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
     }
@@ -236,22 +239,9 @@ class MyMethodVisitor extends MethodVisitor {
       }
       callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
     }
-    if (!isVisitedMethod(childMethodQualifiedName, isMethodVisited)) {
-      addUnvisitedMethod(childMethodQualifiedName, isMethodVisited);
+    if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
+    	relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
     }
-  }
-
-  private static void addUnvisitedMethod(
-      String childMethodQualifiedName, Map<String, Boolean> isMethodVisited) {
-    isMethodVisited.put(childMethodQualifiedName, false);
-  }
-
-  private static boolean isVisitedMethod(
-      String childMethodQualifiedName, Map<String, Boolean> isMethodVisited) {
-    if (!isMethodVisited.keySet().contains(childMethodQualifiedName)) {
-      addUnvisitedMethod(childMethodQualifiedName, isMethodVisited);
-    }
-    return isMethodVisited.get(childMethodQualifiedName);
   }
 
   public static MyInstruction getInstruction(

@@ -48,7 +48,6 @@ public class Main {
   @Deprecated
   private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
-  // Relationships
   @Deprecated
   private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
       LinkedHashMultimap.create();
