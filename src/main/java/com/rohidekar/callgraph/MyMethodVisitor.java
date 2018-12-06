@@ -176,7 +176,7 @@ class MyMethodVisitor extends MethodVisitor {
   private void linkMethodToSuperclassMethod(String unqualifiedMethodName, MyInstruction target)
       throws IllegalAccessError {
 
-    Collection<JavaClass> superClasses = Main.getParentClassesAndInterfaces(visitedClass);
+    Collection<JavaClass> superClasses = relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
     for (JavaClass parentClassOrInterface : superClasses) {
       MyInstruction parentInstruction =
           getInstruction(parentClassOrInterface, unqualifiedMethodName, relationshipsInstructions);

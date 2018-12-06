@@ -81,7 +81,7 @@ class MyClassVisitor extends ClassVisitor {
       }
       JavaClass anInterface = Main.getClassDef(anInterfaceName);
       if (anInterface == null) {
-        Main.deferParentContainment(anInterfaceName, javaClass);
+        relationshipsClassNames.deferParentContainment(anInterfaceName, javaClass);
       } else {
       }
     }

@@ -49,8 +49,6 @@ public class Main {
 
   // nodes
   private static Map<String, JavaClass> classNameToJavaClassMap;
-  private static Set<DeferredParentContainment> deferredParentContainments =
-      new HashSet<DeferredParentContainment>();
   private static Set<GraphNode> visitedNodes = new HashSet<GraphNode>();
 
   // Relationships
@@ -92,7 +90,7 @@ public class Main {
     // These deferred relationships should not be necessary, but if you debug them you'll see that
     // they find additional relationships.
     for (DeferredParentContainment aDeferredParentContainment :
-        ImmutableSet.copyOf(deferredParentContainments)) {
+        ImmutableSet.copyOf(relationshipsClassNames.getDeferredParentContainments())) {
       JavaClass parentClass1 = getClassDef(aDeferredParentContainment.getParentClassName());
       if (parentClass1 == null) {
         try {
@@ -510,40 +508,5 @@ public class Main {
       jc = classNameToJavaClassMap.get(aClassFullName);
     }
     return jc;
-  }
-
-  @Deprecated // This should not be public
-  public static Collection<JavaClass> getParentClassesAndInterfaces(JavaClass childClass) {
-    Collection<JavaClass> superClassesAndInterfaces = new HashSet<JavaClass>();
-    String[] interfaceNames = childClass.getInterfaceNames();
-    for (String interfaceName : interfaceNames) {
-      JavaClass anInterface = classNameToJavaClassMap.get(interfaceName);
-      if (anInterface == null) {
-        // Do it later
-        deferParentContainment(interfaceName, childClass);
-      } else {
-        superClassesAndInterfaces.add(anInterface);
-      }
-    }
-    String superclassNames = childClass.getSuperclassName();
-    if (!superclassNames.equals("java.lang.Object")) {
-      JavaClass theSuperclass = classNameToJavaClassMap.get(superclassNames);
-      if (theSuperclass == null) {
-        // Do it later
-        deferParentContainment(superclassNames, childClass);
-      } else {
-        superClassesAndInterfaces.add(theSuperclass);
-      }
-    }
-    if (superClassesAndInterfaces.size() > 0) {
-      System.err.println("Has a parent (" + childClass.getClassName() + ")");
-    }
-    return ImmutableSet.copyOf(superClassesAndInterfaces);
-  }
-
-  @Deprecated // This should not be public
-  public static void deferParentContainment(String parentClassName, JavaClass javaClass) {
-    System.err.println("Deferring " + parentClassName + " --> " + javaClass.getClassName());
-    deferredParentContainments.add(new DeferredParentContainment(parentClassName, javaClass));
   }
 }
