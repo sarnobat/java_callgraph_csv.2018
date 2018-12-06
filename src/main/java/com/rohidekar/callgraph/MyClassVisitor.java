@@ -24,7 +24,7 @@ class MyClassVisitor extends ClassVisitor {
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsDeferred relationshipsDeferred;
-  private final RelationshipsPackageDepth relationshipsPackageDepth; 
+  private final RelationshipsPackageDepth relationshipsPackageDepth;
   private final RelationshipsContainment relationshipsContainment;
   private final RelationshipsCalling relationshipsCalling;
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
@@ -37,9 +37,7 @@ class MyClassVisitor extends ClassVisitor {
       RelationshipsDeferred relationshipsDeferred,
       RelationshipsPackageDepth relationshipsPackageDepth,
       RelationshipsContainment relationshipsContainment,
-      RelationshipsCalling relationshipsCalling
-      ) {
-	  
+      RelationshipsCalling relationshipsCalling) {
 
     super(classToVisit);
     this.relationshipsCalling = relationshipsCalling;
@@ -47,8 +45,8 @@ class MyClassVisitor extends ClassVisitor {
     this.relationshipsPackageDepth = relationshipsPackageDepth;
     this.relationshipsIsMethodVisited = relationshipsIsMethodVisited;
     this.relationshipsInstructions = relationshipsInstructions;
-    this.relationshipsClassNames= relationshipsClassNames;
-    this.relationshipsDeferred=relationshipsDeferred;
+    this.relationshipsClassNames = relationshipsClassNames;
+    this.relationshipsDeferred = relationshipsDeferred;
     this.classToVisit = classToVisit;
   }
 
@@ -82,7 +80,7 @@ class MyClassVisitor extends ClassVisitor {
       }
       JavaClass anInterface = relationshipsClassNames.getClassDef(anInterfaceName);
       if (anInterface == null) {
-    	  	relationshipsClassNames.deferParentContainment(anInterfaceName, javaClass);
+        relationshipsClassNames.deferParentContainment(anInterfaceName, javaClass);
       } else {
       }
     }
@@ -108,7 +106,15 @@ class MyClassVisitor extends ClassVisitor {
     String className = classToVisit.getClassName();
     ConstantPoolGen classConstants = new ConstantPoolGen(classToVisit.getConstantPool());
     MethodGen methodGen = new MethodGen(method, className, classConstants);
-    new MyMethodVisitor(methodGen, classToVisit, relationshipsIsMethodVisited, relationshipsInstructions, relationshipsClassNames,relationshipsDeferred, relationshipsCalling).start();
+    new MyMethodVisitor(
+            methodGen,
+            classToVisit,
+            relationshipsIsMethodVisited,
+            relationshipsInstructions,
+            relationshipsClassNames,
+            relationshipsDeferred,
+            relationshipsCalling)
+        .start();
   }
 
   @Override
@@ -116,12 +122,21 @@ class MyClassVisitor extends ClassVisitor {
     Type fieldType = field.getType();
     if (fieldType instanceof ObjectType) {
       ObjectType objectType = (ObjectType) fieldType;
-      addContainmentRelationship(this.classToVisit, objectType.getClassName(), true, relationshipsClassNames, relationshipsContainment);
+      addContainmentRelationship(
+          this.classToVisit,
+          objectType.getClassName(),
+          true,
+          relationshipsClassNames,
+          relationshipsContainment);
     }
   }
 
-  public static void addContainmentRelationship(JavaClass classToVisit,
-      String childClassNameQualified,boolean allowDeferral, RelationshipsClassNames relationshipsClassNames2, RelationshipsContainment relationshipsContainment) {
+  public static void addContainmentRelationship(
+      JavaClass classToVisit,
+      String childClassNameQualified,
+      boolean allowDeferral,
+      RelationshipsClassNames relationshipsClassNames2,
+      RelationshipsContainment relationshipsContainment) {
     if (Ignorer.shouldIgnore(childClassNameQualified)) {
       return;
     }
@@ -129,10 +144,10 @@ class MyClassVisitor extends ClassVisitor {
     try {
       jc = Repository.lookupClass(childClassNameQualified);
     } catch (ClassNotFoundException e) {
-      
-        System.err.println(e);
+
+      System.err.println(e);
       if (allowDeferral) {
-    	  relationshipsContainment.deferContainmentVisit(classToVisit, childClassNameQualified);
+        relationshipsContainment.deferContainmentVisit(classToVisit, childClassNameQualified);
       } else {
         jc = relationshipsClassNames2.getClassDef(childClassNameQualified);
         if (jc == null) {
@@ -145,7 +160,7 @@ class MyClassVisitor extends ClassVisitor {
     if (jc == null) {
       System.err.println("WARN: Couldn't find " + childClassNameQualified);
     } else {
-//      relationships.addContainmentRelationship(classToVisit.getClassName(), jc);
+      //      relationships.addContainmentRelationship(classToVisit.getClassName(), jc);
     }
   }
 }
