@@ -99,12 +99,12 @@ class MyClassVisitor extends ClassVisitor {
     Type fieldType = field.getType();
     if (fieldType instanceof ObjectType) {
       ObjectType objectType = (ObjectType) fieldType;
-      addContainmentRelationship(this.classToVisit, objectType.getClassName(), (Relationships) relationships, true);
+      addContainmentRelationship(this.classToVisit, objectType.getClassName(), relationships, true);
     }
   }
 
   public static void addContainmentRelationship(JavaClass classToVisit,
-      String childClassNameQualified, Relationships relationships, boolean allowDeferral) {
+      String childClassNameQualified, RelationshipsClassVisitor relationships, boolean allowDeferral) {
     if (Ignorer.shouldIgnore(childClassNameQualified)) {
       return;
     }
