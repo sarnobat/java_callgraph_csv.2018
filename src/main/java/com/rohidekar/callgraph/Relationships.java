@@ -29,7 +29,7 @@ public class Relationships
     implements RelationshipsClassVisitor, RelationshipsMain, RelationshipsMethodVisitor {
 
   // The top level package with classes in it
-  int minPackageDepth = Integer.MAX_VALUE;
+  private int minPackageDepth = Integer.MAX_VALUE;
 
   // Name to Value mappings
   private Map<String, MyInstruction> allMethodNameToMyInstructionMap =
