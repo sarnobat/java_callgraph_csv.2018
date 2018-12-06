@@ -59,13 +59,11 @@ public class Main {
       resource = args[0];
     }
     Map<String, JavaClass> javaClassesFromResource = getJavaClassesFromResource(resource);
-    RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
     classNameToJavaClassMap = ImmutableMap.copyOf(javaClassesFromResource);
     for (JavaClass jc : getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(
-                jc,
-                relationshipsPackageDepth)
+                jc)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
         throw new RuntimeException(e);

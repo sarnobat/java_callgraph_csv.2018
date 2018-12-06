@@ -20,15 +20,12 @@ import gr.gousiosg.javacg.stat.ClassVisitor;
 class MyClassVisitor extends ClassVisitor {
 
   private final JavaClass classToVisit;
-  private final RelationshipsPackageDepth relationshipsPackageDepth;
   private Map<String, JavaClass> visitedClasses = new HashMap<String, JavaClass>();
 
   public MyClassVisitor(
-      JavaClass classToVisit,
-      RelationshipsPackageDepth relationshipsPackageDepth) {
+      JavaClass classToVisit) {
 
     super(classToVisit);
-    this.relationshipsPackageDepth = relationshipsPackageDepth;
     this.classToVisit = classToVisit;
   }
 
