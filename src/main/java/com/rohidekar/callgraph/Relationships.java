@@ -336,10 +336,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
     return ImmutableSet.copyOf(deferredParentContainments);
   }
 
-  public Set<String> getAllMethodNames() {
-    return ImmutableSet.copyOf(allMethodNameToMyInstructionMap.keySet());
-  }
-
   private Map<String, Boolean> isMethodVisited = new HashMap<String, Boolean>();
 
   public void setVisitedMethod(String parentMethodQualifiedName) {
@@ -360,10 +356,6 @@ public class Relationships implements RelationshipsClassVisitor, RelationshipsMa
 
   public Collection<String> getPackagesKeySet() {
     return ImmutableSet.copyOf(this.parentPackageNameToChildPackageNameMultiMap.keySet());
-  }
-
-  public Collection<String> getChildPackagesOf(String parentPackage) {
-    return ImmutableSet.copyOf(this.parentPackageNameToChildPackageNameMultiMap.get(parentPackage));
   }
 
   static void handleDeferredRelationships(Relationships relationships) {
