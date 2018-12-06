@@ -27,6 +27,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.io.FileUtils;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -107,9 +108,9 @@ public class Main {
             parentInstruction.getMethodNameQualified()
                 + " -> "
                 + deferredSuperMethod.gettarget().getMethodNameQualified());
-        if (!relationshipsCalling.methodCallExists(
+        if (!methodCallExists(
             deferredSuperMethod.gettarget().getMethodNameQualified(),
-            parentInstruction.getMethodNameQualified())) {
+            parentInstruction.getMethodNameQualified(), callingMethodToMethodInvocationMultiMap)) {
           addMethodCall(
               parentInstruction.getMethodNameQualified(),
               deferredSuperMethod.gettarget(),
@@ -121,10 +122,10 @@ public class Main {
       }
     }
     relationshipsInstructions.validate();
-    relationshipsCalling.validate();
+    validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
-    for (String parentMethodNameKey : relationshipsCalling.getAllMethodCallers()) {
+    for (String parentMethodNameKey : getAllMethodCallers(callingMethodToMethodInvocationMultiMap)) {
       System.err.println(
           "RelationshipToGraphTransformerCallHierarchy.determineCallHierarchy() - "
               + parentMethodNameKey);
@@ -152,7 +153,7 @@ public class Main {
           throw new IllegalAccessError("determineCallHierarchy() 2 ");
         }
         Collection<MyInstruction> calledMethods =
-            relationshipsCalling.getCalledMethods(parentMethodNameKey);
+            getCalledMethods(parentMethodNameKey, callingMethodToMethodInvocationMultiMap);
         for (MyInstruction childMethod : calledMethods) {
           if (Ignorer.shouldIgnore(childMethod.getMethodNameQualified())) {
           } else {
@@ -188,7 +189,7 @@ public class Main {
       }
     }
     relationshipsInstructions.validate();
-    relationshipsCalling.validate();
+    validate();
     Set<GraphNode> rootMethodNodes = findRootCallers(allMethodNamesToMethods);
     if (rootMethodNodes.size() < 1) {
       System.err.println("ERROR: no root nodes to print call tree from.");
@@ -285,7 +286,7 @@ public class Main {
       if (parentMethodQualifiedName.contains("Millis")) {
         System.out.println("");
       }
-      relationshipsCalling.put(parentMethodQualifiedName, childMethod);
+      put(parentMethodQualifiedName, childMethod, callingMethodToMethodInvocationMultiMap);
     }
     if (!relationshipsIsMethodVisited.isVisitedMethod(childMethodQualifiedName)) {
       relationshipsIsMethodVisited.addUnvisitedMethod(childMethodQualifiedName);
@@ -408,6 +409,49 @@ public class Main {
         }
         roots.add(aNode);
       }
+    }
+  }
+
+  // Relationships
+  private static Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
+      LinkedHashMultimap.create();
+
+
+  public static Collection<String> getAllMethodCallers(Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet());
+  }
+
+  public static Collection<MyInstruction> getCalledMethods(String parentMethodNameKey, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
+  }
+
+  public static void put(String parentMethodQualifiedName, MyInstruction childMethod, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+    callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
+  }
+
+  public static Collection<MyInstruction> get(String parentMethodQualifiedName, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+    return callingMethodToMethodInvocationMultiMap.get(parentMethodQualifiedName);
+  }
+
+  public static Collection<String> keySet(Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+    return callingMethodToMethodInvocationMultiMap.keySet();
+  }
+
+  public static boolean methodCallExists(
+      String parentMethodQualifiedName, String childMethodQualifiedName, Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
+    for (MyInstruction childMethod : get(parentMethodQualifiedName, callingMethodToMethodInvocationMultiMap)) {
+      if (childMethod.getMethodNameQualified().equals(childMethodQualifiedName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static void validate() {
+
+    if (keySet(callingMethodToMethodInvocationMultiMap)
+        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
+      throw new IllegalAccessError("No such thing");
     }
   }
 }

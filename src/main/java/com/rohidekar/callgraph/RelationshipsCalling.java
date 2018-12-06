@@ -7,45 +7,4 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
 public class RelationshipsCalling {
-  // Relationships
-  private Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap =
-      LinkedHashMultimap.create();
-
-  public Collection<String> getAllMethodCallers() {
-    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.keySet());
-  }
-
-  public Collection<MyInstruction> getCalledMethods(String parentMethodNameKey) {
-    return ImmutableSet.copyOf(callingMethodToMethodInvocationMultiMap.get(parentMethodNameKey));
-  }
-
-  public void put(String parentMethodQualifiedName, MyInstruction childMethod) {
-    callingMethodToMethodInvocationMultiMap.put(parentMethodQualifiedName, childMethod);
-  }
-
-  public Collection<MyInstruction> get(String parentMethodQualifiedName) {
-    return callingMethodToMethodInvocationMultiMap.get(parentMethodQualifiedName);
-  }
-
-  public Collection<String> keySet() {
-    return this.callingMethodToMethodInvocationMultiMap.keySet();
-  }
-
-  public boolean methodCallExists(
-      String parentMethodQualifiedName, String childMethodQualifiedName) {
-    for (MyInstruction childMethod : get(parentMethodQualifiedName)) {
-      if (childMethod.getMethodNameQualified().equals(childMethodQualifiedName)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public void validate() {
-
-    if (keySet()
-        .contains("com.rohidekar.callgraph.GraphNodeInstruction.getMethodNameQualified()")) {
-      throw new IllegalAccessError("No such thing");
-    }
-  }
 }
