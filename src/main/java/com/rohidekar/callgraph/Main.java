@@ -106,9 +106,9 @@ public class Main {
     for (int i = Main.MIN_TREE_DEPTH; i < Main.MAX_TREE_DEPTH; i++) {
       Integer treeDepth = new Integer(i);
       if (treeDepth < Main.MIN_TREE_DEPTH) {
-        continue;
+        //continue;
       } else if (treeDepth > Main.MAX_TREE_DEPTH) {
-        continue;
+        //continue;
       } else {
         for (Object aTreeModel : depthToRootNodes.get(treeDepth)) {
           TreeModel aTreeModel2 = (TreeModel) aTreeModel;
