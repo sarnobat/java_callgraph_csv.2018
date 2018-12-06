@@ -177,7 +177,7 @@ class MyMethodVisitor extends MethodVisitor {
     Collection<JavaClass> superClasses = Main.getParentClassesAndInterfaces(visitedClass);
     for (JavaClass parentClassOrInterface : superClasses) {
       MyInstruction parentInstruction =
-          getInstruction(parentClassOrInterface, unqualifiedMethodName);
+          getInstruction(parentClassOrInterface, unqualifiedMethodName,relationshipsInstructions);
       if (parentInstruction == null) {
         // It may be that we're looking in the wrong superclass/interface and that we should just
         // continue
@@ -245,11 +245,13 @@ class MyMethodVisitor extends MethodVisitor {
   }
 
   public static MyInstruction getInstruction(
-      JavaClass parentClassOrInterface, String unqualifiedChildMethodName) {
+      JavaClass parentClassOrInterface,
+      String unqualifiedChildMethodName,
+      RelationshipsInstructions relationshipsInstructions) {
     String methodName =
         MyInstruction.getQualifiedMethodName(
             parentClassOrInterface.getClassName(), unqualifiedChildMethodName);
-    MyInstruction instruction = Main.getMethod(methodName);
+    MyInstruction instruction = relationshipsInstructions.getMethod(methodName);
     return instruction;
   }
 

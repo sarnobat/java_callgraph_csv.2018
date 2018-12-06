@@ -115,7 +115,8 @@ public class Main {
       MyInstruction parentInstruction =
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
-              deferredSuperMethod.getunqualifiedMethodName());
+              deferredSuperMethod.getunqualifiedMethodName(),
+              relationshipsInstructions);
       if (parentInstruction == null) {
         System.err.println("Parent instruction was not found");
       } else {

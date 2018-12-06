@@ -14,7 +14,7 @@ class GraphNodeInstruction extends GraphNode {
   @Override
   public int getPackageDepth() {
     return instruction == null ? Integer.MAX_VALUE
-        : Main.getPackageDepth(instruction.getMethodNameQualified());
+        : RelationshipsPackageDepth.getPackageDepth(instruction.getMethodNameQualified());
   }
 
   @Override
