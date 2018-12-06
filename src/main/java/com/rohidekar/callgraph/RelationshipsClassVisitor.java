@@ -9,9 +9,5 @@ public interface RelationshipsClassVisitor {
 
   void deferParentContainment(String anInterfaceName, JavaClass javaClass);
 
-  void addContainmentRelationshipStringOnly(String anInterfaceName, String className);
-
-  void addContainmentRelationship(String className, JavaClass classToVisit);
-
   boolean deferContainmentVisit(JavaClass classToVisit, String childClassNameQualified);
 }

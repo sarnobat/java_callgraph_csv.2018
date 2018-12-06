@@ -168,8 +168,6 @@ class MyMethodVisitor extends MethodVisitor {
                 + "\",\""
                 + target.getClassNameQualified()
                 + "\"");
-        relationships.addContainmentRelationshipStringOnly(
-            parentInstruction.getClassNameQualified(), target.getClassNameQualified());
       }
     }
   }

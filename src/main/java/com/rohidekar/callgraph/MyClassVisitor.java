@@ -82,11 +82,8 @@ class MyClassVisitor extends ClassVisitor {
       }
       JavaClass anInterface = relationships.getClassDef(anInterfaceName);
       if (anInterface == null) {
-        relationships.deferParentContainment(anInterfaceName, javaClass);
-        relationships.addContainmentRelationshipStringOnly(
-            anInterfaceName, classToVisit.getClassName());
+    	  	relationshipsClassNames.deferParentContainment(anInterfaceName, javaClass);
       } else {
-        relationships.addContainmentRelationship(anInterface.getClassName(), classToVisit);
       }
     }
     // Methods
@@ -148,7 +145,7 @@ class MyClassVisitor extends ClassVisitor {
     if (jc == null) {
       System.err.println("WARN: Couldn't find " + childClassNameQualified);
     } else {
-      relationships.addContainmentRelationship(classToVisit.getClassName(), jc);
+//      relationships.addContainmentRelationship(classToVisit.getClassName(), jc);
     }
   }
 }

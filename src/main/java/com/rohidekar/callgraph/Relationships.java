@@ -119,22 +119,6 @@ public class Relationships
     }
   }
 
-  public void addContainmentRelationship(String parentClassFullName, JavaClass javaClass) {
-    if (!Ignorer.shouldIgnore(javaClass)) {
-      System.err.println("CONTAINMENT: " + parentClassFullName + "--> " + javaClass.getClassName());
-    }
-    addContainmentRelationshipStringOnly(parentClassFullName, javaClass.getClassName());
-  }
-
-  public void addContainmentRelationshipStringOnly(String parentClassName, String childClassName) {
-    if (parentClassName.equals("java.lang.Object")) {
-      throw new IllegalAccessError("addContainmentRelationshipStringOnly");
-    }
-    if (childClassName.equals("java.lang.Object")) {
-      throw new IllegalAccessError("addContainmentRelationshipStringOnly");
-    }
-  }
-
   @Deprecated
   public void updateMinPackageDepth(JavaClass javaClass) {
     relationshipsPackageDepth.updateMinPackageDepth(javaClass);
