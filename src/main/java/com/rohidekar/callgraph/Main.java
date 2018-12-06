@@ -61,7 +61,6 @@ public class Main {
         new RelationshipsClassNames(javaClassesFromResource);
     RelationshipsInstructions relationshipsInstructions = new RelationshipsInstructions();
     RelationshipsIsMethodVisited relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
-    RelationshipsDeferred relationshipsDeferred = new RelationshipsDeferred();
     for (JavaClass jc : relationshipsClassNames.getClassNameToJavaClassMapValues()) {
       try {
         new MyClassVisitor(
@@ -69,7 +68,6 @@ public class Main {
                 relationshipsInstructions,
                 relationshipsIsMethodVisited,
                 relationshipsClassNames,
-                relationshipsDeferred,
                 relationshipsPackageDepth)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
