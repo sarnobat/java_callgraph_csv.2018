@@ -22,10 +22,10 @@ import gr.gousiosg.javacg.stat.MethodVisitor;
 class MyMethodVisitor extends MethodVisitor {
   private final JavaClass visitedClass;
   private final ConstantPoolGen constantsPool;
-  private final RelationshipsMethodVisitor relationships;
+  private final Relationships relationships;
   private final String parentMethodQualifiedName;
 
-  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, RelationshipsMethodVisitor relationships) {
+  MyMethodVisitor(MethodGen methodGen, JavaClass javaClass, Relationships relationships) {
     super(methodGen, javaClass);
     this.visitedClass = javaClass;
     this.constantsPool = methodGen.getConstantPool();
@@ -34,7 +34,8 @@ class MyMethodVisitor extends MethodVisitor {
     // main bit
     if (methodGen.getInstructionList() != null) {
       for (InstructionHandle instructionHandle = methodGen.getInstructionList().getStart();
-          instructionHandle != null; instructionHandle = instructionHandle.getNext()) {
+          instructionHandle != null;
+          instructionHandle = instructionHandle.getNext()) {
         Instruction anInstruction = instructionHandle.getInstruction();
         if (!shouldVisitInstruction(anInstruction)) {
           anInstruction.accept(this);
@@ -62,36 +63,43 @@ class MyMethodVisitor extends MethodVisitor {
   /** instance method */
   @Override
   public void visitINVOKEVIRTUAL(INVOKEVIRTUAL iInstruction) {
-    addMethodCallRelationship(iInstruction.getReferenceType(constantsPool),
-        iInstruction.getMethodName(constantsPool), iInstruction,
+    addMethodCallRelationship(
+        iInstruction.getReferenceType(constantsPool),
+        iInstruction.getMethodName(constantsPool),
+        iInstruction,
         iInstruction.getArgumentTypes(constantsPool));
   }
 
   /** super method, private method, constructor */
   @Override
   public void visitINVOKESPECIAL(INVOKESPECIAL iInstruction) {
-    addMethodCallRelationship(iInstruction.getReferenceType(constantsPool),
-        iInstruction.getMethodName(constantsPool), iInstruction,
+    addMethodCallRelationship(
+        iInstruction.getReferenceType(constantsPool),
+        iInstruction.getMethodName(constantsPool),
+        iInstruction,
         iInstruction.getArgumentTypes(constantsPool));
   }
 
   @Override
   public void visitINVOKEINTERFACE(INVOKEINTERFACE iInstruction) {
-    addMethodCallRelationship(iInstruction.getReferenceType(constantsPool),
-        iInstruction.getMethodName(constantsPool), iInstruction,
+    addMethodCallRelationship(
+        iInstruction.getReferenceType(constantsPool),
+        iInstruction.getMethodName(constantsPool),
+        iInstruction,
         iInstruction.getArgumentTypes(constantsPool));
   }
 
   @Override
   public void visitINVOKESTATIC(INVOKESTATIC iInstruction) {
-    addMethodCallRelationship(iInstruction.getReferenceType(constantsPool),
-        iInstruction.getMethodName(constantsPool), iInstruction,
+    addMethodCallRelationship(
+        iInstruction.getReferenceType(constantsPool),
+        iInstruction.getMethodName(constantsPool),
+        iInstruction,
         iInstruction.getArgumentTypes(constantsPool));
   }
 
-  private void addMethodCallRelationship(Type iClass, String unqualifiedMethodName,
-      Instruction anInstruction,
-      Type[] argumentTypes) {
+  private void addMethodCallRelationship(
+      Type iClass, String unqualifiedMethodName, Instruction anInstruction, Type[] argumentTypes) {
     if (!(iClass instanceof ObjectType)) {
       return;
     }
@@ -101,7 +109,8 @@ class MyMethodVisitor extends MethodVisitor {
       MyInstruction target = new MyInstruction(childClass, unqualifiedMethodName);
       relationships.addMethodCall(parentMethodQualifiedName, target, target.printInstruction(true));
       if (relationships.getMethod(this.parentMethodQualifiedName) == null) {
-        relationships.addMethodDefinition(new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
+        relationships.addMethodDefinition(
+            new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
       }
       // link to superclass method - note: this will not work for the top-level
       // method (i.e.
@@ -128,25 +137,36 @@ class MyMethodVisitor extends MethodVisitor {
         relationships.deferSuperMethodRelationshipCapture(
             new DeferredSuperMethod(parentClassOrInterface, unqualifiedMethodName, target));
       } else {
-        System.err.println(parentInstruction.getMethodNameQualified() + " -> "
-              + target.getMethodNameQualified());
+        System.err.println(
+            parentInstruction.getMethodNameQualified() + " -> " + target.getMethodNameQualified());
         relationships.addMethodCall(
             parentInstruction.getMethodNameQualified(), target, target.getMethodNameQualified());
       }
-      if (parentInstruction != null && target != null && !target.getClassNameQualified().equals(parentInstruction.getClassNameQualified()) && !"java.lang.Object".equals(target.getClassNameQualified())) {
+      if (parentInstruction != null
+          && target != null
+          && !target.getClassNameQualified().equals(parentInstruction.getClassNameQualified())
+          && !"java.lang.Object".equals(target.getClassNameQualified())) {
         // TODO: this should get printed later
         System.out.println(
             //"MyMethodVisitor.linkMethodToSuperclassMethod() - SRIDHAR: " +
-            "\""+parentInstruction.getClassNameQualified() + "\",\"" + target.getClassNameQualified() + "\"");
-        relationships.addContainmentRelationshipStringOnly(parentInstruction.getClassNameQualified(), target.getClassNameQualified());
+            "\""
+                + parentInstruction.getClassNameQualified()
+                + "\",\""
+                + target.getClassNameQualified()
+                + "\"");
+        relationships.addContainmentRelationshipStringOnly(
+            parentInstruction.getClassNameQualified(), target.getClassNameQualified());
       }
     }
   }
 
-  public static MyInstruction getInstruction(JavaClass parentClassOrInterface,
-      String unqualifiedChildMethodName, RelationshipsMethodVisitor relationships2) {
-    String methodName = MyInstruction.getQualifiedMethodName(
-        parentClassOrInterface.getClassName(), unqualifiedChildMethodName);
+  public static MyInstruction getInstruction(
+      JavaClass parentClassOrInterface,
+      String unqualifiedChildMethodName,
+      Relationships relationships2) {
+    String methodName =
+        MyInstruction.getQualifiedMethodName(
+            parentClassOrInterface.getClassName(), unqualifiedChildMethodName);
     MyInstruction instruction = relationships2.getMethod(methodName);
     return instruction;
   }

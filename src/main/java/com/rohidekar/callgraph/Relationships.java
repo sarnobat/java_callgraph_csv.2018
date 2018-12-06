@@ -9,7 +9,7 @@ import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.JavaClass;
 
 public class Relationships
-    implements RelationshipsClassVisitor, RelationshipsMethodVisitor {
+    implements RelationshipsClassVisitor {
 
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final RelationshipsClassNames relationshipsClassNames;
@@ -72,7 +72,7 @@ public class Relationships
           MyMethodVisitor.getInstruction(
               deferredSuperMethod.getparentClassOrInterface(),
               deferredSuperMethod.getunqualifiedMethodName(),
-              (RelationshipsMethodVisitor) this);
+              this);
       if (parentInstruction == null) {
         System.err.println("Parent instruction was not found");
       } else {
@@ -194,13 +194,11 @@ public class Relationships
   }
 
   @Deprecated
-  @Override
   public void setVisitedMethod(String parentMethodQualifiedName) {
     relationshipsIsMethodVisited.setVisitedMethod(parentMethodQualifiedName);
   }
 
   @Deprecated
-  @Override
   public Collection<JavaClass> getParentClassesAndInterfaces(JavaClass visitedClass) {
     return relationshipsClassNames.getParentClassesAndInterfaces(visitedClass);
   }
@@ -212,13 +210,11 @@ public class Relationships
   }
 
   @Deprecated
-  @Override
   public void addMethodDefinition(MyInstruction myInstruction) {
     relationshipsInstructions.addMethodDefinition(myInstruction);
   }
 
   @Deprecated
-  @Override
   public MyInstruction getMethod(String parentMethodNameKey) {
     return relationshipsInstructions.getMethod(parentMethodNameKey);
   }
