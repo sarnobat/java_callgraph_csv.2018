@@ -25,9 +25,11 @@ public class Relationships
   private final RelationshipsIsMethodVisited relationshipsIsMethodVisited;
   private final RelationshipsClassNames relationshipsClassNames;
   private final RelationshipsInstructions relationshipsInstructions;
+  private final RelationshipsCalling relationshipsCalling;
 
   public Relationships(String resource, Map<String, JavaClass> javaClassesFromResource) {
     Map<String, JavaClass> javaClasses = javaClassesFromResource;
+    relationshipsCalling = new RelationshipsCalling();
     relationshipsClassNames = new RelationshipsClassNames(javaClasses);
     relationshipsInstructions = new RelationshipsInstructions();
     relationshipsIsMethodVisited = new RelationshipsIsMethodVisited();
@@ -139,8 +141,6 @@ public class Relationships
       throw new IllegalAccessError("addContainmentRelationshipStringOnly");
     }
   }
-
-  private final RelationshipsCalling relationshipsCalling = new RelationshipsCalling();
 
   @Deprecated
   public Collection<String> getAllMethodCallers() {
