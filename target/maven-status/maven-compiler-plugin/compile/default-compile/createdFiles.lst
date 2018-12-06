@@ -23,12 +23,10 @@ dnl/utils/text/table/TextTableRenderer.class
 gr/gousiosg/javacg/dyn/Instrumenter.class
 com/rohidekar/callgraph/RelationshipsMethodCalls.class
 com/rohidekar/callgraph/MyMethodVisitor.class
-com/rohidekar/callgraph/RelationshipsContainment.class
 com/rohidekar/callgraph/Ignorer.class
 com/rohidekar/callgraph/RelationshipsCalling.class
 dnl/utils/text/tree/TextTree.class
 com/rohidekar/callgraph/DeferredChildContainment.class
-com/rohidekar/callgraph/Relationships.class
 com/rohidekar/callgraph/TreeDepthVisitor.class
 gr/gousiosg/javacg/dyn/MethodStack.class
 com/rohidekar/callgraph/RelationshipsInstructions.class

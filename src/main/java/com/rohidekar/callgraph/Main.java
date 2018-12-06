@@ -55,7 +55,6 @@ public class Main {
       resource = args[0];
     }
     Map<String, JavaClass> javaClassesFromResource = getJavaClassesFromResource(resource);
-    RelationshipsContainment relationshipsContainment = new RelationshipsContainment();
     RelationshipsPackageDepth relationshipsPackageDepth = new RelationshipsPackageDepth();
     RelationshipsCalling relationshipsCalling = new RelationshipsCalling();
     RelationshipsClassNames relationshipsClassNames =
@@ -72,7 +71,6 @@ public class Main {
                 relationshipsClassNames,
                 relationshipsDeferred,
                 relationshipsPackageDepth,
-                relationshipsContainment,
                 relationshipsCalling)
             .visitJavaClass(jc);
       } catch (ClassFormatException e) {
