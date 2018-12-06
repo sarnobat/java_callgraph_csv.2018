@@ -11,7 +11,6 @@ gr/gousiosg/javacg/dyn/Pair.class
 gr/gousiosg/javacg/stat/JCallGraph.class
 gr/gousiosg/javacg/dyn/MethodStack$1$1.class
 com/rohidekar/callgraph/DeferredSuperMethod.class
-com/rohidekar/callgraph/RelationshipToGraphTransformerCallHierarchy.class
 com/rohidekar/callgraph/DeferredParentContainment.class
 dnl/utils/text/table/TextTreeTableRenderer.class
 gr/gousiosg/javacg/stat/ClassVisitor.class

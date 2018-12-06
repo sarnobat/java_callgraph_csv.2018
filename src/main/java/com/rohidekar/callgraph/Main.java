@@ -46,10 +46,6 @@ public class Main {
   private static void printGraphs(String classDirOrJar) {
     Relationships relationships = new Relationships(classDirOrJar);
     relationships.validate();
-    printCallGraph(relationships);
-  }
-
-  public static void printCallGraph(Relationships relationships) {
     relationships.validate();
     Map<String, GraphNode> allMethodNamesToMethods = new LinkedHashMap<String, GraphNode>();
     // Create a custom call graph structure from the multimap (flatten)
