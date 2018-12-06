@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;
 
-import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 

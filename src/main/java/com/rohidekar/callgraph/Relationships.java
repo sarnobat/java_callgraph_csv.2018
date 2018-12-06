@@ -46,7 +46,6 @@ public class Relationships
   // Objects that cannot yet be found
   private Set<DeferredChildContainment> deferredChildContainments =
       new HashSet<DeferredChildContainment>();
-  private Set<DeferredSuperMethod> deferredSuperMethod = new HashSet<DeferredSuperMethod>();
   private final RelationshipsIsMethodVisited isMethodVisited = new RelationshipsIsMethodVisited();
   private final RelationshipsClassNames classNames;
 
@@ -231,16 +230,18 @@ public class Relationships
     }
   }
 
+  private final RelationshipsDeferred relationshipsDeferred = new RelationshipsDeferred();
+
   public void deferSuperMethodRelationshipCapture(DeferredSuperMethod deferredSuperMethod) {
-    this.deferredSuperMethod.add(deferredSuperMethod);
+    this.relationshipsDeferred.deferSuperMethodRelationshipCapture(deferredSuperMethod);
   }
 
   public Set<DeferredSuperMethod> getDeferSuperMethodRelationships() {
-    return ImmutableSet.copyOf(this.deferredSuperMethod);
+    return this.relationshipsDeferred.getDeferSuperMethodRelationships();
   }
 
   public void deferParentContainment(String parentClassName, JavaClass javaClass) {
-	  classNames.deferParentContainment(parentClassName, javaClass);
+    classNames.deferParentContainment(parentClassName, javaClass);
   }
 
   public Set<DeferredParentContainment> getDeferredParentContainments() {
