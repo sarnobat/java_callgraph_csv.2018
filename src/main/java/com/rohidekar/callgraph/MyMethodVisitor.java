@@ -96,8 +96,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction,
         iInstruction.getArgumentTypes(constantsPool),
         parentMethodQualifiedName,
-        callingMethodToMethodInvocationMultiMap,
-        allMethodNameToMyInstructionMap);
+        callingMethodToMethodInvocationMultiMap);
   }
 
   /** super method, private method, constructor */
@@ -109,8 +108,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction,
         iInstruction.getArgumentTypes(constantsPool),
         parentMethodQualifiedName,
-        callingMethodToMethodInvocationMultiMap,
-        allMethodNameToMyInstructionMap);
+        callingMethodToMethodInvocationMultiMap);
   }
 
   @Override
@@ -121,8 +119,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction,
         iInstruction.getArgumentTypes(constantsPool),
         parentMethodQualifiedName,
-        callingMethodToMethodInvocationMultiMap,
-        allMethodNameToMyInstructionMap);
+        callingMethodToMethodInvocationMultiMap);
   }
 
   @Override
@@ -133,8 +130,7 @@ class MyMethodVisitor extends MethodVisitor {
         iInstruction,
         iInstruction.getArgumentTypes(constantsPool),
         parentMethodQualifiedName,
-        callingMethodToMethodInvocationMultiMap,
-        allMethodNameToMyInstructionMap);
+        callingMethodToMethodInvocationMultiMap);
   }
 
   private void addMethodCallRelationship(
@@ -143,8 +139,7 @@ class MyMethodVisitor extends MethodVisitor {
       Instruction anInstruction,
       Type[] argumentTypes,
       String parentMethodQualifiedName,
-      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
-      Map<String, MyInstruction> allMethodNameToMyInstructionMap) {
+      Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap) {
     if (!(iClass instanceof ObjectType)) {
       return;
     }
@@ -158,7 +153,8 @@ class MyMethodVisitor extends MethodVisitor {
           target.printInstruction(true),
           callingMethodToMethodInvocationMultiMap,
           allMethodNameToMyInstructionMap,
-          relationshipsIsMethodVisited);
+          relationshipsIsMethodVisited,
+          relationshipsInstructions);
       if (relationshipsInstructions.getMethod(parentMethodQualifiedName) == null) {
         relationshipsInstructions.addMethodDefinition(
             new MyInstruction(childClass.getClassName(), unqualifiedMethodName));
@@ -196,7 +192,7 @@ class MyMethodVisitor extends MethodVisitor {
             target.getMethodNameQualified(),
             callingMethodToMethodInvocationMultiMap,
             allMethodNameToMyInstructionMap,
-            relationshipsIsMethodVisited);
+            relationshipsIsMethodVisited, relationshipsInstructions);
       }
       if (parentInstruction != null
           && target != null
@@ -220,13 +216,14 @@ class MyMethodVisitor extends MethodVisitor {
       String childMethodQualifiedName,
       Multimap<String, MyInstruction> callingMethodToMethodInvocationMultiMap,
       Map<String, MyInstruction> allMethodNameToMyInstructionMap,
-      RelationshipsIsMethodVisited relationshipsIsMethodVisited) {
+      RelationshipsIsMethodVisited relationshipsIsMethodVisited, RelationshipsInstructions relationshipsInstructions2) {
     if ("java.lang.System.currentTimeMillis()".equals(parentMethodQualifiedName)) {
       throw new IllegalAccessError("No such thing");
     }
     if ("java.lang.System.currentTimeMillis()".equals(childMethodQualifiedName)) {
       // throw new IllegalAccessError("No such thing");
     }
+    relationshipsInstructions2.putInstruction(childMethod, childMethodQualifiedName);
     allMethodNameToMyInstructionMap.put(childMethodQualifiedName, childMethod);
     if (!parentMethodQualifiedName.equals(childMethodQualifiedName)) { // don't allow cycles
       if (parentMethodQualifiedName.contains("Millis")) {
