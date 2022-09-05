@@ -2,7 +2,12 @@ After using this, create a visualization using:
 
 https://github.com/sarnobat/d3_csv
 
-### native-image problem
+### 2022-09 (version 4)
+
+Use this instead (native image):
+* https://github.com/sarnobat/graalvm_aotc_java/tree/main/3_java_callgraph
+
+### (resolved by gradle plugin) native-image problem
 
 2022-09-04
 
