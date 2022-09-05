@@ -18,3 +18,5 @@ Exception in thread "main" java.lang.NoClassDefFoundError: java.lang.Boolean
 	at com.rohidekar.callgraph.MyClassVisitor.visitJavaClass(MyClassVisitor.java:76)
 	at com.rohidekar.callgraph.Main.main(Main.java:79)
 ```
+
+I haven't looked into fixing this yet. https://www.graalvm.org/22.1/reference-manual/native-image/Reflection/
