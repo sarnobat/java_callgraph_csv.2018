@@ -2,6 +2,13 @@ After using this, create a visualization using:
 
 https://github.com/sarnobat/d3_csv
 
+### 2024-04
+To analyze bytecode, use javap, bcel etc.
+To analyze source code, try using cscope's line-oriented mode
+
+### 2024-04
+Can we use `javap` to create graphs in a more lightweight way?
+
 ### 2022-09 (version 4)
 
 Use this instead (native image):
